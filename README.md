@@ -70,6 +70,10 @@ The build phases (project-wide):
 - 🎨 [`cryptos-web`](https://github.com/CryptOS-PKI/cryptos-web) — Fleet Manager web frontend.
 - ⚓ [`cryptos-release`](https://github.com/CryptOS-PKI/cryptos-release) — the release manifest and the Helm chart for the control plane.
 
+## 🙏 Acknowledgements
+
+CryptOS was originally written by [@Bugs5382](https://github.com/Bugs5382).
+
 ## 📄 License
 
 [Apache License 2.0](LICENSE). Copyright The CryptOS Authors.

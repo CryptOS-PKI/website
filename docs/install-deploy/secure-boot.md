@@ -14,7 +14,7 @@ This describes CryptOS as it works right now.
 
 CryptOS ships **no signing key** and asks you to trust none. You make your own Secure Boot key, build the image with it, and enroll its certificate in the firmware of the machines you run. The same certificate is stamped into the image as its **upgrade anchor**, so the key that makes an image bootable is also the only key that can replace it later.
 
-This page is the short version. The full guide, with every verification command, is [Secure Boot: build and sign with your own key](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/secure-boot.md) in the `cryptos-node` repository.
+This page is the short version. The full guide, with every verification command, is [Secure Boot: build and sign with your own key](https://github.com/CryptOS-PKI/cryptos-appliance/blob/main/docs/secure-boot.md) in the `cryptos-appliance` repository.
 
 ## What the key does
 
@@ -75,10 +75,10 @@ openssl x509 -in sb.crt -outform DER -out sb.der
 </TabItem>
 </Tabs>
 
-Or with `cryptos-sbkey`, which `task build` puts in `bin/`:
+Or with `cryptos-sbkey`, built from the `cryptos-appliance` source:
 
 ```bash
-bin/cryptos-sbkey --out-dir ~/cryptos-sb --cn "Example Org Secure Boot Signing 2026"
+go run ./cmd/cryptos-sbkey --out-dir ~/cryptos-sb --cn "Example Org Secure Boot Signing 2026"
 ```
 
 Its flags are `--out-dir`, `--cn`, `--days` (0, the default, means about 10 years), `--bits` (`2048` or `4096`) and `--force` to overwrite existing files.
@@ -222,7 +222,7 @@ A node accepts a new image only if the image's `.sig` verifies against the ancho
 cryptosctl --endpoint 192.0.2.10:443 --trust node-trust.pem image stage --image build/out/cryptos-amd64.uki
 ```
 
-An image signed by any other key is refused before anything is written. The [in-place upgrade guide](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/image-upgrade.md) covers staging, activating and rolling back.
+An image signed by any other key is refused before anything is written. The [in-place upgrade guide](https://github.com/CryptOS-PKI/cryptos-appliance/blob/main/docs/image-upgrade.md) covers staging, activating and rolling back.
 
 `cryptosctl` runs on Linux and macOS.
 

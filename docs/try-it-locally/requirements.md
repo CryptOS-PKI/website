@@ -53,7 +53,7 @@ Two machines are involved, even when they are the same box: the **node**, which 
 
 ### The node
 
-These are the sizes CryptOS is tested with: the `cryptos` QEMU integration test, `task qemu:run` and the walkthrough on these pages all boot the node this way. Treat them as the minimum for a node.
+These are the sizes CryptOS is tested with: the `cryptos-appliance` QEMU integration test, `task qemu:run` and the walkthrough on these pages all boot the node this way. Treat them as the minimum for a node.
 
 | Resource | Minimum | Notes |
 |---|---|---|

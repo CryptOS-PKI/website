@@ -165,9 +165,10 @@ The management certificate has a new key, so the console's SHA-256 differs from 
 
 ## Run the whole flow as a test
 
-The `cryptos-node` repository runs this same flow automatically: build the debug image, stage a config, boot QEMU with swtpm, run the ceremony, check the Root certificate with zlint, validate the chain and read the status. It skips itself unless every tool is present. From the `cryptos-node` checkout, after [Build the image](./build-image.md) and `task build`:
+The `cryptos-appliance` repository runs this same flow automatically: build the debug image, stage a config, boot QEMU with swtpm, run the ceremony, check the Root certificate with zlint, validate the chain and read the status. It skips itself unless every tool is present. From the `cryptos-appliance` checkout, after [Build the image](./build-image.md):
 
 ```bash
+go build -o bin/cryptosctl github.com/CryptOS-PKI/cryptos-node/cmd/cryptosctl
 export OVMF_CODE=/usr/share/OVMF/OVMF_CODE_4M.fd
 export OVMF_VARS=/usr/share/OVMF/OVMF_VARS_4M.fd
 export CRYPTOSCTL="$PWD/bin/cryptosctl"

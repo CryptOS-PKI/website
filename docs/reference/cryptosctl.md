@@ -146,6 +146,14 @@ Notes:
 - `ca import-key` asks for the backup's passphrase, and refuses a node that already has an identity.
 - Step-by-step guides in the `cryptos-node` repository: [subordinating vCenter's VMCA](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/vmca-subordination.md) and [re-certifying a subordinate](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/subordinate-recertify.md).
 
+## Time-stamp authority
+
+| Command | Flags | What it does |
+|---|---|---|
+| `tsa certificates` | `--pem` | list every TSA certificate the node has signed timestamps with, newest first, marking the current one; `--pem` prints the certificates instead |
+
+The list includes past certificates, and answers whether or not the TSA runs this boot, so tokens signed before a rotation can still be verified. See [Serve RFC 3161 timestamps](../using/serve-timestamps-tsa.md).
+
 ## Audit log
 
 Both commands read the node's hash-chained audit log and change nothing. Over mutual TLS they need the bootstrap admin certificate, like `ca list-issued`. A node in maintenance mode answers `FailedPrecondition`. The walk-through is [Check the audit log](../using/audit-log.md).

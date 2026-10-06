@@ -162,7 +162,7 @@ The manager can switch ACME or EST on or off on one node through the Fleet API c
 A protocol that is already in the state you asked for is left alone: nothing is applied or audited.
 
 :::warning[A switch needs a reboot in a maintenance window]
-Turning a protocol on or off takes effect only at the node's next boot, and rebooting an Issuing CA stops issuance until it is back. The manager can't reboot a node yet, so plan the reboot for a maintenance window and restart it from its hypervisor or its power control.
+Turning a protocol on or off takes effect only at the node's next boot, and rebooting an Issuing CA stops issuance until it is back. Plan the reboot for a maintenance window, then trigger it from the node's page in the web UI (see [Rebooting a node](./web-ui.md#rebooting-a-node)) instead of a hypervisor hard reset.
 :::
 
 ## Removing a node that is gone
@@ -183,7 +183,6 @@ A removed node that is still running keeps its management block and still trusts
 - A node can't start its own enrollment. The manager starts every link, adoption and enrollment, and the challenge in a `LINK` is signed by the node's CA identity key, not the TPM endorsement key.
 
 - Switching a protocol adapter on in the manager's protocol catalog only records the intent. ACME and EST are switched per node with `SetNodeProtocol` (above), which the web UI does not use yet; SCEP and Windows autoenrollment are not built.
-- The manager can't reboot a node, so a protocol switch or any other reboot-required change waits for a reboot you start at the node.
 - The manager records the read-only flag on a linked node, but the node does not enforce it.
 
 ## Where to go next

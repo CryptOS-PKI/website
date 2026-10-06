@@ -46,6 +46,8 @@ Any other value fails config validation. The policy applies to both `IssueLeaf` 
 
 Profiles live in `pki.profiles[]` in the node's machine config; see [Machine config schema](./machine-config.md). The Fleet Manager's catalog (`ListProfiles`, `CreateProfile`, `UpdateProfile`, `ApplyProfileToNode`) uses the same `cryptos.v1.CertificateProfile` message, so `validity_policy` travels with a profile when the manager pushes it to a node.
 
+A catalog profile also carries a manager-only `requestable` flag, off by default, set with `SetProfileRequestable`. It isn't part of `cryptos.v1.CertificateProfile` and never reaches a node; it only decides whether [certificate requests](#certificate-requests) can name the profile. `ListRequestableProfiles` lists the profiles currently marked requestable.
+
 ## MCP agent keys
 
 The Fleet Manager serves an MCP endpoint so AI agents can work with the fleet. An agent authenticates with an **MCP key**: a bearer key bound to one operator's client certificate. MCP clients that can run the OAuth login get a key from that flow; `CreateMcpKey` mints one for clients that can't. Both produce the same kind of key.
@@ -180,6 +182,101 @@ Timestamps are RFC 3339 strings; an unset one is empty.
 | `decided_by_cn` (12) | `string` | subject CN of the deciding operator certificate; empty until decided |
 | `decided_by_serial` (13) | `string` | hex serial of that certificate; empty until decided |
 | `decided_at` (14) | `string` | when it was decided; empty until decided |
+| `kind` (15) | `string` | `step_up` or `certificate_request`; empty is treated as `step_up`, the only kind before this field existed |
+
+## Certificate requests
+
+:::info[No web page yet]
+`CreateCertificateRequest`, `ListCertificateRequests`, `GetCertificateRequestByID` and `CancelCertificateRequest` are reachable over the API today. The Fleet Manager web UI doesn't have a **Request a certificate** or **My requests** page yet; that ships in a later wave, on the same screens as [Make a credential request](../fleet-manager/make-a-credential-request.md).
+:::
+
+Any signed-in user, not only an operator or admin, can ask for a certificate under a profile an admin has marked `requestable`. The flow reuses the step-up approvals queue: filing a request opens an `Approval` of kind `certificate_request`, and an operator or admin other than the requester has to decide it before anything is signed.
+
+```
+pending --(approved)--> approved --(the node signs)--> issued
+   |                         \--(the node refuses)--> failed
+   |--(denied)--> denied
+   |--(cancelled)--> cancelled
+   \--(30 days pass, still pending)--> expired
+```
+
+### Access rules
+
+- **Viewer level and above** may call `CreateCertificateRequest`. There is no operator-or-admin floor on filing a request, only on deciding it.
+- **`ListCertificateRequests`** returns only the caller's own requests below operator level; `mine_only` is forced on. An operator or admin sees every request, and may still set `mine_only` to see just their own.
+- **`GetCertificateRequestByID`** is readable by the request's own requester, or by an operator and above.
+- **`CancelCertificateRequest`** ends a pending request. The requester may cancel their own; anyone else needs admin level.
+- Approving or denying a certificate-request approval goes through the same `DecideApproval` as a step-up approval, with one more rule: **the requester can never decide their own request**, even as an operator or admin. `DecideApproval` refuses a certificate-request approval whose `requested_by_cn` matches the decider with `PERMISSION_DENIED`.
+
+### `CreateCertificateRequest`
+
+| Request field | Type | Meaning |
+|---|---|---|
+| `profile_name` (1) | `string` | a catalog profile marked `requestable` |
+| `csr_der` (2) | `bytes` | a PKCS#10 CSR, generated in the browser or pasted |
+| `note` (3) | `string` | free text for the approver, for example what the certificate is for |
+
+| Response field | Type | Meaning |
+|---|---|---|
+| `request` (1) | `CertificateRequest` | the new request, `pending` |
+
+The manager checks the CSR against the profile before storing anything: an unknown or non-requestable profile returns `NOT_FOUND` or `FAILED_PRECONDITION`; a CSR that doesn't parse, doesn't verify or carries a key the node won't sign (anything but ECDSA P-384 or RSA of 3072 bits or more) returns `INVALID_ARGUMENT` with `CSR_REJECTED`; a CSR whose subject or SANs don't fit the profile (for example no common name when the profile fixes none, or SANs the profile doesn't allow a request to supply) returns `INVALID_ARGUMENT` naming the mismatched field.
+
+### `ListCertificateRequests`
+
+| Request field | Type | Meaning |
+|---|---|---|
+| `state` (1) | `string` | keep only requests in this state; empty lists all |
+| `mine_only` (2) | `bool` | keep only the caller's own requests |
+
+| Response field | Type | Meaning |
+|---|---|---|
+| `items` (1) | `repeated CertificateRequest` | the requests, newest first |
+
+### `GetCertificateRequestByID`
+
+| Request field | Type | Meaning |
+|---|---|---|
+| `id` (1) | `string` | the `CertificateRequest.id` |
+
+| Response field | Type | Meaning |
+|---|---|---|
+| `request` (1) | `CertificateRequest` | the request |
+
+An unknown id returns `NOT_FOUND`.
+
+### `CancelCertificateRequest`
+
+| Request field | Type | Meaning |
+|---|---|---|
+| `id` (1) | `string` | the `CertificateRequest.id` |
+
+| Response field | Type | Meaning |
+|---|---|---|
+| `request` (1) | `CertificateRequest` | the request, `cancelled` |
+
+A request that is no longer pending returns `FAILED_PRECONDITION`.
+
+### `CertificateRequest`
+
+Timestamps are RFC 3339 strings; an unset one is empty.
+
+| Field | Type | Meaning |
+|---|---|---|
+| `id` (1) | `string` | stable identifier |
+| `profile_name` (2) | `string` | the requested catalog profile |
+| `csr_pem` (3) | `string` | the submitted CSR, PEM encoded |
+| `note` (4) | `string` | the requester's note |
+| `requested_by_cn` (5) | `string` | subject CN of the requester's operator certificate |
+| `requested_by_serial` (6) | `string` | hex serial of that certificate |
+| `state` (7) | `string` | `pending`, `approved`, `issued`, `denied`, `cancelled`, `expired` or `failed` |
+| `approval_id` (8) | `string` | the `Approval` deciding this request |
+| `certificate_pem` (9) | `string` | the issued certificate, PEM encoded; empty until `state` is `issued` |
+| `failure_reason` (10) | `string` | the issuing node's refusal reason; empty unless `state` is `failed` |
+| `created_at` (11) | `string` | when the request was filed |
+| `expires_at` (12) | `string` | when a pending request lapses to `expired`, 30 days after `created_at` |
+| `decided_at` (13) | `string` | when the request's approval was decided; empty until decided |
+| `issued_at` (14) | `string` | when the certificate was issued; empty until issued |
 
 ## Node audit log
 

@@ -97,6 +97,7 @@ A node's page shows its identity, issuer, TPM, Fleet Manager link, boot count, u
 | **Config** | view `operator`, apply `admin` | Edits part of the node's config. |
 | **Profiles** | `admin` to apply | Compares the node's profiles with the catalog. |
 | **Re-key…** | `operator` | Gives a subordinate CA a new key. |
+| **Rename…** | `admin` | Changes the node's display name. |
 | **Export key…**, **Import key…** | `admin` | Backs up or restores the CA key. |
 | **Decommission…** | `admin` | Wipes the node. |
 
@@ -127,6 +128,16 @@ The **Revoke** dialog asks only for a reason; there is no typed confirmation. An
 ### Re-keying a subordinate CA
 
 The **Re-key** button, labelled with the node's name, has the node make a new key and request, gets its parent to sign the request, and installs the new chain, all in one step. A Root can't be re-keyed here, because it has no parent to sign its new key.
+
+### Renaming a node
+
+**Rename…** changes a node's display name: the key `ListNodes` and every `/nodes/<name>` URL use, not the subject common name on its certificate. It takes an RFC 1123 label (1 to 63 lowercase letters, digits and hyphens, starting and ending with a letter or digit), rejects a name already taken by another node, and the page follows the node to its new URL once it lands. Audit entries recorded before the rename still point at the node; they show its old name alongside the new one.
+
+- **When it is refused:** a name that isn't an RFC 1123 label, or that has the shape of a node ID, returns error 1103. A name another node already holds returns 1102.
+
+:::info[Renaming is not re-issuing]
+A certificate's subject common name is signed material: the web UI has no field anywhere that edits it. Wanting a different subject means issuing a new certificate and retiring the old one, not a rename. See [Re-keying a subordinate CA](#re-keying-a-subordinate-ca) and [Issuing and revoking certificates](#issuing-and-revoking-certificates).
+:::
 
 ### Backing up and restoring the CA key
 

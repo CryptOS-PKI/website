@@ -4,14 +4,20 @@ title: "🗂️ The repos"
 
 # 🗂️ The repos
 
-CryptOS is built in the open in the [CryptOS-PKI](https://github.com/CryptOS-PKI) organization on GitHub. Three repos make up the system itself: `cryptos-node`, `cryptos-manager` and `cryptos-web`. A few more hold the things around it: the release manifest and Helm chart, test tooling, this site and the organization profile. Every repo on this page is public.
+CryptOS is built in the open in the [CryptOS-PKI](https://github.com/CryptOS-PKI) organization on GitHub. Four repos make up the system itself: `cryptos-node`, `cryptos-appliance`, `cryptos-manager` and `cryptos-web`. A few more hold the things around it: the release manifest and Helm chart, test tooling, this site and the organization profile. Every repo on this page is public.
 
 ## How they fit together
 
 ```text
-     cryptos-node                cryptos-manager   <----   cryptos-web
-     (the CA node,               (Fleet Manager,          (its web UI,
-      node API proto)             fleet API proto)          embedded in the manager)
+     cryptos-appliance            cryptos-manager   <----   cryptos-web
+     (the signed boot image,      (Fleet Manager,          (its web UI,
+      pins + builds cryptos-node)  fleet API proto)          embedded in the manager)
+          ^                            |
+          |                            |
+          |                            |
+     cryptos-node                      |
+     (the CA engine,                   |
+      node API proto)                  |
           ^                            |
           |                            |
           +------- mTLS gRPC ----------+
@@ -21,16 +27,16 @@ CryptOS is built in the open in the [CryptOS-PKI](https://github.com/CryptOS-PKI
 ```
 
 - Each service owns the API it serves. `cryptos-node` holds the node API (`cryptos.node.v1`), and `cryptos-manager` holds the Fleet Manager API (`cryptos.fleet.v1`), which imports the node API from `cryptos-node`.
-- `cryptos-node` is the CA node. It builds the operating system image and `cryptosctl`.
+- `cryptos-node` is the PKI engine: the node API, PID 1, the management CLI and the bare-metal installer. `cryptos-appliance` pins `cryptos-node` at a version and builds the signed boot image around it (kernel, SquashFS, UKI assembly, Secure Boot signing).
 - `cryptos-manager` and `cryptos-web` are the optional Fleet Manager: one application split into a backend and a frontend.
 
-A single CA node needs only `cryptos-node`. You manage it with `cryptosctl`. The Fleet Manager is for when you want a web UI or a view across many nodes.
+A single CA node needs only the image `cryptos-appliance` builds. You manage it with `cryptosctl`. The Fleet Manager is for when you want a web UI or a view across many nodes.
 
 ## 🧠 cryptos-node
 
 [github.com/CryptOS-PKI/cryptos-node](https://github.com/CryptOS-PKI/cryptos-node)
 
-The operating system and CA engine. It builds a signed Unified Kernel Image (UKI): a hardened Linux kernel, a Go PID 1, a read-only SquashFS root filesystem and a TPM-sealed encrypted state partition. One image boots as a Root, Intermediate or Issuing CA, depending on its machine config.
+The PKI engine. This repo builds no bootable image on its own; `cryptos-appliance` pins it at a version and builds the signed Unified Kernel Image (UKI) around it.
 
 What it holds:
 
@@ -40,15 +46,28 @@ What it holds:
 | `cmd/cryptosctl` | The operator CLI, and the only management tool for a node that is not linked to a Fleet Manager. |
 | `cmd/cryptos-console` | The dashboard on the node's local console. It reads status and identity over the on-box UNIX socket. |
 | `cmd/cryptos-install` | The bare-metal disk installer (GPT, ESP and UKI). |
-| `cmd/cryptos-sbkey` | Generates your own Secure Boot signing key and certificate. |
-| `cmd/cryptos-switchroot` | A small `/init` shim that loop-mounts the SquashFS root and pivots into it. |
 | `proto/cryptos/node/v1/` | The node API: `NodeService` and its messages (`node.proto`, `identity.proto`, `ceremony.proto`, `status.proto`, `config.proto`, `audit.proto` and the protocol files). |
 | `gen/go/cryptos/node/v1/` | The generated Go stubs (package `nodev1`), committed so you need no toolchain to use them. |
 | `internal/` | The node itself: TPM, CA templates, ceremony, LUKS and etcd storage, the gRPC server, audit log and machine config. |
-| `build/` | Kernel config, SquashFS templates and the UKI assembly and signing recipes. |
-| `docs/` | Task guides kept next to the code, such as Secure Boot, management trust, certificate profiles and Active Directory. |
+| `docs/` | Task guides kept next to the code, such as management trust, certificate profiles and Active Directory. |
 
-Each `v*` tag attaches its release assets to the GitHub Release: the unsigned UKI and installer ISO (TPM-backed and `nodeid` variants), `cryptosctl` for Linux and macOS on amd64 and arm64, and a `SHA256SUMS` file.
+## 🧰 cryptos-appliance
+
+[github.com/CryptOS-PKI/cryptos-appliance](https://github.com/CryptOS-PKI/cryptos-appliance)
+
+The signed boot image. It requires `cryptos-node` at a pinned version and builds `init`, `cryptosctl` and `cryptos-console` by import path into a hardened Linux kernel, a read-only SquashFS root filesystem and a TPM-sealed encrypted state partition, assembled and signed as a Unified Kernel Image (UKI). One image boots as a Root, Intermediate or Issuing CA, depending on its machine config.
+
+What it holds:
+
+| Path | What it is |
+|---|---|
+| `cmd/cryptos-sbkey` | Generates your own Secure Boot signing key and certificate. |
+| `cmd/cryptos-switchroot` | A small `/init` shim that loop-mounts the SquashFS root and pivots into it. |
+| `build/` | Kernel config, SquashFS templates and the UKI assembly and signing recipes. |
+| `test/image/`, `test/integration/` | The QEMU + `swtpm` full-image suites. |
+| `docs/` | Secure Boot and image upgrade guides. |
+
+Each `v*` tag attaches its release assets to the GitHub Release: the unsigned UKI and installer ISO, TPM-backed and `nodeid` variants.
 
 :::caution[Release images are for evaluation]
 The release UKIs and ISOs carry no Secure Boot signature and no upgrade anchor. A node installed from one cannot be upgraded in place. For real use, build the image with your own Secure Boot key. See [Secure Boot](../install-deploy/secure-boot.md).
@@ -101,7 +120,7 @@ See [The web UI](../fleet-manager/web-ui.md).
 
 | Repo | What it holds |
 |---|---|
-| ⚓ [cryptos-release](https://github.com/CryptOS-PKI/cryptos-release) | The release manifest (`manifest/release.yaml`, the pinned node image, manager image digest and web console of a release) and a deprecated Helm chart, `charts/manager`. See [Deploy with Helm](../fleet-manager/helm.md). |
+| ⚓ [cryptos-release](https://github.com/CryptOS-PKI/cryptos-release) | The release manifest (`manifest/release.yaml`, the pinned appliance image, manager image digest and web console of a release) and a deprecated Helm chart, `charts/manager`. See [Deploy with Helm](../fleet-manager/helm.md). |
 | 🧪 [cryptos-lab](https://github.com/CryptOS-PKI/cryptos-lab) | Scripts for testing CryptOS on real and virtual hardware. `esxi/` boots CryptOS on VMware ESXi with `govc`: upload an ISO, create a UEFI VM, boot it and capture the serial console. Bare metal is planned. |
 | 📚 [website](https://github.com/CryptOS-PKI/website) | This site. Docusaurus 3, with the pages under `docs/` and the sidebar in `sidebars.ts`. |
 | 🏠 [.github](https://github.com/CryptOS-PKI/.github) | The organization profile README shown on the CryptOS-PKI GitHub page. |
@@ -116,7 +135,7 @@ There are two Helm charts for the Fleet Manager today: `charts/manager` in the `
 
 | I want to... | Go to |
 |---|---|
-| Build and run a CA node | `cryptos-node` |
+| Build and run a CA node | `cryptos-appliance` |
 | Manage a node from the command line | `cryptos-node` (`cryptosctl`) |
 | Write my own client for the node API | `cryptos-node` (`proto/`, `gen/`) |
 | Write my own client for the Fleet Manager API | `cryptos-manager` (`proto/`, `gen/`) |

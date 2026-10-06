@@ -10,15 +10,15 @@ This describes CryptOS as it works right now.
 
 Start the image in a local virtual machine with a software TPM.
 
-A real node gets its machine config from the installer: you boot the ISO, send the config, and the installer lays out the disk and stages the config on it. On your laptop you skip the installer and build that installed disk by hand, the same way the `cryptos` QEMU integration test does. Then you boot it.
+A real node gets its machine config from the installer: you boot the ISO, send the config, and the installer lays out the disk and stages the config on it. On your laptop you skip the installer and build that installed disk by hand, the same way the `cryptos-appliance` QEMU integration test does. Then you boot it.
 
 :::info[Before you start]
 You need:
 
-- the debug UKI from [Build the image](./build-image.md), at `build/out/cryptos-amd64.uki.unsigned` in your `cryptos-node` checkout;
+- the debug UKI from [Build the image](./build-image.md), at `build/out/cryptos-amd64.uki.unsigned` in your `cryptos-appliance` checkout;
 - QEMU, swtpm, OVMF, `sgdisk` and mtools from [What you need](./requirements.md).
 
-Run the commands from the root of the `cryptos-node` checkout.
+Run the commands from the root of the `cryptos-appliance` checkout.
 :::
 
 :::info[Why not `task qemu:run`]

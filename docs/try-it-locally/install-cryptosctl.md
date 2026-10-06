@@ -31,7 +31,7 @@ This builds the CryptOS binaries into `bin/`, stamped with the version, commit a
 To build only the CLI, run the same `go build` the task runs for it:
 
 ```bash
-go build -ldflags "$(bash build/ci/buildinfo.sh)" -o bin/cryptosctl ./cmd/cryptosctl
+go build -ldflags "$(bash scripts/buildinfo.sh)" -o bin/cryptosctl ./cmd/cryptosctl
 ```
 
 ## 2. Put it on your PATH

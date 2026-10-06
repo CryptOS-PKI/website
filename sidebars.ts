@@ -92,6 +92,8 @@ const sidebars: SidebarsConfig = {
         'using/time-sync',
         'using/audit-log',
         'using/enrol-devices-scep',
+        'using/tsa-policy-oid',
+        'using/serve-timestamps-tsa',
       ],
     },
     {
@@ -157,6 +159,7 @@ const sidebars: SidebarsConfig = {
         'reference/machine-config',
         'reference/machine-config-pki',
         'reference/machine-config-enrollment',
+        'reference/machine-config-tsa',
         'reference/cryptosctl',
         'reference/grpc-api',
         'reference/root-cert-profile',

@@ -46,7 +46,7 @@ A config that sets `pki.acme` or `pki.est` on a Root is refused, and nothing is 
 
 The Fleet Manager lists each enrolment protocol adapter with an **Enabled** switch. As the page itself says, enabling records intent: it does not start the protocol on a node.
 
-The node does not serve SCEP, ACME `dns-01` or RFC 3161 timestamps.
+The node does not serve ACME `dns-01`. SCEP and RFC 3161 timestamps arrive with their own pages: [Enrol devices with SCEP](../using/enrol-devices-scep.md) and [Serve RFC 3161 timestamps](../using/serve-timestamps-tsa.md).
 
 ## One rule for every key
 

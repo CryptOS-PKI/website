@@ -151,7 +151,7 @@ A `SUBORDINATE` enrollment gives an adopted Intermediate or Issuing node its CA 
 
 ## Switching an enrolment protocol on a node
 
-The manager can switch ACME or EST on or off on one node through the Fleet API call `SetNodeProtocol` (`admin` only). The web UI does not call it yet: its Protocols page still records intent only (see [The web UI](./web-ui.md#protocols)).
+The manager can switch ACME or EST on or off on one node through the Fleet API call `SetNodeProtocol` (`admin` only). The web UI's Protocols page calls it per node (see [The web UI](./web-ui.md#protocols)).
 
 1. **The manager reads the node's config** and changes one thing: the `enabled` flag of that protocol's block (`pki.acme` or `pki.est`). The block's other settings go back as the node stored them. EAB keys and EST password digests are write-only, so the node returns them blank, the manager sends them back blank, and the node keeps the values it has. The other protocol's block is left out, so the node keeps it as it is.
 2. **The node checks and stores it.** The node keeps a switched-off protocol's settings, so switching it off and back on needs nothing re-entered. Switching on still needs the block the node holds to be complete (for ACME a `base_url`, a `profile` and an External Account Binding key unless anonymous accounts are allowed; for EST `hostnames` and a `profile`), because the manager does not fill in settings: a protocol that was never set up on the node, or whose block was removed, is refused until you add its settings with `cryptosctl config apply`. A Root refuses to switch either protocol on. A refusal comes back with the node's reason, and nothing is audited: an invalid config is error 1500 and any other refusal 1108, with the node's own message on the `x-cryptos-node-reason` error metadata. The same applies to `GetNodeConfig` and `ApplyNodeConfig`. A node whose management certificate the manager refuses is error 1106, and one it can't reach 1100.
@@ -182,7 +182,7 @@ A removed node that is still running keeps its management block and still trusts
 
 - A node can't start its own enrollment. The manager starts every link, adoption and enrollment, and the challenge in a `LINK` is signed by the node's CA identity key, not the TPM endorsement key.
 
-- Switching a protocol adapter on in the manager's protocol catalog only records the intent. ACME and EST are switched per node with `SetNodeProtocol` (above), which the web UI does not use yet; SCEP and Windows autoenrollment are not built.
+- Switching a protocol adapter on in the manager's protocol catalog only records the intent; the web UI no longer offers that switch. ACME and EST are switched per node with `SetNodeProtocol` (above), which the web UI's Protocols page now uses; SCEP and Windows autoenrollment are not built, and have no per-node switch anywhere.
 - The manager records the read-only flag on a linked node, but the node does not enforce it.
 
 ## Where to go next

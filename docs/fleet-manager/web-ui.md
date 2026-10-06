@@ -208,10 +208,12 @@ The catalog of certificate templates: key algorithm, validity, subject, CA or no
 
 ## Protocols
 
-The enrollment protocols the fleet means to offer, with an **Enable** or **Disable** switch (`admin`).
+What each managed node actually reports serving, not a fleet-wide setting. The list page counts, per protocol, how many ESTABLISHED Issuing nodes are running it and how many are waiting on a reboot; its detail page lists every node with its role, identity state, and an **Enable** or **Disable** switch (`admin`) for that node.
 
-:::info[Records intent only]
-This page records intent only. ACME (RFC 8555) and EST (RFC 7030) are served by the nodes themselves, set per node under `pki.acme` and `pki.est`, and the manager can switch them per node through its API (see [Switching an enrolment protocol on a node](./overview.md#switching-an-enrolment-protocol-on-a-node)); this page does not do that yet. SCEP and Windows autoenrollment are not built, and enabling them here does nothing.
+ACME (RFC 8555) and EST (RFC 7030) are served by the nodes themselves, set per node under `pki.acme` and `pki.est`; the switch calls `SetNodeProtocol` (see [Switching an enrolment protocol on a node](./overview.md#switching-an-enrolment-protocol-on-a-node)) and takes effect at that node's next reboot. A node that cannot serve the protocol -- a Root or Intermediate, or an Issuing node that is not yet ESTABLISHED -- shows why instead of a switch.
+
+:::info[SCEP and Windows autoenrollment are not wired up]
+Neither protocol has a config block on the node yet, so this page has nothing to read or switch for them and says so instead of showing an empty table.
 :::
 
 ## Operators
@@ -256,7 +258,6 @@ Some screens still read the web app's built-in demo data instead of the manager:
 - **Days left** and the expiring and expired counts are measured from 1 July 2026, not from today.
 - **Renew** on Certificates and **Simulate incoming request** on Enrollment only change demo data.
 - The parent check on an enrollment, and the trust chain on a node's page, look the parent up in demo data. A real parent can show as `Parent CA "…" not found.`
-- On a protocol's page only **Enabled** is saved. The bound profile, endpoint and challenge settings are not.
 - Issuing live sends only the request, the node and the profile. Kind, path length, validity and extended key usage come from the profile. **Subordinate CA** with **Generate a key here** fails with `issueCert: a CSR is required to issue live`.
 
 ## Where to go next

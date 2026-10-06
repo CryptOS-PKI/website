@@ -100,6 +100,7 @@ A node's page shows its identity, issuer, TPM, Fleet Manager link, boot count, u
 | **Rename…** | `admin` | Changes the node's display name. |
 | **Export key…**, **Import key…** | `admin` | Backs up or restores the CA key. |
 | **Decommission…** | `admin` | Wipes the node. |
+| **Reboot…** | `admin` | Reboots or powers off the node. Labelled **Reboot needed…** while a staged change is waiting for one. |
 
 {/* screenshot: fleet-manager/node-detail.png: a node's page with its fields, trust chain, certificate list and buttons */}
 
@@ -156,6 +157,16 @@ The passphrase must be at least 18 characters; **Generate strong passphrase** ma
 :::
 
 To confirm, type the node's Root CA common name exactly and tick `I understand this permanently destroys the node's identity and data.` The page then says `{node} is wiping and entering maintenance.`
+
+### Rebooting a node
+
+A config change **Config** reports as needing a reboot, or any other change the node's page shows as reboot-needed, only takes effect once the node restarts. **Reboot…** triggers that from the Fleet Manager instead of a hypervisor hard reset.
+
+:::warning[Every certificate operation stops until the node is back]
+Rebooting an Issuing CA interrupts everything that depends on it until it restarts, or, with **Power off instead of restarting**, until the hypervisor or a person powers it back on.
+:::
+
+To confirm, type the node's CA common name exactly. A refusal, such as the node being in maintenance mode, shows with the node's own reason.
 
 ## Adopt
 

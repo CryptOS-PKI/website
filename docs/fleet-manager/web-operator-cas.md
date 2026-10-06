@@ -20,7 +20,7 @@ Each row is a CA the manager trusts or has trusted:
 
 | Column | What it shows |
 |---|---|
-| **CA** | The CA's subject, any warning the manager raised (for example that a CryptOS node's CA issued it), and `from the config file` for a config CA. |
+| **CA** | The CA's subject, any warning the manager raised (for example that a CryptOS node's CA issued it, or that the CA is itself now a CryptOS node's CA because a matching node was linked after the CA was registered), and `from the config file` for a config CA. |
 | **State** | `active` (new credentials are recorded under it), `retiring` (still trusted during a rotation) or `retired` (no longer trusted). |
 | **Fingerprint** | The start of the CA certificate's SHA-256 fingerprint. |
 | **Not after** | When the CA certificate expires. |

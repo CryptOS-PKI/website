@@ -135,7 +135,7 @@ Point your signing tool at the same URL, for example `signtool sign /tr http://1
 
 ## When it refuses
 
-- **`timeNotAvailable` for every request.** The clock is not trusted: no time sync has succeeded this boot, the latest one failed, or it measured an offset larger than `accuracy_ms`. `cryptosctl status` shows the `Clock:` line, and the node log says which. The TSA has no override for this, unlike certificate signing.
+- **`timeNotAvailable` for every request.** The clock is not trusted: no time sync has succeeded this boot, the servers answered but the clock was not adjusted, the last good sync is older than `max_sync_age_seconds`, or the estimated clock error is above `max_clock_error_ms`. The status string names the limit, `cryptosctl status` shows the `Clock:` line, and the node log has the details: [The clock grace window](../reference/machine-config-tsa.md#-the-clock-grace-window). The TSA has no override for this, unlike certificate signing.
 - **HTTP 403.** The client is outside `allowed_networks`.
 - **HTTP 429.** The client went over its rate limit (60 a minute by default, per IPv4 address or IPv6 /64). Wait for the `Retry-After` seconds.
 

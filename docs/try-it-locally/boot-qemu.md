@@ -214,6 +214,8 @@ CryptOS PKI v0.1.0
 [ok]  state volume
 [ok]  configuration
 [ok]  network
+[ok]  embedded etcd
+[ok]  management API
 ```
 
 A stage marked `[!!]` failed. The boot stops there and the node restarts; there is no shell to fall back to.

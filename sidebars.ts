@@ -179,6 +179,11 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Contributing',
+      items: ['contributing/ui-issue-button', 'contributing/accessibility-checks'],
+    },
+    {
+      type: 'category',
       label: 'About',
       items: ['about/repos', 'about/license', 'about/cncf'],
     },

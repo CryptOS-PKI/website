@@ -89,6 +89,63 @@
   }
 }
 
+/* Release banner */
+.release-banner {
+  border-bottom: 1px solid hsl(var(--border));
+  background: color-mix(in srgb, hsl(var(--warning)) 10%, hsl(var(--card)));
+}
+
+.release-banner__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding-block: 0.75rem;
+  border-inline-start: 4px solid hsl(var(--warning));
+}
+
+.release-banner__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: hsl(var(--foreground));
+  white-space: nowrap;
+}
+
+.release-banner__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: hsl(var(--warning));
+  flex-shrink: 0;
+}
+
+.release-banner__text {
+  margin: 0;
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.release-banner__text strong {
+  color: hsl(var(--foreground));
+}
+
+.release-banner__link {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.release-banner__link:hover,
+.release-banner__link:focus-visible {
+  color: hsl(var(--foreground));
+}
+
 /* Hero */
 .hero {
   position: relative;
@@ -371,6 +428,7 @@
 .footer__links {
   list-style: none;
   display: flex;
+  flex-wrap: wrap;
   gap: 1.5rem;
   margin: 0;
   padding: 0;

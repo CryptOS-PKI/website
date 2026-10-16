@@ -19,6 +19,7 @@ import type { MetaFunction } from "react-router";
 import { FeatureGrid } from "~/components/feature-grid";
 import { Footer } from "~/components/footer";
 import { Nav } from "~/components/nav";
+import { ReleaseBanner } from "~/components/release-banner";
 import { Section } from "~/components/section";
 import { SplitHero } from "~/components/split-hero";
 import { TerminalCard } from "~/components/terminal-card";
@@ -28,6 +29,7 @@ import {
   hero,
   meta as pageMeta,
   nav,
+  releaseStatus,
   trustModel,
   whatItIs,
 } from "~/content/cryptos";
@@ -44,6 +46,12 @@ export default function Home() {
         Skip to content
       </a>
       <Nav links={nav.links} />
+      <ReleaseBanner
+        badge={releaseStatus.badge}
+        heading={releaseStatus.heading}
+        body={releaseStatus.body}
+        cta={releaseStatus.cta}
+      />
       <main id="main">
         <SplitHero
           eyebrow={hero.eyebrow}

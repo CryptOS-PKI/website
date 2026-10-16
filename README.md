@@ -21,6 +21,13 @@ npm run typecheck   # react-router typegen + tsc --noEmit
 
 `build/client/` is the whole deployable site: static files, no server required.
 
+## 🚀 Deploy
+
+The site goes live on Cloudflare Pages (project `cryptos-pki-www`, domains `cryptos-pki.com` and
+`www.cryptos-pki.com`) the moment a GitHub Release is published here -- nothing else deploys it.
+See [`docs/deploy.md`](docs/deploy.md) for what that build contains, the Cloudflare side of the
+setup, and how to roll back.
+
 ## 🙏 Acknowledgements
 
 CryptOS was originally written by [@Bugs5382](https://github.com/Bugs5382).

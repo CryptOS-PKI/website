@@ -1,0 +1,57 @@
+name: Deploy
+
+# Builds the prerendered site and deploys it to Cloudflare Pages, but only
+# when a GitHub Release is published. Nothing else triggers a deploy: no
+# push, no pull_request, no workflow_dispatch. Publishing the release is the
+# one and only "go live" action for this site.
+#
+# The Cloudflare Pages project (cryptos-pki-www) and its custom domains
+# (cryptos-pki.com, www.cryptos-pki.com) are created by hand in the
+# Cloudflare dashboard, not by this workflow -- see README.md. The org
+# secrets CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID must hold real
+# values before the first release is published; this workflow never prints
+# either one.
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+# Deploys queue rather than race: a release is a one-time event, but if two
+# ever land close together (e.g. a published release immediately followed by
+# an edit-and-republish), the second deploy should wait for the first to
+# finish, not cancel it mid-upload.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: 🚀 Deploy to Cloudflare Pages
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.0
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Set up Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.0.0
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (prerender)
+        run: npm run build
+
+      - name: Deploy build/client to Cloudflare Pages
+        uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4.1.3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy build/client --project-name=cryptos-pki-www --branch=main

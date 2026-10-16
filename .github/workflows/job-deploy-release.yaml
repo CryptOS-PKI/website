@@ -5,6 +5,11 @@ name: Deploy
 # push, no pull_request, no workflow_dispatch. Publishing the release is the
 # one and only "go live" action for this site.
 #
+# A release marked "pre-release" (an rc I tick by hand before publishing)
+# deploys to the dev.cryptos-pki-www.pages.dev branch instead of production,
+# so I can look at it before it reaches cryptos-pki.com. A normal release
+# still deploys to the main branch, unchanged.
+#
 # The workflow creates the Cloudflare Pages project (cryptos-pki-www) the
 # first time, when it doesn't exist yet. Its custom domains (cryptos-pki.com,
 # www.cryptos-pki.com) are still attached once by hand in the Cloudflare
@@ -80,9 +85,27 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages project create cryptos-pki-www --production-branch=main
 
+      # A pre-release (rc) deploys to the dev branch instead of production, so
+      # I can look at it on dev.cryptos-pki-www.pages.dev before publishing a
+      # real release. Only the deploy target changes -- the build and project
+      # above are the same either way.
+      - name: Determine the deploy branch
+        id: deploy-branch
+        env:
+          PRERELEASE: ${{ github.event.release.prerelease }}
+        run: |
+          set -euo pipefail
+          if [ "$PRERELEASE" = "true" ]; then
+            echo "name=dev" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=main" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Deploy build/client to Cloudflare Pages
         uses: cloudflare/wrangler-action@953926a2e2182532811c01a25e53647d93bf07c0 # v4.1.3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy build/client --project-name=cryptos-pki-www --branch=main
+          command: >-
+            pages deploy build/client --project-name=cryptos-pki-www
+            --branch=${{ steps.deploy-branch.outputs.name }}

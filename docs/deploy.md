@@ -13,6 +13,20 @@ When a release is published, the workflow checks out that release's tag, runs `n
 folder to Cloudflare Pages with `cloudflare/wrangler-action`, pinned to a specific commit so a
 tag can't silently move the code I'm trusting with deploy credentials.
 
+## Pre-release (rc) builds go to dev, not production
+
+I tick "Set as a pre-release" on a GitHub Release when I'm publishing an rc. The workflow reads
+`github.event.release.prerelease` and picks the Pages branch to deploy to from it:
+
+- **Pre-release (`prerelease: true`):** deploys to the `dev` branch, which Cloudflare Pages serves
+  at `dev.cryptos-pki-www.pages.dev`. I can look at the rc there before it goes anywhere near
+  `cryptos-pki.com`.
+- **Normal release (`prerelease: false`):** deploys to `main`, the project's production branch,
+  exactly as before -- that's what goes live at `cryptos-pki.com`.
+
+Everything else about the run is identical: same checkout, same build, same Cloudflare Pages
+project, same secrets. Only the `--branch` the final `wrangler pages deploy` uses changes.
+
 ## Where it lives
 
 - **Cloudflare Pages project:** `cryptos-pki-www`. Before it deploys, the workflow lists the

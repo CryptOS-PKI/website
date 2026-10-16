@@ -27,6 +27,7 @@ interface Cta {
 
 interface SplitHeroProps {
   eyebrow: string;
+  headlineIcon?: string;
   headlineLine1: string;
   headlineLine2: string;
   lede: LedeSegment[];
@@ -39,9 +40,13 @@ interface SplitHeroProps {
 // blurred radial glow, top-right. Same recipe as the Astro proof's
 // SplitHero.astro, so the two builds render identically; the CTA buttons are
 // the kit's own <Button asChild> so this version also exercises the design
-// system's real component, not a lookalike.
+// system's real component, not a lookalike. `headlineIcon` is a single
+// decorative character (an emoji escape from the content file, never a
+// literal emoji in this source), shown before the first headline line and
+// wrapped aria-hidden so screen readers only read the headline text.
 export const SplitHero = ({
   eyebrow,
+  headlineIcon,
   headlineLine1,
   headlineLine2,
   lede,
@@ -55,7 +60,14 @@ export const SplitHero = ({
       <div className="hero__copy">
         <p className="hero__eyebrow">{eyebrow}</p>
         <h1 className="hero__headline">
-          <span>{headlineLine1}</span>
+          <span>
+            {headlineIcon ? (
+              <span className="hero__headline-icon" aria-hidden="true">
+                {headlineIcon}
+              </span>
+            ) : null}
+            {headlineLine1}
+          </span>
           <span className="hero__headline-accent">{headlineLine2}</span>
         </h1>
         <p className="hero__lede">

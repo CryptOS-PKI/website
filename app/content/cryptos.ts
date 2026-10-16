@@ -46,6 +46,10 @@ export const releaseStatus = {
 
 export const hero = {
   eyebrow: "CryptOS-PKI",
+  // Decorative only (rendered aria-hidden next to the headline); written as a
+  // Unicode escape rather than the literal character, consistent with the
+  // no-emoji-in-source-files rule everywhere else in this repo.
+  headlineIcon: "\u{1F512}", // lock
   headlineLine1: "A PKI operating system",
   headlineLine2: "with no shell to break into.",
   lede: [
@@ -73,6 +77,7 @@ export const hero = {
 
 export const whatItIs = {
   eyebrow: "What it is",
+  icon: "\u{2693}", // anchor -- matches "trust anchor" in the heading
   heading: "An operating system built around one job: being a trust anchor.",
   lede: "No login prompt, no package manager, no general-purpose shell -- just the PKI API.",
   features: [
@@ -97,6 +102,7 @@ export const whatItIs = {
 
 export const trustModel = {
   eyebrow: "Trust model",
+  icon: "\u{1F511}", // key -- matches "your keys" in the heading
   heading: "Tested source, unsigned images, your keys.",
   lede: "We publish and test the source. You decide who signs what runs.",
   body: "CryptOS ships unsigned images built from source you can read and test yourself. Secure Boot enrollment, image signing and the keys behind them stay with you: nothing in the chain of trust for your fleet is signed by us.",
@@ -104,6 +110,7 @@ export const trustModel = {
 
 export const fleetosManager = {
   eyebrow: "FleetOS Manager",
+  icon: "\u{1F6F0}\u{FE0F}", // satellite -- fleet of linked nodes
   heading: "One view across every linked node.",
   lede: "An optional web console for day-to-day operations -- the nodes keep working without it.",
   body: "Link a node to the FleetOS Manager for topology, certificate inventory and ceremony history across your fleet. The manager never holds issuance authority -- its own certificate can't sign.",

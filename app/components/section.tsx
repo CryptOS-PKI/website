@@ -20,6 +20,7 @@ import "./marketing.css";
 interface SectionProps {
   id?: string;
   eyebrow?: string;
+  icon?: string;
   heading: string;
   lede?: string;
   tone?: "default" | "card";
@@ -28,10 +29,14 @@ interface SectionProps {
 
 // Base-layer component: a content section with an optional eyebrow/heading,
 // consistent width and vertical rhythm. Mirrors the Astro proof's
-// Section.astro.
+// Section.astro. `icon` is a single decorative character (an emoji escape
+// from the content file, never a literal emoji in this source) shown before
+// the heading text; it's wrapped aria-hidden so screen readers only read the
+// heading itself.
 export const Section = ({
   id,
   eyebrow,
+  icon,
   heading,
   lede,
   tone = "default",
@@ -41,7 +46,14 @@ export const Section = ({
     <div className="container">
       <div className="section__head">
         {eyebrow ? <p className="section__eyebrow">{eyebrow}</p> : null}
-        <h2 className="section__heading">{heading}</h2>
+        <h2 className="section__heading">
+          {icon ? (
+            <span className="section__heading-icon" aria-hidden="true">
+              {icon}
+            </span>
+          ) : null}
+          {heading}
+        </h2>
         {lede ? <p className="section__lede">{lede}</p> : null}
       </div>
       <div className="section__body">{children}</div>

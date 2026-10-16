@@ -55,6 +55,7 @@ export default function Home() {
       <main id="main">
         <SplitHero
           eyebrow={hero.eyebrow}
+          headlineIcon={hero.headlineIcon}
           headlineLine1={hero.headlineLine1}
           headlineLine2={hero.headlineLine2}
           lede={hero.lede}
@@ -67,6 +68,7 @@ export default function Home() {
         <Section
           id="what-it-is"
           eyebrow={whatItIs.eyebrow}
+          icon={whatItIs.icon}
           heading={whatItIs.heading}
           lede={whatItIs.lede}
         >
@@ -76,6 +78,7 @@ export default function Home() {
         <Section
           id="trust-model"
           eyebrow={trustModel.eyebrow}
+          icon={trustModel.icon}
           heading={trustModel.heading}
           lede={trustModel.lede}
           tone="card"
@@ -86,6 +89,7 @@ export default function Home() {
         <Section
           id="fleetos-manager"
           eyebrow={fleetosManager.eyebrow}
+          icon={fleetosManager.icon}
           heading={fleetosManager.heading}
           lede={fleetosManager.lede}
         >

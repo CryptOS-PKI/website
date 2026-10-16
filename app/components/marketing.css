@@ -217,6 +217,11 @@
   color: hsl(var(--primary));
 }
 
+.hero__headline-icon {
+  display: inline-block;
+  margin-inline-end: 0.5rem;
+}
+
 .hero__lede {
   font-size: 1.125rem;
   color: hsl(var(--muted-foreground));
@@ -352,6 +357,11 @@
   font-size: 1.875rem;
   font-weight: 700;
   line-height: 1.1;
+}
+
+.section__heading-icon {
+  display: inline-block;
+  margin-inline-end: 0.5rem;
 }
 
 .section__lede {

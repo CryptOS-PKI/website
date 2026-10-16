@@ -2,20 +2,29 @@
 
 > 🧭 The CryptOS product site (www.cryptos-pki.com)
 
-A Vite + React 19 + TypeScript single-page app.
+A static marketing site: React Router v7 in framework mode, prerendered at build time to plain
+HTML (no Node server at request time), styled with Tailwind CSS and the `@cryptos-pki/ui` design
+kit (vendored from cryptos-web; see `vendor/cryptos-ui/NOTICE`).
 
 ## 🛠 Develop
 
+Before you start: Node 20+.
+
 ```bash
 npm install
-npm run dev        # vite dev server with HMR
-npm run build      # tsc type-check + vite build -> dist/
-npm run preview    # serve the production build
-npm test           # vitest (jsdom + Testing Library)
-npm run lint       # eslint + prettier
-npm run typecheck  # tsc --noEmit
+npm run dev         # react-router dev server with HMR
+npm run build       # react-router build -> prerendered static HTML in build/client/
+npm run preview     # serve the prerendered build
+npm run lint        # eslint + prettier
+npm run typecheck   # react-router typegen + tsc --noEmit
 ```
+
+`build/client/` is the whole deployable site: static files, no server required.
+
+## 🙏 Acknowledgements
+
+CryptOS was originally written by [@Bugs5382](https://github.com/Bugs5382).
 
 ## ⚖️ License
 
-MIT (c) 2026 The CryptOS Authors
+Apache License 2.0 (c) 2026 The CryptOS Authors

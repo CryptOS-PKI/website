@@ -27,68 +27,57 @@ the governance below is shared across all repos created that way.
 <!-- layout:begin vite/app -->
 ## Project layout
 
-The `vite/app` baseline from project-template (`ecosystems/vite/layouts/app.md`).
-The governance sync replaces this whole CLAUDE.md with the shared template on
-every run. Only the layout choice in the begin marker carries over, and this
-section is rendered again from it. Anything else written here is replaced, so
-keep repo-specific notes in AGENTS.md, which the sync leaves alone.
+This repo diverges from the `vite/app` baseline (project-template has no framework-mode layout yet;
+`ecosystems/vite/layouts/app.md` describes a single-page app, not a prerendered one). The tree below
+is this repo's actual layout; a future governance sync that adds a matching layout should replace
+this section, not revert it to the SPA tree.
 
-A React single-page app built with Vite.
+A prerendered static site: React Router v7 in framework mode (`ssr: false`, `prerender()`), not a
+single-page app -- there is no client-side routing or server at request time.
 
 ### Tree
 
 ```text
 .
-├── index.html            the Vite entry document
-├── public/               static files served as-is (favicon, robots.txt)
-├── src/
-│   ├── main.tsx          mounts the app: providers and the router
-│   ├── App.tsx           the root component and routes
-│   ├── pages/            one component per route
-│   ├── components/       reusable UI, one component per file
-│   │   ├── <Component>.tsx
-│   │   └── <Component>.test.tsx
-│   ├── features/<name>/  a feature's components, hooks and state together
-│   ├── hooks/            shared custom hooks
-│   ├── lib/              framework-free helpers and API clients
-│   ├── assets/           images and fonts imported by code
-│   ├── styles/           global styles and design tokens
-│   └── setupTests.ts     test environment setup
-├── dist/                 build output (gitignored)
+├── app/
+│   ├── root.tsx           the document shell (<html>, fonts, meta)
+│   ├── routes.ts           the route table (one route today: "/")
+│   ├── routes/
+│   │   └── home.tsx        the home route: composes components from content
+│   ├── components/         presentational pieces, product-agnostic (props carry the copy)
+│   ├── content/
+│   │   └── cryptos.ts      this product's copy and structure
+│   └── app.css             Tailwind entry + the design kit's tokens
+├── vendor/cryptos-ui/       vendored copy of cryptos-web's packages/ui (see its NOTICE)
+├── public/                  static files served as-is (favicon)
+├── build/                   build output (gitignored): client/ is the deployable site
+├── scripts/
+│   └── check-links.mjs      CI: checks internal links in the prerendered output
 ├── package.json
 ├── tsconfig.json
-├── tsconfig.app.json
-├── tsconfig.node.json
-├── vite.config.ts        build and Vitest config
+├── react-router.config.ts   prerender config
+├── vite.config.ts
+├── tailwind.config.js
 ├── eslint.config.mjs
 └── Taskfile.yml
 ```
 
 ### What goes where
 
-- `src/pages/`: route-level components that fetch data and compose features. Not reused elsewhere.
-- `src/components/`: presentational pieces used in more than one place. No data fetching.
-- `src/features/<name>/`: code that belongs to one feature; promote a piece to `components/` or
-  `hooks/` once a second feature needs it.
-- `src/lib/`: plain TypeScript (API clients, formatting). No React imports.
-- `public/`: files that need a fixed URL. Anything imported by code goes in `src/assets/` so Vite
-  hashes it.
+- `app/content/<product>.ts`: all product-specific copy (nav, hero, sections, footer). A second
+  product site gets its own file in this shape; the components and page stay unchanged.
+- `app/components/`: presentational pieces, each one taking its content as props. No data fetching,
+  no product-specific copy.
+- `app/routes/`: one file per route, composes components from a content file.
+- `vendor/cryptos-ui/`: read-only; re-copy from cryptos-web to update, never edit in place.
 - Configuration comes from `import.meta.env.VITE_*`; never put secrets there, it ships to the
   browser.
 
 ### Naming
 
-- Components and their files are `PascalCase` (`UserCard.tsx`), one component per file.
-- Hooks are `useCamelCase.ts`; other modules `camelCase.ts`; folders `camelCase`.
-- Named exports; a page may default-export only when the router lazy-loads it.
-
-### Tests, fixtures and generated code
-
-- Tests sit next to the component as `<Component>.test.tsx` (Vitest and Testing Library), set up by
-  `src/setupTests.ts`.
-- Mock data and fixtures go in `src/test/` (or `__fixtures__/` beside the feature that uses them).
-- Generated API clients and types go in `src/generated/`, are committed and rebuilt by a script;
-  never edit them by hand. `dist/` is gitignored.
+- Components and their files are `kebab-case` (`split-hero.tsx`), one component per file, matching
+  the vendored `@cryptos-pki/ui` kit's own convention.
+- Named exports throughout.
 <!-- layout:end -->
 
 ## CI and Actions minutes

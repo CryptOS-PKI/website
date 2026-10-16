@@ -2,29 +2,24 @@
 # Ignore everything...
 *
 
-# ...but inject the MIT header into these source types:
+# ...but inject the Apache 2.0 header into these source types:
 !*.ts
 !*.tsx
 !*.js
-!*.mts
 !*.mjs
+!*.mts
 !*.cjs
+!*.cts
 
 # ...even when they live in subdirectories:
 !*/
 
-# Never the build output, deps, caches, or generated docs:
+# Never the build output, deps, caches, or generated types:
 /node_modules/**
 **/node_modules/**
-/dist/**
-**/dist/**
-/lib/**
-**/lib/**
+/build/**
+**/build/**
+/.react-router/**
+**/.react-router/**
 /coverage/**
 **/coverage/**
-/temp/**
-**/temp/**
-/docs/**
-**/docs/**
-/.idea/**
-/.husky/**

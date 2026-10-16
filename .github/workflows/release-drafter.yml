@@ -1,0 +1,84 @@
+name: Release Drafter
+
+# Drafts the next release on push to main and updates CHANGELOG.md before the
+# release is cut.
+#
+# DISABLED until the org GitHub App is configured: every job is gated on
+# `vars.APP_CLIENT_ID`, so until that variable is set the job is skipped (no
+# runs, no failures). Once APP_CLIENT_ID (variable) and APP_PRIVATE_KEY
+# (secret) are set for the org/repo, it self-enables -- no edit required.
+#
+# The App token is used to push the CHANGELOG commit back to main. That commit
+# touches only CHANGELOG.md and carries [skip ci], so it never re-triggers
+# this workflow.
+#
+# Push to main only. The Label Checker workflow applies and checks the
+# categorizing label on every PR, so this workflow does not also run on pull
+# requests just to autolabel. That also keeps fork PRs clean: they get no
+# secrets, so the App token step could never run for them.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Release runs queue and are never cancelled mid-flight.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  draft:
+    name: Draft release and update changelog
+    # Inert until the GitHub App is configured (see header).
+    if: ${{ vars.APP_CLIENT_ID != '' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write # update releases + push the changelog commit
+      pull-requests: read # release-drafter reads the merged PRs
+    steps:
+      - name: Create GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+        with:
+          client-id: ${{ vars.APP_CLIENT_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.0
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          fetch-depth: 0
+
+      - name: Release Drafter
+        id: drafter
+        uses: Bugs5382/release-drafter-action@de0c4559d69039b8b371ef951b62a2532ad3593f # v1.0.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          extends: CryptOS-PKI/.github@a04c9d10348665cfa0fe7de7d81e7d9fd3450292
+          first-version: 0.1.0
+          prerelease: true
+          prerelease-identifier: rc
+
+      - name: Update CHANGELOG
+        uses: Bugs5382/changelog-updater-action@f873397e0c92387d9239bb471e46bc5fbaa9fbbd # v0.3.2
+        env:
+          LOG_LEVEL: debug
+          LOG_FORMAT: text
+          RELEASE_NOTES: >-
+            ${{ steps.drafter.outputs.body }}
+          RELEASE_VERSION: v${{ steps.drafter.outputs.resolved_version }}
+        with:
+          tag: ${{ env.RELEASE_VERSION }}
+          notes: ${{ env.RELEASE_NOTES }}
+          diff: "true"
+
+      - name: Commit changelog
+        uses: stefanzweifel/git-auto-commit-action@3ea6ae190baf489ba007f7c92608f33ce20ef04a # v4
+        with:
+          commit_message: "chore(pre-release): v${{ steps.drafter.outputs.resolved_version }} [skip ci]"
+          file_pattern: CHANGELOG.md

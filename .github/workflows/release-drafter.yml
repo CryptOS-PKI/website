@@ -42,5 +42,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           extends: CryptOS-PKI/.github@aa8761a2903d759dbb5f48b8d5e3517a9dc6da79
           first-version: 0.1.0
-          prerelease: true
-          prerelease-identifier: rc
+          prerelease: false

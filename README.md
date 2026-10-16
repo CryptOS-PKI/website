@@ -25,8 +25,9 @@ npm run typecheck   # react-router typegen + tsc --noEmit
 
 The site goes live on Cloudflare Pages (project `cryptos-pki-www`, domains `cryptos-pki.com` and
 `www.cryptos-pki.com`) the moment a GitHub Release is published here -- nothing else deploys it.
-See [`docs/deploy.md`](docs/deploy.md) for what that build contains, the Cloudflare side of the
-setup, and how to roll back.
+The first deploy creates the Pages project if it doesn't exist yet; the custom domains are attached
+once by hand in Cloudflare after that. See [`docs/deploy.md`](docs/deploy.md) for what that build
+contains, the Cloudflare side of the setup, and how to roll back.
 
 ## 🙏 Acknowledgements
 

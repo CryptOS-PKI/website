@@ -15,11 +15,14 @@ tag can't silently move the code I'm trusting with deploy credentials.
 
 ## Where it lives
 
-- **Cloudflare Pages project:** `cryptos-pki-www`.
-- **Domains:** `cryptos-pki.com` and `www.cryptos-pki.com`. I attach both to the Pages project by
-  hand in the Cloudflare dashboard (Custom domains); because the domains' DNS already runs on
-  Cloudflare, attaching a domain creates its DNS record and certificate automatically. This
-  workflow never touches DNS or creates the Pages project itself.
+- **Cloudflare Pages project:** `cryptos-pki-www`. Before it deploys, the workflow lists the
+  account's Pages projects and creates `cryptos-pki-www` (production branch `main`) only when it
+  isn't there yet, so the first published release sets the project up and every later release
+  skips that step.
+- **Domains:** `cryptos-pki.com` and `www.cryptos-pki.com`. I attach both to the Pages project
+  once, by hand, in the Cloudflare dashboard (Custom domains), after the first deploy has created
+  the project. Because the domains' DNS already runs on Cloudflare, attaching a domain creates its
+  DNS record and certificate automatically. The workflow never touches DNS or custom domains.
 - **Credentials:** the org secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, scoped to
   Cloudflare Pages Edit on my account only. They live in GitHub org secrets, never in this repo or
   its workflow logs.

@@ -42,8 +42,9 @@ interface SplitHeroProps {
 // the kit's own <Button asChild> so this version also exercises the design
 // system's real component, not a lookalike. `headlineIcon` is a single
 // decorative character (an emoji escape from the content file, never a
-// literal emoji in this source), shown before the first headline line and
-// wrapped aria-hidden so screen readers only read the headline text.
+// literal emoji in this source), wrapped aria-hidden so screen readers only
+// read the headline text, and kept in a `white-space: nowrap` unit with the
+// word next to it so the two can never be split across a line break.
 export const SplitHero = ({
   eyebrow,
   headlineIcon,
@@ -53,42 +54,49 @@ export const SplitHero = ({
   primaryCta,
   secondaryCta,
   children,
-}: SplitHeroProps) => (
-  <section className="hero">
-    <div className="hero__backdrop" aria-hidden="true" />
-    <div className="container hero__grid">
-      <div className="hero__copy">
-        <p className="hero__eyebrow">{eyebrow}</p>
-        <h1 className="hero__headline">
-          <span>
-            {headlineIcon ? (
-              <span className="hero__headline-icon" aria-hidden="true">
-                {headlineIcon}
-              </span>
-            ) : null}
-            {headlineLine1}
-          </span>
-          <span className="hero__headline-accent">{headlineLine2}</span>
-        </h1>
-        <p className="hero__lede">
-          {lede.map((segment, index) =>
-            segment.accent ? (
-              <mark key={index}>{segment.text}</mark>
-            ) : (
-              <span key={index}>{segment.text}</span>
-            ),
-          )}
-        </p>
-        <div className="hero__actions">
-          <Button asChild size="lg">
-            <a href={primaryCta.href}>{primaryCta.label}</a>
-          </Button>
-          <Button asChild size="lg" variant="outline">
-            <a href={secondaryCta.href}>{secondaryCta.label}</a>
-          </Button>
+}: SplitHeroProps) => {
+  const [firstWord, ...restOfLine1] = headlineLine1.split(" ");
+  const restText = restOfLine1.length ? ` ${restOfLine1.join(" ")}` : "";
+
+  return (
+    <section className="hero">
+      <div className="hero__backdrop" aria-hidden="true" />
+      <div className="container hero__grid">
+        <div className="hero__copy">
+          <p className="hero__eyebrow">{eyebrow}</p>
+          <h1 className="hero__headline">
+            <span>
+              {headlineIcon ? (
+                <span className="hero__headline-icon">
+                  <span aria-hidden="true">{headlineIcon}</span> {firstWord}
+                </span>
+              ) : (
+                firstWord
+              )}
+              {restText}
+            </span>
+            <span className="hero__headline-accent">{headlineLine2}</span>
+          </h1>
+          <p className="hero__lede">
+            {lede.map((segment, index) =>
+              segment.accent ? (
+                <mark key={index}>{segment.text}</mark>
+              ) : (
+                <span key={index}>{segment.text}</span>
+              ),
+            )}
+          </p>
+          <div className="hero__actions">
+            <Button asChild size="lg">
+              <a href={primaryCta.href}>{primaryCta.label}</a>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <a href={secondaryCta.href}>{secondaryCta.label}</a>
+            </Button>
+          </div>
         </div>
+        <div className="hero__aside">{children}</div>
       </div>
-      <div className="hero__aside">{children}</div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};

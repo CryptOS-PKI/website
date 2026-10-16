@@ -195,6 +195,14 @@
   grid-template-columns: 1.1fr 0.9fr;
 }
 
+.hero__copy {
+  /* The headline's available width is this column's width, not the
+     viewport's -- at the two-column desktop breakpoint this column is well
+     under half the viewport. A container query (not a vw-based clamp) lets
+     the headline size track its actual column. */
+  container-type: inline-size;
+}
+
 .hero__eyebrow {
   font-family: var(--font-mono);
   font-size: 0.875rem;
@@ -205,12 +213,22 @@
 }
 
 .hero__headline {
-  font-size: 3.25rem;
-  line-height: 1.1;
+  /* A floor for the smallest phones, a cqw-driven middle so it scales with
+     this column's own width (see .hero__copy's container-type), a ceiling
+     so it never grows past the original design size. Tuned so the two-line
+     headline stays at or under 3 wrapped lines at every width this site is
+     checked at, including the narrower column the two-column desktop
+     layout leaves it. */
+  font-size: clamp(1.25rem, 0.7rem + 3.3cqw, 2.6rem);
+  line-height: 1.15;
   font-weight: 700;
   display: flex;
   flex-direction: column;
   margin-bottom: 1.5rem;
+}
+
+.hero__headline span {
+  text-wrap: balance;
 }
 
 .hero__headline-accent {
@@ -219,7 +237,7 @@
 
 .hero__headline-icon {
   display: inline-block;
-  margin-inline-end: 0.5rem;
+  white-space: nowrap;
 }
 
 .hero__lede {
@@ -245,10 +263,6 @@
 @media (max-width: 860px) {
   .hero__grid {
     grid-template-columns: 1fr;
-  }
-
-  .hero__headline {
-    font-size: 2.5rem;
   }
 }
 

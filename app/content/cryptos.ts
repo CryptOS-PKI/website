@@ -117,7 +117,7 @@ export const fleetosManager = {
 };
 
 export const footer = {
-  marks: ["CryptOS", "FleetOS"],
+  marks: ["CryptOS-PKI", "FleetOS"],
   links: [
     { label: "GitHub", href: "https://github.com/CryptOS-PKI" },
     { label: "Docs", href: "#" },

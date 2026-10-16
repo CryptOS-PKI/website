@@ -17,6 +17,7 @@ import { Button } from "@cryptos-pki/ui";
 import type { ReactNode } from "react";
 
 import type { LedeSegment } from "~/content/cryptos";
+import { splitTrailingWord } from "~/lib/text";
 
 import "./marketing.css";
 
@@ -27,6 +28,7 @@ interface Cta {
 
 interface SplitHeroProps {
   eyebrow: string;
+  headlineIcon?: string;
   headlineLine1: string;
   headlineLine2: string;
   lede: LedeSegment[];
@@ -39,44 +41,60 @@ interface SplitHeroProps {
 // blurred radial glow, top-right. Same recipe as the Astro proof's
 // SplitHero.astro, so the two builds render identically; the CTA buttons are
 // the kit's own <Button asChild> so this version also exercises the design
-// system's real component, not a lookalike.
+// system's real component, not a lookalike. `headlineIcon` is a single
+// decorative character (an emoji escape from the content file, never a
+// literal emoji in this source), shown after the headline's last word,
+// wrapped aria-hidden so screen readers only read the headline text, and
+// kept in a `white-space: nowrap` unit with that word so the two can never
+// land on separate lines.
 export const SplitHero = ({
   eyebrow,
+  headlineIcon,
   headlineLine1,
   headlineLine2,
   lede,
   primaryCta,
   secondaryCta,
   children,
-}: SplitHeroProps) => (
-  <section className="hero">
-    <div className="hero__backdrop" aria-hidden="true" />
-    <div className="container hero__grid">
-      <div className="hero__copy">
-        <p className="hero__eyebrow">{eyebrow}</p>
-        <h1 className="hero__headline">
-          <span>{headlineLine1}</span>
-          <span className="hero__headline-accent">{headlineLine2}</span>
-        </h1>
-        <p className="hero__lede">
-          {lede.map((segment, index) =>
-            segment.accent ? (
-              <mark key={index}>{segment.text}</mark>
-            ) : (
-              <span key={index}>{segment.text}</span>
-            ),
-          )}
-        </p>
-        <div className="hero__actions">
-          <Button asChild size="lg">
-            <a href={primaryCta.href}>{primaryCta.label}</a>
-          </Button>
-          <Button asChild size="lg" variant="outline">
-            <a href={secondaryCta.href}>{secondaryCta.label}</a>
-          </Button>
+}: SplitHeroProps) => {
+  const [line2Lead, line2Tail] = splitTrailingWord(headlineLine2);
+
+  return (
+    <section className="hero">
+      <div className="hero__backdrop" aria-hidden="true" />
+      <div className="container hero__grid">
+        <div className="hero__copy">
+          <p className="hero__eyebrow">{eyebrow}</p>
+          <h1 className="hero__headline">
+            <span>{headlineLine1}</span>
+            <span className="hero__headline-accent">
+              {line2Lead}
+              <span className="hero__headline-icon">
+                {line2Tail}
+                {headlineIcon ? <span aria-hidden="true"> {headlineIcon}</span> : null}
+              </span>
+            </span>
+          </h1>
+          <p className="hero__lede">
+            {lede.map((segment, index) =>
+              segment.accent ? (
+                <mark key={index}>{segment.text}</mark>
+              ) : (
+                <span key={index}>{segment.text}</span>
+              ),
+            )}
+          </p>
+          <div className="hero__actions">
+            <Button asChild size="lg">
+              <a href={primaryCta.href}>{primaryCta.label}</a>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <a href={secondaryCta.href}>{secondaryCta.label}</a>
+            </Button>
+          </div>
         </div>
+        <div className="hero__aside">{children}</div>
       </div>
-      <div className="hero__aside">{children}</div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};

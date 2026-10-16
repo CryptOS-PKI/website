@@ -40,7 +40,7 @@ export const nav = {
 export const releaseStatus = {
   badge: "Pre-release",
   heading: "First release coming soon.",
-  body: "v0.1.0-rc.1 is in final testing. There are no downloads yet -- check back soon, or follow progress on GitHub.",
+  body: "v0.1.0-rc.1 is in final testing. There are no downloads yet -- check back soon.",
   cta: { label: "Follow progress on GitHub", href: "https://github.com/CryptOS-PKI/website" },
 };
 

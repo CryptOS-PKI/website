@@ -82,6 +82,7 @@ export default function Home() {
           heading={trustModel.heading}
           lede={trustModel.lede}
           tone="card"
+          layout="split"
         >
           <p className="prose">{trustModel.body}</p>
         </Section>
@@ -92,6 +93,7 @@ export default function Home() {
           icon={fleetosManager.icon}
           heading={fleetosManager.heading}
           lede={fleetosManager.lede}
+          layout="split"
         >
           <div className="fleetos-row">
             <FleetosMark size={48} />

@@ -26,6 +26,12 @@ interface SectionProps {
   heading: string;
   lede?: string;
   tone?: "default" | "card";
+  // "stack": head above body, full container width (what-it-is's feature
+  // grid already fills that width on its own). "split": head and body sit
+  // side by side in the hero's own column ratio, for a section whose body
+  // is a single block of prose that would otherwise sit in a narrow column
+  // on the left with the rest of the wide container empty.
+  layout?: "stack" | "split";
   children: ReactNode;
 }
 
@@ -43,13 +49,14 @@ export const Section = ({
   heading,
   lede,
   tone = "default",
+  layout = "stack",
   children,
 }: SectionProps) => {
   const [headingLead, headingTail] = splitTrailingWord(heading);
 
   return (
     <section id={id} className={tone === "card" ? "section section--card" : "section"}>
-      <div className="container">
+      <div className={layout === "split" ? "container section__grid" : "container"}>
         <div className="section__head">
           {eyebrow ? <p className="section__eyebrow">{eyebrow}</p> : null}
           <h2 className="section__heading">

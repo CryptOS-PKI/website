@@ -358,6 +358,28 @@
   margin-bottom: 2rem;
 }
 
+/* Split layout: head and body side by side in the same column ratio as the
+   hero's grid, so a section whose body is a single block of prose still
+   uses the section's full width instead of sitting in a narrow column with
+   empty space beside it. The prose itself still wraps at a readable width
+   (its own max-width, below) inside that column. */
+.section__grid {
+  display: grid;
+  gap: 3rem;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: start;
+}
+
+.section__grid .section__head {
+  margin-bottom: 0;
+}
+
+@media (max-width: 860px) {
+  .section__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .section__eyebrow {
   font-family: var(--font-mono);
   font-size: 0.875rem;

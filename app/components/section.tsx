@@ -15,6 +15,8 @@ limitations under the License.
 */
 import type { ReactNode } from "react";
 
+import { splitTrailingWord } from "~/lib/text";
+
 import "./marketing.css";
 
 interface SectionProps {
@@ -30,9 +32,10 @@ interface SectionProps {
 // Base-layer component: a content section with an optional eyebrow/heading,
 // consistent width and vertical rhythm. Mirrors the Astro proof's
 // Section.astro. `icon` is a single decorative character (an emoji escape
-// from the content file, never a literal emoji in this source) shown before
-// the heading text; it's wrapped aria-hidden so screen readers only read the
-// heading itself.
+// from the content file, never a literal emoji in this source) shown after
+// the heading's last word, wrapped aria-hidden so screen readers only read
+// the heading itself, and kept in a `white-space: nowrap` unit with that
+// word so the two can never land on separate lines.
 export const Section = ({
   id,
   eyebrow,
@@ -41,22 +44,25 @@ export const Section = ({
   lede,
   tone = "default",
   children,
-}: SectionProps) => (
-  <section id={id} className={tone === "card" ? "section section--card" : "section"}>
-    <div className="container">
-      <div className="section__head">
-        {eyebrow ? <p className="section__eyebrow">{eyebrow}</p> : null}
-        <h2 className="section__heading">
-          {icon ? (
-            <span className="section__heading-icon" aria-hidden="true">
-              {icon}
+}: SectionProps) => {
+  const [headingLead, headingTail] = splitTrailingWord(heading);
+
+  return (
+    <section id={id} className={tone === "card" ? "section section--card" : "section"}>
+      <div className="container">
+        <div className="section__head">
+          {eyebrow ? <p className="section__eyebrow">{eyebrow}</p> : null}
+          <h2 className="section__heading">
+            {headingLead}
+            <span className="section__heading-icon">
+              {headingTail}
+              {icon ? <span aria-hidden="true"> {icon}</span> : null}
             </span>
-          ) : null}
-          {heading}
-        </h2>
-        {lede ? <p className="section__lede">{lede}</p> : null}
+          </h2>
+          {lede ? <p className="section__lede">{lede}</p> : null}
+        </div>
+        <div className="section__body">{children}</div>
       </div>
-      <div className="section__body">{children}</div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};

@@ -17,6 +17,7 @@ import { Button } from "@cryptos-pki/ui";
 import type { ReactNode } from "react";
 
 import type { LedeSegment } from "~/content/cryptos";
+import { splitTrailingWord } from "~/lib/text";
 
 import "./marketing.css";
 
@@ -42,9 +43,10 @@ interface SplitHeroProps {
 // the kit's own <Button asChild> so this version also exercises the design
 // system's real component, not a lookalike. `headlineIcon` is a single
 // decorative character (an emoji escape from the content file, never a
-// literal emoji in this source), wrapped aria-hidden so screen readers only
-// read the headline text, and kept in a `white-space: nowrap` unit with the
-// word next to it so the two can never be split across a line break.
+// literal emoji in this source), shown after the headline's last word,
+// wrapped aria-hidden so screen readers only read the headline text, and
+// kept in a `white-space: nowrap` unit with that word so the two can never
+// land on separate lines.
 export const SplitHero = ({
   eyebrow,
   headlineIcon,
@@ -55,8 +57,7 @@ export const SplitHero = ({
   secondaryCta,
   children,
 }: SplitHeroProps) => {
-  const [firstWord, ...restOfLine1] = headlineLine1.split(" ");
-  const restText = restOfLine1.length ? ` ${restOfLine1.join(" ")}` : "";
+  const [line2Lead, line2Tail] = splitTrailingWord(headlineLine2);
 
   return (
     <section className="hero">
@@ -65,17 +66,14 @@ export const SplitHero = ({
         <div className="hero__copy">
           <p className="hero__eyebrow">{eyebrow}</p>
           <h1 className="hero__headline">
-            <span>
-              {headlineIcon ? (
-                <span className="hero__headline-icon">
-                  <span aria-hidden="true">{headlineIcon}</span> {firstWord}
-                </span>
-              ) : (
-                firstWord
-              )}
-              {restText}
+            <span>{headlineLine1}</span>
+            <span className="hero__headline-accent">
+              {line2Lead}
+              <span className="hero__headline-icon">
+                {line2Tail}
+                {headlineIcon ? <span aria-hidden="true"> {headlineIcon}</span> : null}
+              </span>
             </span>
-            <span className="hero__headline-accent">{headlineLine2}</span>
           </h1>
           <p className="hero__lede">
             {lede.map((segment, index) =>

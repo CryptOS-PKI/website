@@ -375,7 +375,7 @@
 
 .section__heading-icon {
   display: inline-block;
-  margin-inline-end: 0.5rem;
+  white-space: nowrap;
 }
 
 .section__lede {

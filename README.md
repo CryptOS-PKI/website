@@ -16,6 +16,10 @@ npm run lint       # eslint + prettier
 npm run typecheck  # tsc --noEmit
 ```
 
+## 🙏 Acknowledgements
+
+CryptOS was originally written by [@Bugs5382](https://github.com/Bugs5382).
+
 ## ⚖️ License
 
-MIT (c) 2026 The CryptOS Authors
+Apache License 2.0 (c) 2026 The CryptOS Authors

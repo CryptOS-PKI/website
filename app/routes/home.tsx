@@ -19,6 +19,7 @@ import type { MetaFunction } from "react-router";
 import { FeatureGrid } from "~/components/feature-grid";
 import { Footer } from "~/components/footer";
 import { Nav } from "~/components/nav";
+import { ReleaseBanner } from "~/components/release-banner";
 import { Section } from "~/components/section";
 import { SplitHero } from "~/components/split-hero";
 import { TerminalCard } from "~/components/terminal-card";
@@ -28,6 +29,7 @@ import {
   hero,
   meta as pageMeta,
   nav,
+  releaseStatus,
   trustModel,
   whatItIs,
 } from "~/content/cryptos";
@@ -44,9 +46,16 @@ export default function Home() {
         Skip to content
       </a>
       <Nav links={nav.links} />
+      <ReleaseBanner
+        badge={releaseStatus.badge}
+        heading={releaseStatus.heading}
+        body={releaseStatus.body}
+        cta={releaseStatus.cta}
+      />
       <main id="main">
         <SplitHero
           eyebrow={hero.eyebrow}
+          headlineIcon={hero.headlineIcon}
           headlineLine1={hero.headlineLine1}
           headlineLine2={hero.headlineLine2}
           lede={hero.lede}
@@ -59,6 +68,7 @@ export default function Home() {
         <Section
           id="what-it-is"
           eyebrow={whatItIs.eyebrow}
+          icon={whatItIs.icon}
           heading={whatItIs.heading}
           lede={whatItIs.lede}
         >
@@ -68,9 +78,11 @@ export default function Home() {
         <Section
           id="trust-model"
           eyebrow={trustModel.eyebrow}
+          icon={trustModel.icon}
           heading={trustModel.heading}
           lede={trustModel.lede}
           tone="card"
+          layout="split"
         >
           <p className="prose">{trustModel.body}</p>
         </Section>
@@ -78,8 +90,10 @@ export default function Home() {
         <Section
           id="fleetos-manager"
           eyebrow={fleetosManager.eyebrow}
+          icon={fleetosManager.icon}
           heading={fleetosManager.heading}
           lede={fleetosManager.lede}
+          layout="split"
         >
           <div className="fleetos-row">
             <FleetosMark size={48} />

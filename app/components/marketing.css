@@ -89,6 +89,63 @@
   }
 }
 
+/* Release banner */
+.release-banner {
+  border-bottom: 1px solid hsl(var(--border));
+  background: color-mix(in srgb, hsl(var(--warning)) 10%, hsl(var(--card)));
+}
+
+.release-banner__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding-block: 0.75rem;
+  border-inline-start: 4px solid hsl(var(--warning));
+}
+
+.release-banner__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: hsl(var(--foreground));
+  white-space: nowrap;
+}
+
+.release-banner__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: hsl(var(--warning));
+  flex-shrink: 0;
+}
+
+.release-banner__text {
+  margin: 0;
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.release-banner__text strong {
+  color: hsl(var(--foreground));
+}
+
+.release-banner__link {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.release-banner__link:hover,
+.release-banner__link:focus-visible {
+  color: hsl(var(--foreground));
+}
+
 /* Hero */
 .hero {
   position: relative;
@@ -138,6 +195,14 @@
   grid-template-columns: 1.1fr 0.9fr;
 }
 
+.hero__copy {
+  /* The headline's available width is this column's width, not the
+     viewport's -- at the two-column desktop breakpoint this column is well
+     under half the viewport. A container query (not a vw-based clamp) lets
+     the headline size track its actual column. */
+  container-type: inline-size;
+}
+
 .hero__eyebrow {
   font-family: var(--font-mono);
   font-size: 0.875rem;
@@ -148,16 +213,31 @@
 }
 
 .hero__headline {
-  font-size: 3.25rem;
-  line-height: 1.1;
+  /* A floor for the smallest phones, a cqw-driven middle so it scales with
+     this column's own width (see .hero__copy's container-type), a ceiling
+     so it never grows past the original design size. Tuned so the two-line
+     headline stays at or under 3 wrapped lines at every width this site is
+     checked at, including the narrower column the two-column desktop
+     layout leaves it. */
+  font-size: clamp(1.25rem, 0.7rem + 3.3cqw, 2.6rem);
+  line-height: 1.15;
   font-weight: 700;
   display: flex;
   flex-direction: column;
   margin-bottom: 1.5rem;
 }
 
+.hero__headline span {
+  text-wrap: balance;
+}
+
 .hero__headline-accent {
   color: hsl(var(--primary));
+}
+
+.hero__headline-icon {
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .hero__lede {
@@ -183,10 +263,6 @@
 @media (max-width: 860px) {
   .hero__grid {
     grid-template-columns: 1fr;
-  }
-
-  .hero__headline {
-    font-size: 2.5rem;
   }
 }
 
@@ -282,6 +358,28 @@
   margin-bottom: 2rem;
 }
 
+/* Split layout: head and body side by side in the same column ratio as the
+   hero's grid, so a section whose body is a single block of prose still
+   uses the section's full width instead of sitting in a narrow column with
+   empty space beside it. The prose itself still wraps at a readable width
+   (its own max-width, below) inside that column. */
+.section__grid {
+  display: grid;
+  gap: 3rem;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: start;
+}
+
+.section__grid .section__head {
+  margin-bottom: 0;
+}
+
+@media (max-width: 860px) {
+  .section__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .section__eyebrow {
   font-family: var(--font-mono);
   font-size: 0.875rem;
@@ -295,6 +393,11 @@
   font-size: 1.875rem;
   font-weight: 700;
   line-height: 1.1;
+}
+
+.section__heading-icon {
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .section__lede {
@@ -371,6 +474,7 @@
 .footer__links {
   list-style: none;
   display: flex;
+  flex-wrap: wrap;
   gap: 1.5rem;
   margin: 0;
   padding: 0;

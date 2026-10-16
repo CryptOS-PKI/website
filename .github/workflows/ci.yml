@@ -1,0 +1,57 @@
+name: CI (lint, typecheck, build)
+
+# Lint, typecheck and build (prerender) the site on a GitHub-hosted Linux
+# runner, then check the prerendered output for broken internal links.
+#
+# Pull requests only, and not while the PR is a draft; the PR run covers what
+# merges, so nothing reruns on push to main. Skip when a change touches only
+# Markdown or issue templates.
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths-ignore:
+      - "**.md"
+      - ".github/ISSUE_TEMPLATE/**"
+
+permissions:
+  contents: read
+
+# One run per PR per workflow: a new push cancels the older PR run.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: 🧪 Build (lint, typecheck, prerender)
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.0
+
+      - name: Set up Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.0.0
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Install dependencies
+        # `npm ci` rather than `npm install`: it installs exactly the
+        # lockfile, including the vendored `@cryptos-pki/ui` `file:` link, and
+        # fails if package.json and the lockfile disagree.
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build (prerender)
+        run: npm run build
+
+      - name: Check internal links in the prerendered output
+        run: node scripts/check-links.mjs build/client

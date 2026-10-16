@@ -35,7 +35,7 @@ jobs:
   autolabel:
     name: 🏷️ Autolabel
     if: github.event.pull_request.draft == false
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     # The addLabels call below targets the Issues API (a PR's labels live under
     # /issues/{number}/labels), so this needs issues:write. On a PR, GitHub's own
@@ -96,7 +96,7 @@ jobs:
     # Run even if autolabel was skipped/failed; the label may already be present
     # from the PR title. Drafts are still skipped.
     if: always() && github.event.pull_request.draft == false
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     # Reading labels is the Issues API (a PR's labels live under
     # /issues/{number}/labels), so this needs issues:read. On a PR, GitHub's own

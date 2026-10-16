@@ -1,0 +1,13 @@
+@cryptos-pki/ui (vendored)
+
+This is a vendored copy of packages/ui from CryptOS-PKI/cryptos-web, at commit
+6720003 (feat(dev): a development-only Copy for UI issue button, #167).
+
+It is copied in, not installed from a registry, because cryptos-web does not
+publish this package. It is not kept in lockstep with cryptos-web automatically;
+re-copy it from that commit (or a later one) by hand when the website needs a
+newer version of the kit, and update the commit noted above.
+
+Licensed under the Apache License, Version 2.0, same as the rest of CryptOS-PKI
+(see the repository's own LICENSE and NOTICE). Originally written by @Bugs5382
+(https://github.com/Bugs5382).

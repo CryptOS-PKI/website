@@ -21,7 +21,9 @@ import prettier from "eslint-plugin-prettier";
 import prettierConfig from "eslint-config-prettier";
 
 export default tseslint.config(
-  { ignores: ["dist", "coverage", "node_modules"] },
+  // vendor/ is a vendored copy of cryptos-web's packages/ui (see vendor/cryptos-ui/NOTICE);
+  // it is linted and typechecked in its own repo, not here.
+  { ignores: ["build", ".react-router", "vendor", "node_modules"] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -34,6 +36,16 @@ export default tseslint.config(
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+    },
+  },
+  {
+    // scripts/ runs under Node (CI build-output checks), not the browser.
+    files: ["scripts/**/*.mjs"],
+    languageOptions: {
+      globals: {
+        process: "readonly",
+        console: "readonly",
+      },
     },
   },
   prettierConfig,

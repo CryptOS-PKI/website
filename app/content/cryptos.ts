@@ -33,6 +33,7 @@ export const nav = {
     { label: "What it is", href: "#what-it-is" },
     { label: "Trust model", href: "#trust-model" },
     { label: "FleetOS Manager", href: "#fleetos-manager" },
+    { label: "Standards", href: "#standards" },
     { label: "GitHub", href: "https://github.com/CryptOS-PKI" },
   ],
 };
@@ -114,6 +115,18 @@ export const fleetosManager = {
   heading: "One view across every linked node.",
   lede: "An optional web console for day-to-day operations -- the nodes keep working without it.",
   body: "Link a node to the FleetOS Manager for topology, certificate inventory and ceremony history across your fleet. The manager never holds issuance authority -- its own certificate can't sign.",
+};
+
+export const standards = {
+  eyebrow: "Standards",
+  icon: "\u{1F4DC}", // scroll -- the RFCs the heading names
+  heading: "Built to the PKI RFCs.",
+  lede: "X.509, OCSP, time-stamps, ACME, EST and SCEP.",
+  body: "Your time-stamp policy is yours: its OID sits under your own IANA Private Enterprise Number.",
+  link: {
+    label: "Get a TSA policy OID",
+    href: "https://github.com/CryptOS-PKI/docs/blob/v0.1.0-rc.1/docs/using/tsa-policy-oid.md",
+  },
 };
 
 export const footer = {

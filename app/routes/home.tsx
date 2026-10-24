@@ -30,6 +30,7 @@ import {
   meta as pageMeta,
   nav,
   releaseStatus,
+  standards,
   trustModel,
   whatItIs,
 } from "~/content/cryptos";
@@ -99,6 +100,20 @@ export default function Home() {
             <FleetosMark size={48} />
             <p className="prose">{fleetosManager.body}</p>
           </div>
+        </Section>
+
+        <Section
+          id="standards"
+          eyebrow={standards.eyebrow}
+          icon={standards.icon}
+          heading={standards.heading}
+          lede={standards.lede}
+          tone="card"
+          layout="split"
+        >
+          <p className="prose">
+            {standards.body} <a href={standards.link.href}>{standards.link.label}</a>
+          </p>
         </Section>
       </main>
       <Footer marks={footer.marks} links={footer.links} />

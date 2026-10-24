@@ -39,9 +39,12 @@ export const nav = {
 
 export const releaseStatus = {
   badge: "Pre-release",
-  heading: "First release coming soon.",
-  body: "v0.1.0-rc.1 is in final testing. There are no downloads yet -- check back soon.",
-  cta: { label: "Follow progress on GitHub", href: "https://github.com/CryptOS-PKI/website" },
+  heading: "v0.1.0-rc.1 is out.",
+  body: "A release candidate for testing, not for production. The unsigned images and the release notes are on GitHub.",
+  cta: {
+    label: "Download v0.1.0-rc.1",
+    href: "https://github.com/CryptOS-PKI/cryptos-appliance/releases/tag/v0.1.0-rc.1",
+  },
 };
 
 export const hero = {
@@ -61,7 +64,10 @@ export const hero = {
     { text: "hold the keys", accent: true },
     { text: ", not us." },
   ] satisfies LedeSegment[],
-  primaryCta: { label: "Read the docs", href: "#" },
+  primaryCta: {
+    label: "Read the docs",
+    href: "https://github.com/CryptOS-PKI/docs/tree/v0.1.0-rc.1/docs",
+  },
   secondaryCta: { label: "View on GitHub", href: "https://github.com/CryptOS-PKI" },
   terminal: {
     title: "cryptosctl identity show",
@@ -120,6 +126,6 @@ export const footer = {
   marks: ["CryptOS-PKI", "FleetOS"],
   links: [
     { label: "GitHub", href: "https://github.com/CryptOS-PKI" },
-    { label: "Docs", href: "#" },
+    { label: "Docs", href: "https://github.com/CryptOS-PKI/docs/tree/v0.1.0-rc.1/docs" },
   ],
 };

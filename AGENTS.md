@@ -24,7 +24,7 @@ future product site, not CryptOS-specific themselves.
   `vendor/cryptos-ui/NOTICE` for the commit it was copied from). Not linted, typechecked or
   formatted here (see `eslint.config.mjs` and `.prettierignore`); update it by re-copying from
   cryptos-web, not by editing it in place.
-- `public/` - files served as-is (favicon).
+- `public/` - files served as-is (favicon, apple-touch-icon).
 
 ## Build, test, lint
 

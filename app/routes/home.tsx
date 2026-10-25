@@ -38,6 +38,12 @@ import {
 export const meta: MetaFunction = () => [
   { title: pageMeta.title },
   { name: "description", content: pageMeta.description },
+  { property: "og:site_name", content: pageMeta.siteName },
+  { property: "og:title", content: pageMeta.title },
+  { property: "og:description", content: pageMeta.description },
+  { property: "og:type", content: "website" },
+  { property: "og:url", content: pageMeta.url },
+  { name: "twitter:card", content: "summary" },
 ];
 
 export default function Home() {

@@ -23,6 +23,8 @@ export interface LedeSegment {
 }
 
 export const meta = {
+  siteName: "CryptOS",
+  url: "https://www.cryptos-pki.com/",
   title: "CryptOS -- an immutable, API-driven PKI operating system",
   description:
     "CryptOS is an immutable, API-driven, high-assurance PKI operating system. No SSH, no shell: every operation goes through an mTLS-authenticated API.",

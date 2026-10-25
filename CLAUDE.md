@@ -49,7 +49,7 @@ single-page app -- there is no client-side routing or server at request time.
 │   │   └── cryptos.ts      this product's copy and structure
 │   └── app.css             Tailwind entry + the design kit's tokens
 ├── vendor/cryptos-ui/       vendored copy of cryptos-web's packages/ui (see its NOTICE)
-├── public/                  static files served as-is (favicon)
+├── public/                  static files served as-is (favicon, apple-touch-icon)
 ├── build/                   build output (gitignored): client/ is the deployable site
 ├── scripts/
 │   └── check-links.mjs      CI: checks internal links in the prerendered output

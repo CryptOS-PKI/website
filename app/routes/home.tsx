@@ -43,7 +43,11 @@ export const meta: MetaFunction = () => [
   { property: "og:description", content: pageMeta.description },
   { property: "og:type", content: "website" },
   { property: "og:url", content: pageMeta.url },
-  { name: "twitter:card", content: "summary" },
+  { property: "og:image", content: "https://www.cryptos-pki.com/og-image.png" },
+  { property: "og:image:width", content: "1200" },
+  { property: "og:image:height", content: "630" },
+  { property: "og:image:alt", content: "CryptOS — an immutable, API-driven PKI operating system" },
+  { name: "twitter:card", content: "summary_large_image" },
 ];
 
 export default function Home() {

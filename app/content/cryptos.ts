@@ -138,9 +138,40 @@ export const standards = {
 };
 
 export const footer = {
-  marks: ["CryptOS-PKI", "FleetOS"],
-  links: [
-    { label: "GitHub", href: "https://github.com/CryptOS-PKI" },
-    { label: "Docs", href: "https://github.com/CryptOS-PKI/docs/tree/v0.1.0-rc.1/docs" },
+  marks: ["CryptOS-PKI", "FleetOS", "No shell to break into"],
+  tagline: "An immutable, API-driven PKI operating system.",
+  groups: [
+    {
+      title: "Product",
+      links: [
+        { label: "What it is", href: "/#what-it-is" },
+        { label: "Trust model", href: "/#trust-model" },
+        { label: "FleetOS Manager", href: "/#fleetos-manager" },
+        { label: "Standards", href: "/#standards" },
+        { label: "Download v0.1.0-rc.1", href: releaseStatus.cta.href },
+      ],
+    },
+    {
+      title: "Resources",
+      links: [
+        { label: "Docs", href: "https://github.com/CryptOS-PKI/docs/tree/v0.1.0-rc.1/docs" },
+        { label: "GitHub", href: "https://github.com/CryptOS-PKI" },
+        { label: "Releases", href: "https://github.com/CryptOS-PKI/cryptos-appliance/releases" },
+      ],
+    },
+    {
+      title: "Trust",
+      links: [
+        { label: "Trust model", href: "/#trust-model" },
+        {
+          label: "Security policy",
+          href: "https://github.com/CryptOS-PKI/.github/blob/main/SECURITY.md",
+        },
+        {
+          label: "Report a vulnerability",
+          href: "https://github.com/CryptOS-PKI/.github/blob/main/SECURITY.md#reporting-a-vulnerability",
+        },
+      ],
+    },
   ],
 };

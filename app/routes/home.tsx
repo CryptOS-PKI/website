@@ -122,7 +122,7 @@ export default function Home() {
           </p>
         </Section>
       </main>
-      <Footer marks={footer.marks} links={footer.links} />
+      <Footer tagline={footer.tagline} groups={footer.groups} marks={footer.marks} />
     </>
   );
 }

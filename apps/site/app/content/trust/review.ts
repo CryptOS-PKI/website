@@ -249,7 +249,7 @@ const sections: ReviewSection[] = [
       },
       {
         kind: "p",
-        text: "A node is a single machine today. A TPM-held CA key can't leave the TPM, so it can't be escrowed; losing that node's TPM loses that CA. Software keys can be escrowed in a passphrase envelope. Pairs with failover and split-custody recovery are on the roadmap.",
+        text: "A node is a single machine today. A TPM-held CA key can't leave the TPM, so it can't be escrowed; losing that node's TPM loses that CA. Software keys can be escrowed in a passphrase envelope. An encrypted backup of a node's state and export of the audit log to a SIEM are planned, and pairs with failover and split-custody recovery are on the roadmap.",
       },
     ],
   },
@@ -264,7 +264,7 @@ const sections: ReviewSection[] = [
       },
       {
         kind: "p",
-        text: "Every change goes through a pull request with CI: Go formatting, lint, vet and tests with a software TPM, interop tests against standard clients, and secret scanning.",
+        text: "Every change goes through a pull request with CI: Go formatting, lint, vet and tests with a software TPM, interop tests against standard clients, and secret scanning. Scanning for known vulnerabilities with govulncheck and gosec is planned.",
       },
     ],
   },

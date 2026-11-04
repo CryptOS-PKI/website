@@ -18,7 +18,7 @@ import { test } from "node:test";
 
 import { fleetos } from "../fleetos.ts";
 import { areas, controls } from "./controls.ts";
-import { STATUSES } from "./filter.ts";
+import { STATUSES, countByStatus } from "./filter.ts";
 import { evidenceHref, statusLabel } from "./links.ts";
 import { review } from "./review.ts";
 import { trustCenter } from "./trust-center.ts";
@@ -40,6 +40,32 @@ test("control ids are unique and every control sits in a known area", () => {
       controls.some((c) => c.area === a.id),
       `area ${a.id} is empty`,
     );
+});
+
+test("the register holds 61 controls: 38 implemented, 8 partial, 11 planned, 4 not planned", () => {
+  assert.deepEqual(countByStatus(controls), {
+    implemented: 38,
+    partial: 8,
+    planned: 11,
+    "not-planned": 4,
+  });
+});
+
+test("each design-intent control is planned and linked to the issue that tracks it", () => {
+  const tracked: Record<string, string> = {
+    "KEY-6": "website#42",
+    "AUD-5": "cryptos-node#408",
+    "REC-5": "cryptos-node#407",
+    "SUP-9": "cryptos-node#406",
+  };
+  for (const [id, issue] of Object.entries(tracked)) {
+    const c = controls.find((x) => x.id === id);
+    assert.equal(c?.status, "planned", `${id} should be planned`);
+    assert.ok(
+      c?.gaps?.some((g) => `${g.repo}#${g.number}` === issue),
+      `${id} should link ${issue}`,
+    );
+  }
 });
 
 test("every status has at least one control, so every chip filters to something", () => {

@@ -267,6 +267,22 @@ export const controls: Control[] = [
       { repo: "cryptos-node", path: "internal/config/config.go", kind: "code" },
     ],
   },
+  {
+    id: "KEY-6",
+    area: "keys",
+    title: "No network HSM for CA keys",
+    statement:
+      "CA keys live only in the node's own TPM; a network HSM or PKCS#11 device for CA keys is out of scope. The kms mode wraps only the state disk's key with an external KMS. Saying so plainly in the docs is planned.",
+    status: "planned",
+    evidence: [],
+    gaps: [
+      {
+        repo: "website",
+        number: 42,
+        title: "Say that CA keys stay in the TPM and a network HSM is out of scope",
+      },
+    ],
+  },
 
   // Ceremonies and quorum
   {
@@ -628,6 +644,16 @@ export const controls: Control[] = [
       { repo: "cryptos-node", number: 327, title: "Audit retention with a signed checkpoint" },
     ],
   },
+  {
+    id: "AUD-5",
+    area: "audit",
+    title: "Audit export to a SIEM",
+    statement:
+      "Each node keeps its own signed, hash-chained log, which cryptosctl reads and verifies on the node. Shipping it to a SIEM isn't built.",
+    status: "planned",
+    evidence: [],
+    gaps: [{ repo: "cryptos-node", number: 408, title: "Export the audit log to a SIEM" }],
+  },
 
   // Appliance platform
   {
@@ -832,6 +858,22 @@ export const controls: Control[] = [
     since: RC1,
     evidence: [{ repo: "cryptos-node", path: "internal/init/statekey.go", kind: "code" }],
   },
+  {
+    id: "REC-5",
+    area: "availability",
+    title: "Encrypted backup of node state",
+    statement:
+      "There is no backup of a node's etcd state today; only a software CA key can be escrowed (REC-1). An encrypted snapshot and restore isn't built.",
+    status: "planned",
+    evidence: [],
+    gaps: [
+      {
+        repo: "cryptos-node",
+        number: 407,
+        title: "Encrypted backup and restore of a node's etcd state",
+      },
+    ],
+  },
 
   // Supply chain and development
   {
@@ -920,5 +962,17 @@ export const controls: Control[] = [
       "Vulnerabilities are reported privately through GitHub security advisories; the latest 0.x release gets fixes.",
     status: "implemented",
     evidence: [{ repo: ".github", path: "SECURITY.md", kind: "doc" }],
+  },
+  {
+    id: "SUP-9",
+    area: "supply-chain",
+    title: "Vulnerability scanning in CI",
+    statement:
+      "CI scans for secrets and runs the linters and tests, but no workflow checks for known vulnerabilities with govulncheck or runs gosec yet.",
+    status: "planned",
+    evidence: [],
+    gaps: [
+      { repo: "cryptos-node", number: 406, title: "Run govulncheck and gosec in the Go repos' CI" },
+    ],
   },
 ];

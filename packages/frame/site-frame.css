@@ -1,15 +1,262 @@
-/* The shared site frame for www.cryptos-pki.com and docs.cryptos-pki.com.
+/* The shared site frame for www.cryptos-pki.com and docs.cryptos-pki.com: the
+   strip, header, page column and footer measurements, the frame colours, the
+   theme switch and the font faces both sites use, so moving between the two
+   never shifts, resizes or recolours anything in the frame.
 
    This is the one copy, in packages/frame. The site (apps/site) and the docs
    (apps/docs) both import it, so a change here changes both sites together.
+   Each site lays out its own header and footer markup from these tokens (the
+   site in app/components/marketing.css, the docs in src/css/custom.css on
+   Docusaurus's navbar and footer classes); only the values live here. The
+   strip and the theme switch are the same markup on both sites, so their
+   rules are here too.
 
-   For now it holds the font faces: Inter Variable for text and JetBrains Mono
-   for code and the wordmark, self-hosted from /fonts/ under the SIL Open Font
-   License (see /fonts/README.md). The family names are the ones the kit's
-   tokens (vendor/cryptos-ui/tokens.css) and the docs theme already ask for. The
-   webpackIgnore comments keep the docs build (webpack) from renaming or
-   inlining the files, so both sites load the same URLs; Vite leaves them
-   alone anyway. */
+   The colours are the kit's palette (vendor/cryptos-ui/tokens.css) as hex,
+   light on :root and dark under [data-theme="dark"], which both sites set on
+   <html>. Dark is the default on both.
+
+   The fonts are self-hosted from /fonts/ under the SIL Open Font License (see
+   /fonts/README.md): Inter Variable for text and JetBrains Mono for the
+   wordmark, labels and code. The webpackIgnore comments keep the docs build
+   (webpack) from renaming or inlining the files, so both sites load the same
+   URLs; Vite leaves them alone anyway. */
+
+:root {
+  --frame-font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --frame-font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* The page column every part of both sites lines up on. */
+  --frame-max: 72rem;
+  --frame-gutter: clamp(1.25rem, 4vw, 2rem);
+
+  /* Header: a 28px row with 1rem above and below, then a 1px rule. */
+  --frame-header-pad: 1rem;
+  --frame-header-height: 61px;
+  --frame-header-blur: blur(6px);
+  --frame-logo: 1.75rem;
+  --frame-brand-gap: 0.625rem;
+  --frame-wordmark-size: 1.0625rem;
+  --frame-wordmark-line: 1.59375rem;
+  --frame-wordmark-weight: 700;
+  --frame-wordmark-spacing: -0.025em;
+  --frame-nav-size: 0.875rem;
+  --frame-nav-line: 1.3125rem;
+  --frame-nav-gap: 2rem;
+  --frame-header-stack-gap: 0.75rem;
+  --frame-nav-gap-stacked: 1rem;
+  --frame-toggle: 2rem;
+  --frame-toggle-icon: 1rem;
+  --frame-radius: 0.5rem;
+
+  /* The strip above the header. */
+  --frame-strip-pad: 0.75rem;
+  --frame-strip-gap: 0.5rem 1rem;
+  --frame-strip-rule: 4px;
+  --frame-strip-size: 0.875rem;
+  --frame-strip-line: 1.3125rem;
+  --frame-strip-badge-size: 0.75rem;
+  --frame-strip-badge-line: 1.125rem;
+  --frame-strip-badge-spacing: 0.08em;
+  --frame-strip-dot: 0.5rem;
+
+  /* Footer. */
+  --frame-footer-pad-top: 2.5rem;
+  --frame-footer-pad-bottom: 2rem;
+  --frame-footer-cols: 2fr repeat(3, 1fr);
+  --frame-footer-cols-narrow: 1fr 1fr;
+  --frame-footer-gap: 2rem;
+  --frame-footer-mark: 1.5rem;
+  --frame-footer-wordmark-size: 1.0625rem;
+  --frame-footer-size: 0.875rem;
+  --frame-footer-line: 1.3125rem;
+  --frame-footer-link-gap: 0.5rem;
+  --frame-footer-heading-size: 0.75rem;
+  --frame-footer-heading-line: 1.125rem;
+  --frame-footer-heading-gap: 0.75rem;
+  --frame-footer-heading-spacing: 0.08em;
+  --frame-footer-tagline-gap: 0.5rem;
+  --frame-footer-tagline-max: 20rem;
+  --frame-legal-size: 0.75rem;
+  --frame-legal-line: 1.125rem;
+  --frame-legal-pad: 1.25rem;
+
+  /* Frame colours, light (the kit's :root palette). */
+  --frame-bg: #fbfcfe;
+  --frame-surface: #ffffff;
+  --frame-ink: #0e1526;
+  --frame-muted: #556077;
+  --frame-border: #e3e7ef;
+  --frame-primary: #2e74c0;
+  --frame-warning: #d97706;
+  --frame-header-bg: color-mix(in srgb, var(--frame-bg) 92%, transparent);
+  --frame-strip-bg: color-mix(in srgb, var(--frame-warning) 10%, var(--frame-surface));
+}
+
+/* Breakpoints, the same on both sites: at 640px and under, the header stacks,
+   the brand on one line and the links under it, wrapping as they need; at
+   720px and under, the footer drops to two columns under the brand. */
+@media (max-width: 640px) {
+  :root {
+    --frame-nav-gap: var(--frame-nav-gap-stacked);
+  }
+}
+
+/* Dark (the kit's .dark palette). Screens only, so print stays on paper
+   colours. */
+@media screen {
+  :root[data-theme="dark"] {
+    --frame-bg: #0c0f16;
+    --frame-surface: #141925;
+    --frame-ink: #e7eaf1;
+    --frame-muted: #8b94a6;
+    --frame-border: #232b3d;
+    --frame-primary: #5391d8;
+    --frame-warning: #f5a623;
+  }
+}
+
+/* The scrollbar's space is always kept, so a long page and a short one put
+   the frame at the same spot; and text is drawn the same way on both. */
+html {
+  scrollbar-gutter: stable;
+  background-color: var(--frame-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* The marks: each site renders the light and the dark file, and the theme on
+   <html> shows one. */
+.mark--dark,
+:root[data-theme="dark"] .mark--light {
+  display: none;
+}
+
+:root[data-theme="dark"] .mark--dark {
+  display: inline-block;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+/* Every property set, since the site's reset (Tailwind) and the docs'
+   (Infima) style <sup> differently. */
+.tm {
+  position: relative;
+  top: -0.5em;
+  font-size: 0.7em;
+  vertical-align: super;
+  line-height: 0;
+}
+
+/* The strip above the header (strip.ts): the release badge, the release and
+   pre-1.0 note, and two links, on a warning-tinted band with a warning rule
+   at the column's left edge. Text stays in the ink and muted pair, which
+   meets WCAG AA on the band in both themes; the warning colour is only the
+   rule and the dot. */
+.strip__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--frame-strip-gap);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--frame-max);
+  margin-inline: auto;
+  padding: var(--frame-strip-pad) var(--frame-gutter);
+  border-inline-start: var(--frame-strip-rule) solid var(--frame-warning);
+  text-align: start;
+}
+
+.strip__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--frame-font-mono);
+  font-size: var(--frame-strip-badge-size);
+  line-height: var(--frame-strip-badge-line);
+  font-weight: 700;
+  letter-spacing: var(--frame-strip-badge-spacing);
+  text-transform: uppercase;
+  color: var(--frame-ink);
+  white-space: nowrap;
+}
+
+.strip__dot {
+  width: var(--frame-strip-dot);
+  height: var(--frame-strip-dot);
+  border-radius: 50%;
+  background: var(--frame-warning);
+  flex-shrink: 0;
+}
+
+.strip__text {
+  margin: 0;
+  font-family: var(--frame-font-sans);
+  font-size: var(--frame-strip-size);
+  line-height: var(--frame-strip-line);
+  font-weight: 400;
+  color: var(--frame-muted);
+}
+
+.strip__text strong {
+  font-weight: 700;
+  color: var(--frame-ink);
+}
+
+/* Two classes deep, so it outranks the docs' announcement bar link rule. */
+.strip__text .strip__link,
+.strip__text .strip__link:hover {
+  color: var(--frame-primary);
+  text-decoration: underline;
+}
+
+/* The theme switch (theme-toggle.tsx): the kit's ThemeToggle, a 2rem square
+   ghost button with a 1px border and a 1rem icon. The sun shows in dark
+   (switch to light), the moon in light. */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--frame-toggle);
+  height: var(--frame-toggle);
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--frame-border);
+  border-radius: calc(var(--frame-radius) - 2px);
+  background: transparent;
+  color: var(--frame-ink);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--frame-border);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--frame-primary);
+  outline-offset: 2px;
+}
+
+.theme-toggle__icon {
+  width: var(--frame-toggle-icon);
+  height: var(--frame-toggle-icon);
+  flex-shrink: 0;
+}
+
+.theme-toggle__icon--sun,
+:root[data-theme="dark"] .theme-toggle__icon--moon {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle__icon--sun {
+  display: block;
+}
 
 @font-face {
   font-family: "Inter Variable";

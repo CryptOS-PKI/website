@@ -9,8 +9,9 @@ Two static sites and the pieces they share, as npm workspaces:
   `@cryptos-pki/ui` design kit.
 - 📚 **`apps/docs`:** the docs. Docusaurus 3, versioned: each product release gets its own docs
   version, and Next is unreleased `main`.
-- 🔤 **`packages/frame`:** what both sites share: `site-frame.css`, the self-hosted fonts and
-  `release.ts`, the current product release both sites show.
+- 🔤 **`packages/frame`:** the frame both sites share, so they read as one site: the strip,
+  header and footer (`site-frame.css`, `strip.ts`, `content.ts`), the light and dark switch, the
+  self-hosted fonts and `release.ts`, the current product release both sites show.
 - 🎨 **`packages/brand`:** the CryptOS and FleetOS marks, the favicon and the touch icon.
 - 🧩 **`vendor/cryptos-ui`:** a vendored, read-only copy of cryptos-web's `packages/ui` kit
   (see `vendor/cryptos-ui/NOTICE`).

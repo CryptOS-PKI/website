@@ -16,8 +16,11 @@ Two static sites in one repo, as npm workspaces:
 - `apps/docs` (`@cryptos-pki/docs`): the CryptOS docs (docs.cryptos-pki.com), Docusaurus 3,
   versioned. `docs/` is Next (unreleased `main`); `versioned_docs/` holds one snapshot per
   release.
-- `packages/frame` (`@cryptos-pki/frame`): `site-frame.css` (the font faces), the self-hosted
-  fonts in `public/fonts/`, and `release.ts`, the current product release both sites show.
+- `packages/frame` (`@cryptos-pki/frame`): the frame both sites share. `site-frame.css` holds the
+  font faces, the frame tokens (column, header, strip and footer measurements) and the frame
+  colours, light and dark; `strip.ts` the strip above the header; `content.ts` the header links,
+  the footer and the legal line; `theme-toggle.tsx` the light and dark switch; `release.ts` the
+  current product release; `public/fonts/` the self-hosted fonts.
 - `packages/brand` (`@cryptos-pki/brand`): the marks, favicon and touch icon in `public/`.
 - `vendor/cryptos-ui` (`@cryptos-pki/ui`): a vendored, read-only copy of cryptos-web's
   `packages/ui` kit (see `vendor/cryptos-ui/NOTICE`). The site depends on it as a `file:` link; it is not a workspace,
@@ -41,6 +44,21 @@ Run from the repo root.
 - Site link check (after a build): `npm run check:links`
 - Docs version check: `npm run check:docs-version`; cut one: `npm run docs:version`
 - License headers: `task license` (verify) / `task license:fix` (inject)
+
+## The shared frame
+
+- The strip, header and footer must match pixel for pixel on both sites. Change a measurement or
+  colour in `packages/frame/site-frame.css`, a link or label in `packages/frame/content.ts`, never
+  in one app. The site lays the frame out in `apps/site/app/components/marketing.css`, the docs in
+  `apps/docs/src/css/custom.css` on Docusaurus's navbar and footer classes, both from the
+  `--frame-*` tokens.
+- Dark is the default on both. The site keeps the choice in localStorage `theme` and puts it on
+  `<html>` as the kit's `dark` class and `data-theme`; the docs use Docusaurus's colour mode with
+  its built-in switch off. Both draw the shared `ThemeToggle`.
+- The docs header carries the site's links; the docs sections live in the sidebar and on the docs
+  home. The version picker sits right after the wordmark, on doc pages only.
+- Cross-site links come from `VITE_DOCS_URL` (site) and `CRYPTOS_SITE_URL` / `CRYPTOS_DOCS_URL`
+  (docs), defaulting to the live addresses; `PREVIEW_BASE_PATH` builds either app under a sub-path.
 
 ## Docs versions
 

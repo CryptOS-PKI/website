@@ -62,7 +62,7 @@ request time.
 │       ├── static/              the docs' own images
 │       └── build/               build output (gitignored)
 ├── packages/
-│   ├── frame/                   @cryptos-pki/frame: site-frame.css, public/fonts/, release.ts
+│   ├── frame/                   @cryptos-pki/frame: site-frame.css, strip, content, theme switch, fonts, release.ts
 │   └── brand/                   @cryptos-pki/brand: public/ (favicon, touch icon, img/brand/)
 ├── vendor/cryptos-ui/           vendored copy of cryptos-web's packages/ui (see its NOTICE)
 ├── scripts/                     CI path filter and the docs version scripts, with tests
@@ -81,8 +81,9 @@ request time.
   data fetching, no product-specific copy.
 - `apps/docs/docs/`: docs pages for Next. A released version's pages change only by cutting a new
   version (`npm run docs:version`).
-- `packages/frame`: anything both sites must render the same (fonts now; the header and footer
-  measurements later) and the current release version.
+- `packages/frame`: anything both sites must render the same: the fonts, the frame tokens and
+  colours, the strip, the header links, the footer and the theme switch, and the current release
+  version.
 - `packages/brand`: the marks and icons both sites serve.
 - `vendor/cryptos-ui/`: read-only; re-copy from cryptos-web to update, never edit in place.
 - Configuration comes from `import.meta.env.VITE_*` (site) or the Docusaurus config (docs);

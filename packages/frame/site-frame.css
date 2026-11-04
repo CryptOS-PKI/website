@@ -1,112 +1,405 @@
-/* The shared site frame for www.cryptos-pki.com and docs.cryptos-pki.com.
+/* The shared site frame for www.cryptos-pki.com and docs.cryptos-pki.com: the
+   strip, header, page column and footer measurements, the frame colours, the
+   theme switch and the font faces both sites use, so moving between the two
+   never shifts, resizes or recolours anything in the frame.
 
    This is the one copy, in packages/frame. The site (apps/site) and the docs
    (apps/docs) both import it, so a change here changes both sites together.
+   Each site lays out its own header and footer markup from these tokens (the
+   site in app/components/marketing.css, the docs in src/css/custom.css on
+   Docusaurus's navbar and footer classes); only the values live here. The
+   strip and the theme switch are the same markup on both sites, so their
+   rules are here too.
 
-   For now it holds the font faces: Inter Variable for text and JetBrains Mono
-   for code and the wordmark, self-hosted from /fonts/ under the SIL Open Font
-   License (see /fonts/README.md). The family names are the ones the kit's
-   tokens (vendor/cryptos-ui/tokens.css) and the docs theme already ask for. The
-   webpackIgnore comments keep the docs build (webpack) from renaming or
-   inlining the files, so both sites load the same URLs; Vite leaves them
-   alone anyway. */
+   The colours are the kit's palette (vendor/cryptos-ui/tokens.css) as hex,
+   light on :root and dark under [data-theme="dark"], which both sites set on
+   <html>. Dark is the default on both.
 
-@font-face {
-  font-family: "Inter Variable";
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  /* webpackIgnore: true */
-  src: url("/fonts/inter-latin-ext.woff2") format("woff2");
-  unicode-range:
-    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
-    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
-    U+A720-A7FF;
+   The fonts are self-hosted from /fonts/ under the SIL Open Font License (see
+   /fonts/README.md): Inter Variable for text and JetBrains Mono for the
+   wordmark, labels and code. Their font-face rules aren't here: a url() in
+   this file can't know the site's base path, so a site served under a
+   sub-path would ask for /fonts/ at the server root and miss. fonts.ts writes
+   them with the base instead, and each site puts them in its <head>. */
+
+:root {
+  --frame-font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --frame-font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* The page column every part of both sites lines up on. */
+  --frame-max: 72rem;
+  --frame-gutter: clamp(1.25rem, 4vw, 2rem);
+
+  /* Header: a 28px row with 1rem above and below, then a 1px rule. */
+  --frame-header-pad: 1rem;
+  --frame-header-height: 61px;
+  --frame-header-blur: blur(6px);
+  --frame-logo: 1.75rem;
+  --frame-brand-gap: 0.625rem;
+  --frame-wordmark-size: 1.0625rem;
+  --frame-wordmark-line: 1.59375rem;
+  --frame-wordmark-weight: 700;
+  --frame-wordmark-spacing: -0.025em;
+  --frame-nav-size: 0.875rem;
+  --frame-nav-line: 1.3125rem;
+  --frame-nav-gap: 2rem;
+  --frame-nav-gap-menu: 0.5rem;
+  --frame-toggle: 2rem;
+  --frame-toggle-icon: 1rem;
+  --frame-radius: 0.5rem;
+
+  /* The strip above the header. */
+  --frame-strip-pad: 0.75rem;
+  --frame-strip-gap: 0.5rem 1rem;
+  --frame-strip-rule: 4px;
+  --frame-strip-size: 0.875rem;
+  --frame-strip-line: 1.3125rem;
+  --frame-strip-badge-size: 0.75rem;
+  --frame-strip-badge-line: 1.125rem;
+  --frame-strip-badge-spacing: 0.08em;
+  --frame-strip-dot: 0.5rem;
+
+  /* Footer. */
+  --frame-footer-pad-top: 2.5rem;
+  --frame-footer-pad-bottom: 2rem;
+  --frame-footer-cols: 2fr repeat(3, 1fr);
+  --frame-footer-cols-narrow: 1fr 1fr;
+  --frame-footer-gap: 2rem;
+  --frame-footer-mark: 1.5rem;
+  --frame-footer-wordmark-size: 1.0625rem;
+  --frame-footer-size: 0.875rem;
+  --frame-footer-line: 1.3125rem;
+  --frame-footer-link-gap: 0.5rem;
+  --frame-footer-heading-size: 0.75rem;
+  --frame-footer-heading-line: 1.125rem;
+  --frame-footer-heading-gap: 0.75rem;
+  --frame-footer-heading-spacing: 0.08em;
+  --frame-footer-tagline-gap: 0.5rem;
+  --frame-footer-tagline-max: 20rem;
+  --frame-legal-size: 0.75rem;
+  --frame-legal-line: 1.125rem;
+  --frame-legal-pad: 1.25rem;
+
+  /* Frame colours, light (the kit's :root palette). */
+  --frame-bg: #fbfcfe;
+  --frame-surface: #ffffff;
+  --frame-ink: #0e1526;
+  --frame-muted: #556077;
+  --frame-border: #e3e7ef;
+  --frame-primary: #2e74c0;
+  /* Body-text links: a shade darker than the primary for AA on the page and
+     card backgrounds (5.9:1 and 6.0:1). */
+  --frame-link: #2563b0;
+  --frame-warning: #d97706;
+  --frame-header-bg: color-mix(in srgb, var(--frame-bg) 92%, transparent);
+  --frame-strip-bg: color-mix(in srgb, var(--frame-warning) 10%, var(--frame-surface));
 }
 
-@font-face {
-  font-family: "Inter Variable";
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  /* webpackIgnore: true */
-  src: url("/fonts/inter-latin.woff2") format("woff2");
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+/* Breakpoints, the same on both sites. Under 1168px the header folds its
+   links into the menu button (header-menu-config.ts; the rule is below), so
+   it stays one row and never wraps or overlaps; at 720px and under, the
+   footer drops to two columns under the brand. */
+
+/* Dark (the kit's .dark palette). Screens only, so print stays on paper
+   colours. */
+@media screen {
+  :root[data-theme="dark"] {
+    --frame-bg: #0c0f16;
+    --frame-surface: #141925;
+    --frame-ink: #e7eaf1;
+    --frame-muted: #8b94a6;
+    --frame-border: #232b3d;
+    --frame-primary: #5391d8;
+    /* 7.3:1 on the page, 6.7:1 on cards. */
+    --frame-link: #6aa3e2;
+    --frame-warning: #f5a623;
+  }
 }
 
-@font-face {
-  font-family: "JetBrains Mono";
-  font-style: normal;
+/* The scrollbar's space is always kept, so a long page and a short one put
+   the frame at the same spot; and text is drawn the same way on both. */
+html {
+  scrollbar-gutter: stable;
+  background-color: var(--frame-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* The marks: each site renders the light and the dark file, and the theme on
+   <html> shows one. */
+.mark--dark,
+:root[data-theme="dark"] .mark--light {
+  display: none;
+}
+
+:root[data-theme="dark"] .mark--dark {
+  display: inline-block;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+/* Every property set, since the site's reset (Tailwind) and the docs'
+   (Infima) style <sup> differently. */
+.tm {
+  position: relative;
+  top: -0.5em;
+  font-size: 0.7em;
+  vertical-align: super;
+  line-height: 0;
+}
+
+/* Links in body text, on both sites: the site marks its page content with
+   .frame-prose, the docs' pages are Docusaurus's .markdown. Only links with
+   no class of their own, so buttons, cards, the hero's calls to action,
+   heading anchors and the header and footer keep their own look; Docusaurus
+   writes a markdown link with an empty class attribute, so that counts as
+   none. Links in the docs' callouts take one more class, to outrank the docs
+   theme's admonition link rule, which loads after this file. The colour
+   alone sits too close to the muted body text, so prose links are always
+   underlined. */
+.frame-prose a:is(:not([class]), [class=""]),
+.markdown a:is(:not([class]), [class=""]),
+.markdown .theme-admonition a:is(:not([class]), [class=""]) {
+  color: var(--frame-link);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in srgb, var(--frame-link) 60%, transparent);
+  text-underline-offset: 0.2em;
+}
+
+.frame-prose a:is(:not([class]), [class=""]):is(:hover, :focus-visible),
+.markdown a:is(:not([class]), [class=""]):is(:hover, :focus-visible),
+.markdown .theme-admonition a:is(:not([class]), [class=""]):is(:hover, :focus-visible) {
+  color: var(--frame-link);
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 2px;
+}
+
+/* The footer's legal text (content.ts legalHtml): the trademarks, then the
+   copyright and licence, each on its own line. */
+.footer__legal-line {
+  display: block;
+}
+
+/* The header menu (header-menu.tsx): under 1168px each site's header links
+   (.frame-nav__link) hide and this button shows at the right end, after the
+   theme switch, opening a panel of the same links under the header. The one
+   media rule for both sites; !important because the docs' own navbar rules
+   are more specific than one class. HEADER_MENU_BREAKPOINT in
+   header-menu-config.ts is the same width. */
+.frame-menu {
+  display: none;
+  align-items: center;
+  height: var(--frame-nav-line);
+}
+
+@media (max-width: 1167px) {
+  .frame-nav__link {
+    display: none !important;
+  }
+
+  /* Closer to the switch than the links' gap; the gap itself stays, so the
+     version picker after the wordmark doesn't move. */
+  .frame-menu {
+    display: flex;
+    margin-inline-start: calc(var(--frame-nav-gap-menu) - var(--frame-nav-gap));
+  }
+}
+
+/* The kit's ghost icon button, as the theme switch. */
+.frame-menu__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--frame-toggle);
+  height: var(--frame-toggle);
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--frame-border);
+  border-radius: calc(var(--frame-radius) - 2px);
+  background: transparent;
+  color: var(--frame-ink);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.frame-menu__button:hover,
+.frame-menu__button[aria-expanded="true"] {
+  background: var(--frame-border);
+}
+
+.frame-menu__button:focus-visible {
+  outline: 2px solid var(--frame-primary);
+  outline-offset: 2px;
+}
+
+.frame-menu__icon {
+  display: block;
+  width: var(--frame-toggle-icon);
+  height: var(--frame-toggle-icon);
+  flex-shrink: 0;
+}
+
+/* The panel hangs from the header's bottom edge, across the full width, with
+   the links in the page column. */
+.frame-menu__panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid var(--frame-border);
+  background: var(--frame-bg);
+  box-shadow: 0 16px 32px -24px rgb(0 0 0 / 0.5);
+  font-family: var(--frame-font-sans);
+}
+
+.frame-menu__panel[hidden] {
+  display: none;
+}
+
+.frame-menu__links {
+  box-sizing: border-box;
+  max-width: var(--frame-max);
+  margin: 0 auto;
+  padding: 0.5rem var(--frame-gutter);
+  list-style: none;
+}
+
+.frame-menu__panel .frame-menu__links li {
+  margin: 0;
+  border-bottom: 1px solid var(--frame-border);
+}
+
+.frame-menu__panel .frame-menu__links li:last-child {
+  border-bottom: 0;
+}
+
+/* Two classes deep, so the sites' own header link rules don't reach in. */
+.frame-menu__panel .frame-menu__links a {
+  display: block;
+  padding: 0.75rem 0;
+  font-size: 1rem;
+  line-height: 1.5rem;
   font-weight: 400;
-  font-display: swap;
-  /* webpackIgnore: true */
-  src: url("/fonts/jetbrains-mono-400-latin-ext.woff2") format("woff2");
-  unicode-range:
-    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
-    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
-    U+A720-A7FF;
+  color: var(--frame-ink);
+  text-decoration: none;
 }
 
-@font-face {
-  font-family: "JetBrains Mono";
-  font-style: normal;
+.frame-menu__panel .frame-menu__links a:hover,
+.frame-menu__panel .frame-menu__links a:focus-visible {
+  color: var(--frame-primary);
+  text-decoration: none;
+}
+
+/* The strip above the header (strip.ts): the release badge, the release and
+   pre-1.0 note, and two links, on a warning-tinted band with a warning rule
+   at the column's left edge. Text stays in the ink and muted pair, which
+   meets WCAG AA on the band in both themes; the warning colour is only the
+   rule and the dot. */
+.strip__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--frame-strip-gap);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--frame-max);
+  margin-inline: auto;
+  padding: var(--frame-strip-pad) var(--frame-gutter);
+  border-inline-start: var(--frame-strip-rule) solid var(--frame-warning);
+  text-align: start;
+}
+
+.strip__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--frame-font-mono);
+  font-size: var(--frame-strip-badge-size);
+  line-height: var(--frame-strip-badge-line);
+  font-weight: 700;
+  letter-spacing: var(--frame-strip-badge-spacing);
+  text-transform: uppercase;
+  color: var(--frame-ink);
+  white-space: nowrap;
+}
+
+.strip__dot {
+  width: var(--frame-strip-dot);
+  height: var(--frame-strip-dot);
+  border-radius: 50%;
+  background: var(--frame-warning);
+  flex-shrink: 0;
+}
+
+.strip__text {
+  margin: 0;
+  font-family: var(--frame-font-sans);
+  font-size: var(--frame-strip-size);
+  line-height: var(--frame-strip-line);
   font-weight: 400;
-  font-display: swap;
-  /* webpackIgnore: true */
-  src: url("/fonts/jetbrains-mono-400-latin.woff2") format("woff2");
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  color: var(--frame-muted);
 }
 
-@font-face {
-  font-family: "JetBrains Mono";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  /* webpackIgnore: true */
-  src: url("/fonts/jetbrains-mono-500-latin-ext.woff2") format("woff2");
-  unicode-range:
-    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
-    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
-    U+A720-A7FF;
-}
-
-@font-face {
-  font-family: "JetBrains Mono";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  /* webpackIgnore: true */
-  src: url("/fonts/jetbrains-mono-500-latin.woff2") format("woff2");
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "JetBrains Mono";
-  font-style: normal;
+.strip__text strong {
   font-weight: 700;
-  font-display: swap;
-  /* webpackIgnore: true */
-  src: url("/fonts/jetbrains-mono-700-latin-ext.woff2") format("woff2");
-  unicode-range:
-    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
-    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
-    U+A720-A7FF;
+  color: var(--frame-ink);
 }
 
-@font-face {
-  font-family: "JetBrains Mono";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  /* webpackIgnore: true */
-  src: url("/fonts/jetbrains-mono-700-latin.woff2") format("woff2");
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+/* Two classes deep, so it outranks the docs' announcement bar link rule. */
+.strip__text .strip__link,
+.strip__text .strip__link:hover {
+  color: var(--frame-primary);
+  text-decoration: underline;
+}
+
+/* The theme switch (theme-toggle.tsx): the kit's ThemeToggle, a 2rem square
+   ghost button with a 1px border and a 1rem icon. The sun shows in dark
+   (switch to light), the moon in light. */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--frame-toggle);
+  height: var(--frame-toggle);
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--frame-border);
+  border-radius: calc(var(--frame-radius) - 2px);
+  background: transparent;
+  color: var(--frame-ink);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--frame-border);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--frame-primary);
+  outline-offset: 2px;
+}
+
+.theme-toggle__icon {
+  width: var(--frame-toggle-icon);
+  height: var(--frame-toggle-icon);
+  flex-shrink: 0;
+}
+
+.theme-toggle__icon--sun,
+:root[data-theme="dark"] .theme-toggle__icon--moon {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle__icon--sun {
+  display: block;
 }

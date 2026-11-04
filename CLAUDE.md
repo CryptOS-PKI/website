@@ -44,10 +44,11 @@ request time.
 │   ├── site/                    @cryptos-pki/site: www.cryptos-pki.com
 │   │   ├── app/
 │   │   │   ├── root.tsx         the document shell (<html>, meta)
-│   │   │   ├── routes.ts        the route table (one route today: "/")
-│   │   │   ├── routes/home.tsx  the home route: composes components from content
+│   │   │   ├── routes.ts        the route table ("/" and "/releases")
+│   │   │   ├── routes/          home.tsx and releases.tsx: compose components from content
 │   │   │   ├── components/      presentational pieces, product-agnostic (props carry the copy)
 │   │   │   ├── content/cryptos.ts   this product's copy and structure
+│   │   │   ├── content/release.ts   the Releases page's downloads
 │   │   │   └── app.css          the frame's fonts, Tailwind, the kit's tokens
 │   │   ├── scripts/check-links.mjs  CI: internal links in the prerendered output
 │   │   ├── shared-public.ts     Vite plugin serving packages/*/public at the site root
@@ -62,8 +63,8 @@ request time.
 │       ├── static/              the docs' own images
 │       └── build/               build output (gitignored)
 ├── packages/
-│   ├── frame/                   @cryptos-pki/frame: site-frame.css, public/fonts/, release.ts
-│   └── brand/                   @cryptos-pki/brand: public/ (favicon, touch icon, img/brand/)
+│   ├── frame/                   @cryptos-pki/frame: site-frame.css, strip, content, hero, theme switch, fonts, release.ts
+│   └── brand/                   @cryptos-pki/brand: public/ (favicon, touch icon, img/brand/ with og-card.png), og-card.html
 ├── vendor/cryptos-ui/           vendored copy of cryptos-web's packages/ui (see its NOTICE)
 ├── scripts/                     CI path filter and the docs version scripts, with tests
 ├── docs/deploy.md               how a release deploys both sites
@@ -75,22 +76,24 @@ request time.
 
 ### What goes where
 
-- `apps/site/app/content/<product>.ts`: all product-specific copy (nav, hero, sections, footer).
+- `apps/site/app/content/<product>.ts`: all product-specific copy (nav, sections, footer);
+  `release.ts` the Releases page's downloads.
   The components and the page stay product-agnostic.
 - `apps/site/app/components/`: presentational pieces, each one taking its content as props. No
   data fetching, no product-specific copy.
 - `apps/docs/docs/`: docs pages for Next. A released version's pages change only by cutting a new
   version (`npm run docs:version`).
-- `packages/frame`: anything both sites must render the same (fonts now; the header and footer
-  measurements later) and the current release version.
-- `packages/brand`: the marks and icons both sites serve.
+- `packages/frame`: anything both sites must render the same: the fonts, the frame tokens and
+  colours, the strip, the header links, the footer, the hero both homes open with and the theme
+  switch, and the current release version.
+- `packages/brand`: the marks, icons and link-preview card both sites serve.
 - `vendor/cryptos-ui/`: read-only; re-copy from cryptos-web to update, never edit in place.
 - Configuration comes from `import.meta.env.VITE_*` (site) or the Docusaurus config (docs);
   never put secrets there, it ships to the browser.
 
 ### Naming
 
-- Site components and their files are `kebab-case` (`split-hero.tsx`), one component per file,
+- Site components and their files are `kebab-case` (`feature-grid.tsx`), one component per file,
   matching the vendored `@cryptos-pki/ui` kit's own convention. Named exports throughout.
 - Workspace packages are scoped `@cryptos-pki/<name>`.
 <!-- layout:end -->

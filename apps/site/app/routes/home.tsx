@@ -13,38 +13,29 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import { Hero } from "@cryptos-pki/frame/hero";
 import { FleetosMark } from "@cryptos-pki/ui";
 import type { MetaFunction } from "react-router";
 
 import { FeatureGrid } from "~/components/feature-grid";
 import { Footer } from "~/components/footer";
 import { Nav } from "~/components/nav";
-import { ReleaseBanner } from "~/components/release-banner";
 import { Section } from "~/components/section";
-import { SplitHero } from "~/components/split-hero";
-import { TerminalCard } from "~/components/terminal-card";
+import { Strip } from "~/components/strip";
 import {
   fleetosManager,
   footer,
   hero,
-  meta as pageMeta,
+  links,
+  homeMeta,
   nav,
-  releaseStatus,
   standards,
   trustModel,
   whatItIs,
 } from "~/content/cryptos";
+import { pageMeta } from "~/content/meta";
 
-export const meta: MetaFunction = () => [
-  { title: pageMeta.title },
-  { name: "description", content: pageMeta.description },
-  { property: "og:site_name", content: pageMeta.siteName },
-  { property: "og:title", content: pageMeta.title },
-  { property: "og:description", content: pageMeta.description },
-  { property: "og:type", content: "website" },
-  { property: "og:url", content: pageMeta.url },
-  { name: "twitter:card", content: "summary" },
-];
+export const meta: MetaFunction = () => pageMeta({ description: homeMeta.description, path: "/" });
 
 export default function Home() {
   return (
@@ -52,30 +43,14 @@ export default function Home() {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
+      <Strip links={links} />
       <Nav links={nav.links} />
-      <ReleaseBanner
-        badge={releaseStatus.badge}
-        heading={releaseStatus.heading}
-        body={releaseStatus.body}
-        cta={releaseStatus.cta}
-      />
-      <main id="main">
-        <SplitHero
-          eyebrow={hero.eyebrow}
-          headlineIcon={hero.headlineIcon}
-          headlineLine1={hero.headlineLine1}
-          headlineLine2={hero.headlineLine2}
-          lede={hero.lede}
-          primaryCta={hero.primaryCta}
-          secondaryCta={hero.secondaryCta}
-        >
-          <TerminalCard title={hero.terminal.title} lines={hero.terminal.lines} />
-        </SplitHero>
+      <main id="main" className="frame-prose">
+        <Hero primaryCta={hero.primaryCta} secondaryCta={hero.secondaryCta} />
 
         <Section
           id="what-it-is"
           eyebrow={whatItIs.eyebrow}
-          icon={whatItIs.icon}
           heading={whatItIs.heading}
           lede={whatItIs.lede}
         >
@@ -85,7 +60,6 @@ export default function Home() {
         <Section
           id="trust-model"
           eyebrow={trustModel.eyebrow}
-          icon={trustModel.icon}
           heading={trustModel.heading}
           lede={trustModel.lede}
           tone="card"
@@ -97,7 +71,6 @@ export default function Home() {
         <Section
           id="fleetos-manager"
           eyebrow={fleetosManager.eyebrow}
-          icon={fleetosManager.icon}
           heading={fleetosManager.heading}
           lede={fleetosManager.lede}
           layout="split"
@@ -111,7 +84,6 @@ export default function Home() {
         <Section
           id="standards"
           eyebrow={standards.eyebrow}
-          icon={standards.icon}
           heading={standards.heading}
           lede={standards.lede}
           tone="card"

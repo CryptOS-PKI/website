@@ -1,0 +1,29 @@
+/*
+Copyright The CryptOS Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+import ComponentTypes from '@theme-original/NavbarItem/ComponentTypes';
+
+import {DocsVersionNavbarItem} from '@site/src/components/docs-version-navbar-item';
+import {HeaderMenuNavbarItem} from '@site/src/components/header-menu-navbar-item';
+import {ThemeToggleNavbarItem} from '@site/src/components/theme-toggle-navbar-item';
+
+// Adds the 'custom-docsVersion', 'custom-themeToggle' and 'custom-headerMenu'
+// navbar item types (docusaurus.config.ts).
+export default {
+  ...ComponentTypes,
+  'custom-docsVersion': DocsVersionNavbarItem,
+  'custom-themeToggle': ThemeToggleNavbarItem,
+  'custom-headerMenu': HeaderMenuNavbarItem,
+};

@@ -10,6 +10,7 @@
     "build": "react-router build",
     "preview": "npx serve build/client",
     "typecheck": "react-router typegen && tsc --noEmit -p tsconfig.json",
+    "test": "node --experimental-strip-types --test app/*.test.ts app/content/*.test.ts",
     "check:links": "node scripts/check-links.mjs build/client"
   },
   "dependencies": {

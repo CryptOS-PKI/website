@@ -37,3 +37,10 @@ test("the marks and the favicon are SVGs", () => {
     assert.match(file(name).toString("utf8"), /<svg[\s>]/, `${name} is not an SVG`);
   }
 });
+
+test("the link-preview card is a 1200x630 PNG", () => {
+  const png = file("img/brand/og-card.png");
+  assert.deepEqual([...png.subarray(1, 4)], [0x50, 0x4e, 0x47], "not a PNG");
+  assert.equal(png.readUInt32BE(16), 1200, "width");
+  assert.equal(png.readUInt32BE(20), 630, "height");
+});

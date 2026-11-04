@@ -5,6 +5,8 @@
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "types": ["vite/client"],
     "isolatedModules": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "module": "ESNext",

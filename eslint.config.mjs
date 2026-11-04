@@ -28,6 +28,7 @@ export default tseslint.config(
   {
     ignores: [
       "**/build",
+      "**/build-sub-path",
       "**/.react-router",
       "**/.docusaurus",
       "**/node_modules",

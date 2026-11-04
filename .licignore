@@ -19,6 +19,7 @@
 **/node_modules/**
 /build/**
 **/build/**
+**/build-sub-path/**
 /.react-router/**
 **/.react-router/**
 /.docusaurus/**

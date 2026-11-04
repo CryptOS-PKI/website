@@ -2,7 +2,7 @@
   "name": "@cryptos-pki/brand",
   "private": true,
   "type": "module",
-  "description": "The CryptOS and FleetOS marks, the favicon and the touch icon, served by both sites.",
+  "description": "The CryptOS and FleetOS marks, the favicon, the touch icon and the link-preview card, served by both sites.",
   "license": "Apache-2.0",
   "exports": {
     "./public": "./public/",

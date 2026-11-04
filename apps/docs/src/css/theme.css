@@ -105,12 +105,6 @@ limitations under the License.
   --ifm-code-background: var(--cryptos-muted);
   --ifm-code-border-radius: calc(var(--cryptos-radius) - 4px);
 
-  --ifm-navbar-height: 3.5rem;
-  --ifm-navbar-background-color: var(--cryptos-card);
-  --ifm-navbar-link-color: var(--cryptos-muted-foreground);
-  --ifm-navbar-link-hover-color: var(--cryptos-foreground);
-  --ifm-navbar-shadow: none;
-
   --ifm-menu-color: var(--cryptos-muted-foreground);
   --ifm-menu-color-active: var(--cryptos-primary);
   --ifm-menu-color-background-hover: var(--cryptos-muted);
@@ -126,11 +120,6 @@ limitations under the License.
   --ifm-tabs-color-active-border: var(--cryptos-primary);
 
   --ifm-breadcrumb-item-background-active: var(--cryptos-muted);
-  --ifm-footer-background-color: var(--cryptos-card);
-  --ifm-footer-color: var(--cryptos-muted-foreground);
-  --ifm-footer-link-color: var(--cryptos-muted-foreground);
-  --ifm-footer-link-hover-color: var(--cryptos-foreground);
-  --ifm-footer-title-color: var(--cryptos-foreground);
 
   --docusaurus-highlighted-code-line-bg: rgba(var(--cryptos-primary-rgb), 0.12);
 }
@@ -141,65 +130,9 @@ body {
     'calt' 1;
 }
 
-/* Header and top nav: a card-coloured bar with a bottom border, and mono nav
-   items with the active one underlined in Shield Blue, as in the web TopNav. */
-.navbar {
-  border-bottom: 1px solid var(--cryptos-border);
-}
-
-.navbar__title {
-  font-family: var(--cryptos-font-mono);
-  font-weight: 700;
-  font-size: 1.125rem;
-  letter-spacing: -0.025em;
-  color: var(--cryptos-foreground);
-}
-
-/* The web wordmark shows "OS" in the hero colour. The navbar title is plain
-   text, so the config sets it to "Crypt" and the accent is added here; this
-   avoids ejecting the Logo component for one coloured word. */
-.navbar__title::after {
-  content: 'OS';
-  color: var(--cryptos-primary);
-}
-
-.navbar__items:not(.navbar__items--right) > .navbar__item.navbar__link,
-.navbar__items--right > .navbar__item.navbar__link {
-  align-self: stretch;
-  display: flex;
-  align-items: center;
-  font-family: var(--cryptos-font-mono);
-  font-size: 0.875rem;
-  font-weight: 400;
-  border-bottom: 2px solid transparent;
-  transition: color var(--ifm-transition-fast);
-}
-
-.navbar__item.navbar__link--active {
-  color: var(--cryptos-primary);
-  border-bottom-color: var(--cryptos-primary);
-}
-
-/* Theme toggle as the web's ghost icon button. Docusaurus gives the toggle
-   hashed CSS-module classes, so these match on the class prefix. */
-.navbar [class*='colorModeToggle'] [class*='toggle_'] {
-  width: 2.25rem;
-  height: 2.25rem;
-}
-
-.navbar [class*='toggleButton_'] {
-  border-radius: calc(var(--cryptos-radius) - 2px);
-  color: var(--cryptos-foreground);
-}
-
-.navbar [class*='toggleButton_']:hover {
-  background: var(--cryptos-muted);
-}
-
-.navbar [class*='toggleButton_'] svg {
-  width: 1rem;
-  height: 1rem;
-}
+/* The header, the strip above it and the footer are the site's, drawn from
+   packages/frame/site-frame.css and mapped onto Docusaurus's classes in
+   custom.css. */
 
 /* Sidebar, as the web sidebar: mono items, muted until hovered, active item
    tinted with the primary colour. */
@@ -493,7 +426,7 @@ table tr:nth-child(2n) {
   --ifm-button-background-color: var(--cryptos-muted);
 }
 
-/* Prev and next links, breadcrumbs and the footer on the same surfaces. */
+/* Prev and next links and breadcrumbs on the same surfaces. */
 .pagination-nav__link {
   border-color: var(--cryptos-border);
   background: var(--cryptos-card);
@@ -505,22 +438,4 @@ table tr:nth-child(2n) {
 
 .breadcrumbs__item--active .breadcrumbs__link {
   color: var(--cryptos-foreground);
-}
-
-.footer {
-  border-top: 1px solid var(--cryptos-border);
-}
-
-.footer__title {
-  font-family: var(--cryptos-font-mono);
-  font-size: 0.875rem;
-}
-
-.footer__links {
-  justify-content: space-evenly;
-}
-
-.footer__col {
-  flex: 0 0 14rem;
-  max-width: 14rem;
 }

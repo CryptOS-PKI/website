@@ -16,17 +16,48 @@ limitations under the License.
 import type { ReactNode } from "react";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 
+import { fontFaceCss, fontUrl, PRELOAD_FONTS } from "@cryptos-pki/frame/fonts";
+
+import { themeInitScript } from "./theme";
+
 import "./app.css";
+
+const base = import.meta.env.BASE_URL;
+
+// The frame's font faces, written with the base path so a sub-path build
+// (the previews) still finds /fonts/ under it.
+const fontFaces = fontFaceCss(base);
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    // Dark is the default. The head script switches <html> to a stored light
+    // choice before React hydrates, so it differs from the prerendered markup
+    // on purpose.
+    <html
+      lang="en"
+      className="dark"
+      data-theme="dark"
+      style={{ colorScheme: "dark" }}
+      suppressHydrationWarning
+    >
       <head>
         <meta charSet="utf-8" />
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="color-scheme" content="dark" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <meta name="color-scheme" content="dark light" />
+        <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+        <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
+        <style dangerouslySetInnerHTML={{ __html: fontFaces }} />
+        {PRELOAD_FONTS.map((font) => (
+          <link
+            key={font}
+            rel="preload"
+            href={fontUrl(base, font)}
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
+          />
+        ))}
         <Meta />
         <Links />
       </head>

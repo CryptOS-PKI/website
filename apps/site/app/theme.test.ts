@@ -1,0 +1,60 @@
+/*
+Copyright The CryptOS Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+import assert from "node:assert/strict";
+import { test } from "node:test";
+
+import { applyTheme, nextTheme, storedTheme, themeInitScript } from "./theme.ts";
+
+const fakeRoot = () => {
+  const classes = new Set<string>();
+  const attrs = new Map<string, string>();
+  return {
+    classList: {
+      toggle: (name: string, on: boolean) => (on ? classes.add(name) : classes.delete(name)),
+    },
+    setAttribute: (name: string, value: string) => attrs.set(name, value),
+    style: { colorScheme: "" },
+    classes,
+    attrs,
+  };
+};
+
+test("dark is the default, and only a stored light or dark counts", () => {
+  assert.equal(storedTheme(null), "dark");
+  assert.equal(storedTheme("light"), "light");
+  assert.equal(storedTheme("dark"), "dark");
+  assert.equal(storedTheme("system"), "dark");
+});
+
+test("the switch flips between the two themes", () => {
+  assert.equal(nextTheme("dark"), "light");
+  assert.equal(nextTheme("light"), "dark");
+});
+
+test("a theme lands on <html> as the kit's class and the frame's data-theme", () => {
+  const root = fakeRoot();
+  applyTheme(root, "light");
+  assert.equal(root.attrs.get("data-theme"), "light");
+  assert.equal(root.classes.has("dark"), false);
+  assert.equal(root.style.colorScheme, "light");
+  applyTheme(root, "dark");
+  assert.equal(root.attrs.get("data-theme"), "dark");
+  assert.equal(root.classes.has("dark"), true);
+});
+
+test("the head script reads the same storage key the docs use", () => {
+  assert.match(themeInitScript, /localStorage\.getItem\("theme"\)/);
+});

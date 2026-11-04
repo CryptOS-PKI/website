@@ -4,14 +4,12 @@ title: "🪪 Adding operators"
 
 # 🪪 Adding operators
 
-These screens are new in the web UI and need a FleetOS Manager that serves operator credential requests. An older manager refuses them.
-
 This page covers one task: giving someone an operator certificate, and taking it away, from the web UI's **Operators** page. The FleetOS Manager never signs operator certificates. Your external operator CA does (see [The operator CA and revocation](./operator-ca.md)). The web UI files a **credential request**, you get the request signed at the CA, and the web UI records the signed certificate.
 
 If the person who needs the certificate can make their own key, have them use [Make a credential request](./make-a-credential-request.md) and send you the CSR. Their key then never leaves their machine.
 
 :::caution[Before you start]
-You need an `admin` operator certificate and a working login (see [Logging in](./web-ui.md#logging-in)). The manager needs an operator CA and `database_url`. You need someone who can sign at the operator CA, with the CA's OpenSSL config.
+You need an `admin` operator certificate and a working login (see [Logging in](./web-ui.md#logging-in)). The manager needs an operator CA and a durable store (`database_url`, or `storage.mode: kv`). You need someone who can sign at the operator CA, with the CA's OpenSSL config.
 :::
 
 ## What the Operators page shows
@@ -97,7 +95,7 @@ To record a certificate made entirely at the CA, with no request, select **Recor
 The manager refuses the certificate from its next request, on every manager instance within about 5 seconds. Anything else that trusts the operator CA still accepts it. Revoke it at your CA as well and publish a new CRL. The dialog repeats this, with any warning the manager returns.
 :::
 
-Denying needs `database_url`. Without it the dialog shows `Not available here` with error 1603 `DATABASE_REQUIRED`.
+Denying needs a durable store (`database_url` or `storage.mode: kv`). With `storage.mode: memory` the dialog shows `Not available here` with error 1603 `DATABASE_REQUIRED`.
 
 ## Where to go next
 

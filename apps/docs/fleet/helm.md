@@ -12,7 +12,7 @@ The supported chart is `chart/fleet-manager` in the [`cryptos-manager`](https://
 
 ## What the chart deploys
 
-Chart version `0.1.0`, app version `0.1.0`. The release sets both to the tag it publishes.
+A checkout's `Chart.yaml` says version `0.1.0`, app version `0.1.0`; the release workflow sets both to the tag without its leading `v` (`0.1.0-rc.2` for `v0.1.0-rc.2`).
 
 :::info[Pre-1.0: 0.x]
 Every CryptOS release before `1.0.0` is a `0.x` pre-release. `1.0.0` will be the first GA release, once the whole system lands. It isn't out yet.
@@ -42,9 +42,9 @@ The chart creates no secrets. Before an install you need these in the release na
 
   To use Valkey or Redis instead of Postgres, see [Storage with Valkey or Redis](./kv-storage.md).
 - **Storage for the node credentials.** The default claim asks the cluster's default storage class for `1Gi`, `ReadWriteOnce`.
-- **Nothing, by default.** A release tag publishes `ghcr.io/cryptos-pki/cryptos-manager`, which `image.repository` already points at. Build and push your own instead to track an unreleased commit or a local edit, then set `image.repository` and `image.tag`; the manager README covers [building the image yourself](https://github.com/CryptOS-PKI/cryptos-manager#building-the-image-yourself).
+- **The image tag.** A release tag publishes `ghcr.io/cryptos-pki/cryptos-manager`, which `image.repository` already points at, but tagged with a leading `v` (`v0.1.0-rc.2`) while the chart's app version has none. Set `image.tag` to the release tag, or the pod can't pull its image. To track an unreleased commit or a local edit, build and push your own and set `image.repository` and `image.tag`; the manager README covers [building the image yourself](https://github.com/CryptOS-PKI/cryptos-manager#building-the-image-yourself).
 
-With `authBypass: false`, the default, the chart refuses to render without `database.existingSecret` or a `storage.mode`.
+The chart refuses to render unless you set `database.existingSecret` or `storage.mode` (`kv` or `memory`), and refuses both together.
 
 Two more are optional. Leave both out for day zero:
 
@@ -56,7 +56,7 @@ Two more are optional. Leave both out for day zero:
 Install straight from the published chart, with only the database Secret:
 
 ```bash
-helm install fm oci://ghcr.io/cryptos-pki/charts/fleet-manager --version X.Y.Z --set database.existingSecret=fm-postgres
+helm install fm oci://ghcr.io/cryptos-pki/charts/fleet-manager --version X.Y.Z --set image.tag=vX.Y.Z --set database.existingSecret=fm-postgres
 ```
 
 Or, from a checkout, for an unreleased commit or a local edit:
@@ -95,7 +95,7 @@ The full list is in [`chart/fleet-manager/values.yaml`](https://github.com/Crypt
 |---|---|---|
 | `replicaCount` | `1` | Number of manager pods. See the caution below before raising it. |
 | `image.repository` | `ghcr.io/cryptos-pki/cryptos-manager` | The manager image. Pull the published image at a release tag, or build and push your own and point this at it. |
-| `image.tag` | `""` | Empty means the chart's app version. |
+| `image.tag` | `""` | Empty means the chart's app version, which has no published image (the image tags carry a leading `v`): set the release tag, such as `v0.1.0-rc.2`. |
 | `service.port` / `service.targetPort` | `443` / `8443` | The Service port and the container's HTTPS listener. |
 | `service.httpPort` / `service.httpTargetPort` | `80` / `8080` | The redirect-to-HTTPS port and its listener. |
 | `httpRedirectListen` | `0.0.0.0:8080` | The redirect listener. Empty turns it off. |
@@ -179,10 +179,10 @@ You can render the chart without a cluster and read what it would create. `git` 
    ```
 
    :::tip[Expected output]
-   The chart passes. Lint renders it with the default values, so it warns about the database Secret you supply at install, and notes that it has no icon.
+   The chart passes. Lint renders it with the default values, so it notes that no store is set (you choose a database Secret or a `storage.mode` at install) and that it has no icon.
 
    ```text
-   level=WARN msg="missing required values" message="database.existingSecret is required when authBypass is false (without it the manager runs its in-memory demo store)"
+   level=INFO msg="funcMap fail" message="either database.existingSecret or storage.mode (kv or memory) must be set: the chart no longer falls back to an undeclared in-memory store (see docs/storage.md)"
    ==> Linting manager/chart/fleet-manager
    [INFO] Chart.yaml: icon is recommended
 
@@ -210,10 +210,10 @@ You can render the chart without a cluster and read what it would create. `git` 
    :::
 
    :::caution[A missing value stops the render]
-   Leave out `database.existingSecret` and the render fails instead of deploying a manager with no durable state:
+   Leave out both `database.existingSecret` and `storage.mode` and the render fails instead of deploying a manager with no declared store:
 
    ```text
-   Error: execution error at (fleet-manager/templates/deployment.yaml:11:10): database.existingSecret is required when authBypass is false (without it the manager runs its in-memory demo store)
+   Error: execution error at (fleet-manager/templates/deployment.yaml:17:4): either database.existingSecret or storage.mode (kv or memory) must be set: the chart no longer falls back to an undeclared in-memory store (see docs/storage.md)
    ```
    :::
 
@@ -222,7 +222,7 @@ You can render the chart without a cluster and read what it would create. `git` 
 FleetOS Manager deploys three ways:
 
 - **Kubernetes**, above -- the published chart, or a checkout for an unreleased commit or a local edit.
-- **A container** (Docker or a Docker-compatible runtime) on a bare-metal host, with PostgreSQL alongside it on the same host for easy upgrades: [Single host with `docker compose`](https://github.com/CryptOS-PKI/cryptos-manager#single-host-with-docker-compose). The compose file starts for day zero with only `config.yaml` and the Postgres password: its `tls`, `operator-ca` and `operator-crl` read-only mounts are commented out until you uncomment each one with its key in `config.yaml`. PostgreSQL is always yours to provide -- the compose file's `postgres` service is a worked example you run and own, not something the manager ships or manages.
+- **A container** (Docker or a Docker-compatible runtime) on a bare-metal host, with PostgreSQL alongside it on the same host for easy upgrades: [Single host with `docker compose`](https://github.com/CryptOS-PKI/cryptos-manager#single-host-with-docker-compose). The compose file starts for day zero with only `config.yaml` and the Postgres password, plus `MANAGER_VERSION` set to the release tag (the compose file defaults to `latest`, which an rc never publishes): its `tls`, `operator-ca` and `operator-crl` read-only mounts are commented out until you uncomment each one with its key in `config.yaml`. PostgreSQL is always yours to provide -- the compose file's `postgres` service is a worked example you run and own, not something the manager ships or manages.
 - **A plain Linux host with systemd**, no container runtime, and a Postgres you provide: [Deploying FleetOS Manager standalone](https://github.com/CryptOS-PKI/cryptos-manager/blob/main/docs/deploying-standalone.md).
 
 Every deployment needs an operator certificate before anyone can log in. The manager's [Operator credentials guide](https://github.com/CryptOS-PKI/cryptos-manager/blob/main/docs/operator-credentials.md) shows how to mint one.

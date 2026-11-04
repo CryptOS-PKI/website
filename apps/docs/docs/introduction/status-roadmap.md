@@ -17,7 +17,8 @@ The core of a certificate authority is built, tested, and running on VMware virt
 - The encrypted **API** (mTLS gRPC) and the tamper-evident **audit log**.
 - The full **`cryptosctl`** command-line tool.
 - Signing subordinate CAs and issuing end-entity certificates from a CSR, and enrolling devices over **SCEP** (RFC 8894). See [Enrol devices with SCEP](../using/enrol-devices-scep.md).
-- Building the OS image and turning it into a bootable **ISO** for a platform such as VMware.
+- Building the OS image and turning it into a bootable **ISO** for VMware and Proxmox VE (amd64).
+- Enrolment over **ACME** (RFC 8555, `http-01`) and **EST** (RFC 7030) on intermediate and issuing nodes, and **RFC 3161 timestamps**. See [Machine config: ACME and EST](../reference/machine-config-enrollment.md) and [Serve RFC 3161 timestamps](../using/serve-timestamps-tsa.md).
 - Installing a node from start to finish: **maintenance mode** on the very first boot, **install to disk**, then the reboot into the ceremony. See [Install & Deploy](../install-deploy/build-bootable-image.md).
 - The **FleetOS Manager** web app, for watching and managing several nodes from one place. See [FleetOS Manager overview](/docs/fleet/vnext).
 
@@ -38,7 +39,6 @@ Both VMware and Proxmox VE are in `v0.1.0`. Node images are amd64 only in every 
 ## 🧭 Roadmap
 
 - **Still landing** — the FleetOS Manager's web UI for adding operators and making credential requests is in flight; a few of its pages are still being finished.
-- **More enrolment protocols** — ACME and EST, alongside the SCEP support that already works.
 - **Physical servers** — installing on a physical server, including booting the installer from a USB stick. The code is in, but it hasn't been proven on real hardware, so it isn't supported in v0.1.0.
 - **Phase 3** — high-availability pairs, many independent Roots, signed add-on extensions, and disaster recovery.
 

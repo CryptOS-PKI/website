@@ -66,7 +66,7 @@ The files land in `build/out/`:
 |---|---|
 | `cryptos-amd64.uki` | the signed UKI |
 | `cryptos-amd64.uki.sig` | the detached signature a node checks before it accepts an upgrade |
-| `cryptos-amd64-vmware.iso` | the bootable installer ISO (`cryptos-amd64-vmware-nodeid.iso` for `STATEKEY=nodeid`) |
+| `cryptos-amd64-vmware-<build>.iso` | the bootable installer ISO (`cryptos-amd64-vmware-nodeid-<build>.iso` for `STATEKEY=nodeid`) |
 
 `task image` runs the same chain but stops at the signed UKI, without making an ISO.
 
@@ -83,7 +83,7 @@ task iso:unsigned PLATFORM=vmware
 task iso:unsigned PLATFORM=vmware STATEKEY=nodeid
 ```
 
-This writes `build/out/cryptos-amd64-vmware-unsigned.iso` (or `...-vmware-nodeid-unsigned.iso`).
+This writes `build/out/cryptos-amd64-vmware-unsigned-<build>.iso` (or `cryptos-amd64-vmware-nodeid-unsigned-<build>.iso`).
 
 ## Download the unsigned image
 

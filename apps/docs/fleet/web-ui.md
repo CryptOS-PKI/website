@@ -74,7 +74,7 @@ The header holds the CryptOS mark (back to the Dashboard), your certificate's na
 
 Lists refresh every 10 seconds. Every table has filters and a search box.
 
-What you can do depends on the access level in your certificate: `viewer`, `operator` or `admin` (see [How operators log in](./overview.md#how-operators-log-in)). Where a page needs a higher level, it greys out the controls and says so, for example `Read-only — applying config requires admin level.` The manager checks the level again on every call.
+What you can do depends on the access level in your certificate: `viewer`, `operator` or `admin` (see [How operators log in](./overview.md#how-operators-log-in)). Where a page needs a higher level, it greys out the controls and says why when you hover over them, for example `Needs the admin role`. The manager checks the level again on every call.
 
 ## Known gaps
 

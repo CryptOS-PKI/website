@@ -110,20 +110,21 @@ VMCA keeps issuing certificates for vCenter and the ESXi hosts, and clients only
 A subordinate issues leaf certificates from leaf profiles (`is_ca: false`) in its machine config:
 
 - `cryptosctl ca issue-leaf --csr <file> --profile <name>` for a one-off certificate;
-- the ACME (RFC 8555) and EST (RFC 7030) endpoints, when they are turned on in `pki.acme` or `pki.est`.
+- the ACME (RFC 8555) and EST (RFC 7030) endpoints, when they are turned on in `pki.acme` or `pki.est`;
+- SCEP (RFC 8894), when it is turned on in `pki.scep`; see [Enrol devices with SCEP](../using/enrol-devices-scep.md).
 
-SCEP and WSTEP are not available.
+WSTEP is not available.
 
 :::caution[A Root serves no enrolment protocol]
-ACME and EST run on an intermediate or issuing node only. A Root's config with `pki.acme` or `pki.est` is refused by `config apply`, the maintenance-mode install and the first-boot ceremony, so a Root never opens either endpoint.
+ACME, EST and SCEP run on an intermediate or issuing node only. A Root's config with `pki.acme`, `pki.est` or `pki.scep` is refused by `config apply`, the maintenance-mode install and the first-boot ceremony, so a Root never opens any of them.
 :::
 
 ## Key algorithms
 
 `pki.root_key_alg` sets the node's own CA key: `ECDSA-P384`, `RSA-3072` or `RSA-4096`. Despite the name, it applies to every role. The CA key also decides the signature algorithm on everything the node signs, so a platform that only accepts RSA signatures needs an RSA key at every level of its chain.
 
-:::caution[RSA CA keys are not held in the TPM]
-The TPM backend creates ECDSA P-384 keys only. An RSA CA key needs a software state-key mode, where the key is kept on the encrypted state partition instead of inside the TPM. [The TPM and sealed keys](./tpm-sealed-keys.md) explains the difference.
+:::caution[An RSA CA key in the TPM needs a TPM with that size]
+In `tpm` mode an RSA CA key is created and held inside the TPM like the ECDSA one, but only if the TPM implements that RSA size. Many implement only RSA-2048, and then key creation fails with `tpm: key algorithm not supported by this TPM`. The `nodeid` and `kms` modes keep the key in software instead. [The TPM and sealed keys](./tpm-sealed-keys.md) explains the difference.
 :::
 
 ## What it doesn't do yet

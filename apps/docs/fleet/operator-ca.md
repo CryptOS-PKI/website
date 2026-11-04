@@ -15,8 +15,8 @@ The source depends only on what is configured:
 | Source | When | Trusted | Revocation |
 |---|---|---|---|
 | Config file | `operatorCAPath` is set | The certificates in that PEM file | The denylist (needs Postgres), plus the CRLs in `operatorCRL`, plus OCSP as `operatorOCSP` says |
-| Registered | No `operatorCAPath`, `database_url` set, `firstRun` not `disabled` | The operator CAs stored in Postgres | The denylist, plus each CA's own CRL source, plus OCSP as that CA's OCSP mode says |
-| None | No `operatorCAPath`, and no `database_url` or `firstRun: disabled` | Nothing | Nothing. Every API call is refused. |
+| Registered | No `operatorCAPath`, a durable store (`database_url` or `storage.mode: kv`), `firstRun` not `disabled` | The operator CAs kept in that store | The denylist, plus each CA's own CRL source, plus OCSP as that CA's OCSP mode says |
+| None | No `operatorCAPath`, and no durable store or `firstRun: disabled` | Nothing | Nothing. Every API call is refused. |
 
 Registered operator CAs come from [first run](./first-run/index.md): the holder of the bootstrap token registers the CA's certificate.
 
@@ -38,7 +38,7 @@ The manager checks the certificate again on every request, not only when the bro
 
 A certificate is refused if any source lists it. Serial numbers are unique per CA only, so each source is keyed by the CA as well as the serial.
 
-- **The denylist** is the FleetOS Manager's own list, kept in Postgres and always on. Revoking an operator in the manager adds to it. The manager instance that takes the request refuses the certificate at once, and the other instances within about 5 seconds. Without `database_url` there is no denylist, and revoking fails with error 1603 (`DATABASE_REQUIRED`).
+- **The denylist** is the FleetOS Manager's own list, kept in the durable store (Postgres or Valkey/Redis) and always on. Revoking an operator in the manager adds to it. The manager instance that takes the request refuses the certificate at once, and the other instances within about 5 seconds. Without a durable store (`storage.mode: memory`) there is no denylist, and revoking fails with error 1603 (`DATABASE_REQUIRED`).
 - **The CRL** is your CA's own revocation list, optional for each CA. The manager downloads it (or reads the file), checks it against the CA, and refuses a CRL older than the one it holds. It refreshes the CRL every 15 minutes and at the CRL's next update time, and after a failure tries again after a minute, then less often, up to every 15 minutes.
 - **OCSP** is your CA's live answer about one certificate, optional for each CA. It can only add a refusal: `revoked` refuses the certificate with error 1610 (`REVOKED_OCSP`), and `unknown` counts as revoked (1610, `OCSP_UNKNOWN`, recorded as `operator-ocsp-unknown` in the audit log). A `good` answer never overrides the denylist or the CRL.
 
@@ -132,11 +132,11 @@ firstRun: auto
 The manager refuses keys it doesn't know, and says which one. Before this change an unknown key was ignored.
 :::
 
-`mcp.enabled` needs `database_url` and `authBypass: false`. It no longer needs `operator_ca_node` or `operatorCAPath`.
+`mcp.enabled` needs a durable store (`database_url` or `storage.mode: kv`) and `authBypass: false`. It no longer needs `operator_ca_node` or `operatorCAPath`.
 
 ## The self-signed certificate
 
-Without `tlsCert` and `tlsKey`, the manager serves a self-signed certificate. With `database_url` it keeps that certificate in Postgres, so a restart or a second instance serves the same one, and replaces it 7 days before it expires. It deletes it once `tlsCert` is set. Every start logs its fingerprint:
+Without `tlsCert` and `tlsKey`, the manager serves a self-signed certificate. With a durable store (`database_url` or `storage.mode: kv`) it keeps that certificate there, so a restart or a second instance serves the same one, and replaces it 7 days before it expires. It deletes it once `tlsCert` is set. Every start logs its fingerprint:
 
 ```
 manager: WARNING serving a SELF-SIGNED bootstrap certificate, SHA-256 AB:CD:...:EF, valid until 2026-12-29; ...

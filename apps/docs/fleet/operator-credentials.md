@@ -16,7 +16,7 @@ Adding an operator takes four steps:
 | 4. Deny, when needed | An admin | The FleetOS Manager **and** the CA |
 
 :::info[Before you start]
-You need an admin certificate from the operator CA, and the manager needs `database_url`: requests and recorded credentials live in Postgres. Without it every step fails with error 1603 (`DATABASE_REQUIRED`). With no operator CA configured at all, requesting, listing and recording fail with error 1400.
+You need an admin certificate from the operator CA, and the manager needs a durable store (`database_url`, or `storage.mode: kv`): requests and recorded credentials live there. With `storage.mode: memory` every step fails with error 1603 (`DATABASE_REQUIRED`). With no operator CA configured at all, requesting, listing and recording fail with error 1400.
 :::
 
 :::tip[In the web UI]
@@ -113,7 +113,7 @@ Installing it in a browser is covered in [Logging in](./web-ui.md#logging-in).
 
 ## Credentials seen in use
 
-With `database_url` set, the manager also notes every operator certificate it sees log in. The first time it sees one it hasn't recorded, it adds it to the list as `observed`, with the serial, CA, email, level and expiry. It keeps each credential's first and last seen times, updating the last one at most once an hour. An observed certificate you record later becomes `requested` or `recorded`.
+With a durable store (`database_url` or `storage.mode: kv`), the manager also notes every operator certificate it sees log in. The first time it sees one it hasn't recorded, it adds it to the list as `observed`, with the serial, CA, email, level and expiry. It keeps each credential's first and last seen times, updating the last one at most once an hour. An observed certificate you record later becomes `requested` or `recorded`.
 
 So the list shows everyone who can actually log in, including certificates your CA signed that nobody recorded, and you can deny any of them. The noting happens in the background and never slows a request down.
 

@@ -31,6 +31,8 @@ Carrying CSRs by hand works, but it does not scale to hundreds of servers or a r
 | CRL and OCSP | Every TLS client that checks revocation | Available |
 | ACME (RFC 8555, `http-01`) | certbot, lego, acme.sh, win-acme, cert-manager | Off until you switch it on in the machine config |
 | EST (RFC 7030) | Network gear and devices with an EST client | Off until you switch it on in the machine config |
+| SCEP (RFC 8894) | Cisco IOS/IOS-XE trustpoints and other network gear | Off until you switch it on in the machine config (`pki.scep`) |
+| RFC 3161 time-stamping | `signtool`, `openssl ts` and other signing tools | Off until you switch it on in the machine config (`pki.tsa`) |
 
 ACME and EST run on an intermediate or issuing node. You switch each one on by adding its `pki.acme` or `pki.est` block to the node's machine config and running `cryptosctl config apply`, and off by removing the block and applying again. See the [machine config reference](../reference/machine-config.md) and the [ACME](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/acme.md) and [EST](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/est.md) guides.
 
@@ -48,7 +50,7 @@ The node does not serve ACME `dns-01`. SCEP and RFC 3161 timestamps arrive with 
 
 ## One rule for every key
 
-A node certifies only two kinds of subject key: **ECDSA P-384**, and **RSA of 3072 bits or more**. It refuses a CSR for anything else with `subject ECDSA key must be on P-384` or `subject RSA key must be at least 3072 bits`. Many tools default to RSA 2048 or ECDSA P-256, so check the key before you send the request. Each use case page says where this bites.
+A node certifies only two kinds of subject key: **ECDSA P-384**, and **RSA of 3072 bits or more**. It refuses a CSR for anything else with `subject ECDSA key must be on P-384` or `subject RSA key must be at least 3072 bits`. The one exception is SCEP, where a profile can accept RSA 2048 with `min_rsa_key_bits: 2048`; see [Enrol devices with SCEP](../using/enrol-devices-scep.md). Many tools default to RSA 2048 or ECDSA P-256, so check the key before you send the request. Each use case page says where this bites.
 
 ## The use cases
 

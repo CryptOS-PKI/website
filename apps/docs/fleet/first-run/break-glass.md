@@ -6,10 +6,10 @@ title: "🧯 Break-glass: reopen first run"
 
 This page covers one task: reopening [first run](./index.md) after it has closed, when no one can sign in as an admin any more. Every admin certificate is lost, expired or revoked, and there is no other way back in.
 
-`manager -config <config> -reset-first-run` is an offline command. Shell access to a host that can reach the manager's Postgres is the authority; it asks for nothing else. It runs once and exits.
+`manager -config <config> -reset-first-run` is an offline command. Shell access to a host that can reach the manager's store is the authority; it asks for nothing else. It runs once and exits.
 
 :::info[Before you start]
-You need the manager's config file (or the Kubernetes ConfigMap), its database connection string, and the right to stop the manager. First run must use Postgres: with no `database_url` there is nothing to reset.
+You need the manager's config file (or the Kubernetes ConfigMap), its store's connection string, and the right to stop the manager. First run is kept in the durable store, Postgres (`database_url`) or Valkey/Redis (`storage.mode: kv`): with neither there is nothing to reset.
 :::
 
 ## What the reset does
@@ -74,7 +74,7 @@ spec:
       type: RuntimeDefault
   containers:
     - name: reset
-      image: ghcr.io/cryptos-pki/cryptos-manager:0.1.0 # or the image you built and pushed
+      image: ghcr.io/cryptos-pki/cryptos-manager:v0.1.0-rc.2 # or the image you built and pushed
       args: ["-config", "/etc/cryptos/fleet/config.yaml", "-reset-first-run"]
       securityContext:
         readOnlyRootFilesystem: true

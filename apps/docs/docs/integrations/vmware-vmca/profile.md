@@ -25,7 +25,7 @@ The Intermediate signs the VMCA request under a **CA profile**. The profile deci
 
 ## 2.2 Choose the validity
 
-CryptOS computes the VMCA certificate's expiry as *signing time + `validity_days`*. It does **not** shorten it to fit inside the Intermediate's own validity, so you must pick a value that ends before the Intermediate does. Check the Intermediate's expiry:
+CryptOS computes the VMCA certificate's expiry as *signing time + `validity_days`*. If that runs past the Intermediate's own `notAfter`, the node shortens the certificate to end with the Intermediate and `cryptosctl` prints a `WARNING:`. With `validity_policy: reject` on the profile, it refuses to sign instead. Pick a value that ends before the Intermediate does, so the VMCA certificate gets the lifetime you chose. Check the Intermediate's expiry:
 
 ```sh
 cryptosctl --endpoint 192.0.2.21:443 --identity admin.crt --identity-key admin.key --trust node-trust.pem \

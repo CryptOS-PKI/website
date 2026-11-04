@@ -4,8 +4,6 @@ title: "🙋 Make a credential request"
 
 # 🙋 Make a credential request
 
-This page is new in the web UI. Your admin needs a FleetOS Manager that serves operator credential requests to file the CSR you make here.
-
 This page covers one task: making your own FleetOS Manager operator key and certificate signing request (CSR), then building your `.p12` file once your admin sends back the signed certificate. It is for someone who doesn't have an operator certificate yet.
 
 The **Make a credential request** page runs entirely in your browser. It needs no login and sends nothing anywhere: the key, its backup and the passphrase stay on your machine. Only the CSR goes to your admin, who files it as described in [Adding operators](./web-operator-credentials.md).

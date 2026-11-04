@@ -4,8 +4,6 @@ title: "🏛️ Managing operator CAs in the web UI"
 
 # 🏛️ Managing operator CAs in the web UI
 
-This page is new in the web UI and needs a FleetOS Manager that serves the operator CA admin calls. An older manager refuses them.
-
 This page covers one task: looking after the external operator CAs the FleetOS Manager trusts, from the web UI's **Operator CAs** page. You can register a new CA, retire an old one, and change how the manager learns about each CA's revocations. What an operator CA is, and the config keys, are in [The operator CA and revocation](./operator-ca.md).
 
 :::caution[Before you start]

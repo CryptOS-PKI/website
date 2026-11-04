@@ -86,7 +86,7 @@ export default function Home(): ReactNode {
         secondaryCta={{label: 'What is CryptOS?', href: useBaseUrl('/docs')}}
       />
 
-      <main>
+      <main className="frame-prose">
         <section className={styles.entryPoints}>
           <div className={styles.entryGrid}>
             {entryPoints.map((entry) => (

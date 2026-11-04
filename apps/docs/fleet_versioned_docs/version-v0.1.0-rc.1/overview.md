@@ -8,7 +8,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 # <ThemedImage sources={{light: useBaseUrl('/img/brand/fleetos-mark-light.svg'), dark: useBaseUrl('/img/brand/fleetos-mark-dark.svg')}} alt="FleetOS" className="integration-logo" /> FleetOS Manager overview
 
-They have run a two-tier hierarchy (a Root and an Intermediate) on VMware, with both nodes reported as established and healthy. A release tag publishes the container image and chart; see [Deploy with Helm](./helm.md) for where each install path stands.
+FleetOS Manager and its web UI have run a two-tier hierarchy (a Root and an Intermediate) on VMware, with both nodes reported as established and healthy. A release tag publishes the container image and chart; see [Deploy with Helm](./helm.md) for where each install path stands.
 
 A single CryptOS node is managed with `cryptosctl`, one node at a time. Once you have several nodes, a Root and the CAs under it, you want one place to see all of them. That place is **FleetOS Manager**.
 

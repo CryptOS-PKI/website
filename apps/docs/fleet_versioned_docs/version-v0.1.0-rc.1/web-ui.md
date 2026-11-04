@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 # 🖥️ The web UI
 
-It is built into the FleetOS Manager and served on the same HTTPS port, so there is nothing separate to install. A few screens still read demo data in places; they are listed under [Known gaps](#known-gaps).
+The web UI is built into FleetOS Manager and served on the same HTTPS port, so there is nothing separate to install. A few screens still read demo data in places; they are listed under [Known gaps](#known-gaps).
 
 This page walks through logging in and finding your way around the FleetOS Manager's web UI. What the FleetOS Manager is, and how nodes join it, is in the [FleetOS Manager overview](./overview.md). Each area of the UI then has its own page, linked under [Where to go next](#where-to-go-next).
 

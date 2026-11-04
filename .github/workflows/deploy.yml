@@ -66,10 +66,11 @@ jobs:
       - name: Build the site (prerender)
         run: npm run build -w @cryptos-pki/site
 
-      # The published docs leave out Next (unreleased main).
+      # The published docs carry vNext (unreleased main) beside the released
+      # version, under its banner; the released version stays the default.
       - name: Build the docs
         env:
-          DOCS_INCLUDE_NEXT: "false"
+          DOCS_INCLUDE_NEXT: "true"
         run: npm run build -w @cryptos-pki/docs
 
       # Each step creates its Pages project on the first run only. `--json`

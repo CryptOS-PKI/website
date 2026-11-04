@@ -17,8 +17,8 @@ When a release is published, the workflow checks out that release's tag and then
    `apps/docs/fleet_versions.json`, each as the newest version there. If either isn't, the run
    stops before anything builds or deploys.
 2. Runs `npm ci --ignore-scripts`, then builds the site and the docs. The docs build sets
-   `DOCS_INCLUDE_NEXT=false`, so the published docs carry the released versions only, not vNext
-   (unreleased `main`). Both builds finish before either deploy starts, so a failed build never
+   `DOCS_INCLUDE_NEXT=true`, so the published docs carry vNext (unreleased `main`) under its
+   banner beside the released versions, with the released version as the default. Both builds finish before either deploy starts, so a failed build never
    leaves one site on the new release and the other on the old one.
 3. Uploads `apps/site/build/client/` to the Pages project `cryptos-pki-www` and `apps/docs/build/`
    to `cryptos-pki-docs`, with `cloudflare/wrangler-action` pinned to a commit so a moved tag

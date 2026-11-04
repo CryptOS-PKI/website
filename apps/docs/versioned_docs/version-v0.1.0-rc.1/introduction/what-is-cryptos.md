@@ -1,9 +1,12 @@
 ---
-title: "🔐 What is CryptOS?"
+title: "What is CryptOS?"
 slug: "/"
 ---
 
-# 🔐 What is CryptOS?
+import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# <ThemedImage sources={{light: useBaseUrl('/img/brand/cryptos-mark-light.svg'), dark: useBaseUrl('/img/brand/cryptos-mark-dark.svg')}} alt="CryptOS" className="integration-logo" /> What is CryptOS?
 
 The core described here is built and tested, and runs end to end on VMware virtual machines. Physical servers aren't supported in v0.1.0-rc.1. See [Project status and roadmap](./status-roadmap.md).
 

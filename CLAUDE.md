@@ -70,7 +70,7 @@ request time.
 │   ├── frame/                   @cryptos-pki/frame: site-frame.css, strip, content, hero, theme switch, consent, full width, fonts, release.ts
 │   └── brand/                   @cryptos-pki/brand: public/ (favicon, touch icon, img/brand/)
 ├── vendor/cryptos-ui/           vendored copy of cryptos-web's packages/ui (see its NOTICE)
-├── scripts/                     CI path filter and the docs version scripts, with tests
+├── scripts/                     CI path filter, the docs version scripts and the storage check, with tests
 ├── docs/deploy.md               how a release deploys both sites
 ├── package.json                 the workspace root (one package-lock.json)
 ├── eslint.config.mjs            one lint config for the whole repo

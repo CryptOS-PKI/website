@@ -72,6 +72,12 @@ jobs:
         if: steps.changes.outputs.site_changed == 'true'
         run: npm run check:links -w @cryptos-pki/site
 
+      # Nothing may be written to browser storage before the visitor accepts
+      # the cookie choice (scripts/check-no-storage.mjs).
+      - name: Site - nothing stored before consent
+        if: steps.changes.outputs.site_changed == 'true'
+        run: npm run check:storage:site
+
       - name: Docs - typecheck
         if: steps.changes.outputs.docs_changed == 'true'
         run: npm run typecheck -w @cryptos-pki/docs
@@ -82,3 +88,9 @@ jobs:
       - name: Docs - build
         if: steps.changes.outputs.docs_changed == 'true'
         run: npm run build -w @cryptos-pki/docs
+
+      # Loads every page, then hydrates a few and uses the theme, full-width
+      # and tab switches: nothing may be stored before consent.
+      - name: Docs - nothing stored before consent
+        if: steps.changes.outputs.docs_changed == 'true'
+        run: npm run check:storage:docs

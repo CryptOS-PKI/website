@@ -80,7 +80,10 @@ export function createConsent({
   const read = (key: string) => (storage ? safely(() => storage.getItem(key), null) : null);
   const write = (key: string, value: string) =>
     storage && safely(() => storage.setItem(key, value), undefined);
-  const remove = (key: string) => storage && safely(() => storage.removeItem(key), undefined);
+  // Only touches storage when there's something there to clear.
+  const remove = (key: string) => {
+    if (storage && read(key) !== null) safely(() => storage.removeItem(key), undefined);
+  };
 
   let state: ConsentState = read(keys.consent) === "accepted" ? "accepted" : "unset";
   let asking = false;
@@ -147,4 +150,31 @@ export function createConsent({
       return names;
     }, []);
   }
+}
+
+// One store per prefix for the page, made on first use in the browser, so
+// every switch and the cookie bar share it. While prerendering there's no
+// window and no store. Reading localStorage can throw when site data is
+// blocked; the store then keeps everything in memory.
+const browserStores = new Map<string, Consent>();
+
+export function browserConsent(
+  prefix: string = DEFAULT_CONSENT_PREFIX,
+  win: { localStorage: StorageLike } | undefined = typeof window === "undefined"
+    ? undefined
+    : window,
+): Consent | null {
+  if (!win) return null;
+  let store = browserStores.get(prefix);
+  if (!store) {
+    let storage: StorageLike | null;
+    try {
+      storage = win.localStorage;
+    } catch {
+      storage = null;
+    }
+    store = createConsent({ storage, prefix });
+    browserStores.set(prefix, store);
+  }
+  return store;
 }

@@ -34,11 +34,14 @@ npm run typecheck -w @cryptos-pki/docs
   `site-frame.css`, mapped onto Docusaurus's classes in `src/css/custom.css`. The theme switch is
   the shared one (`src/components/theme-toggle-navbar-item.tsx`), and the version picker shows on
   doc pages only (`src/components/docs-version-navbar-item.tsx`), one per docs.
-- ↔️ **Full width and the cookie choice:** beside the picker, a switch widens the content column
-  to the window (`src/components/full-width-navbar-item.tsx`); the frame stays put. It's off by
-  default and remembered on the machine only after the visitor accepts the cookie choice, which
-  shows the first time they change it (`src/theme/Root.tsx`). Nothing is stored before that, and
-  nothing tracks anyone. Both pieces live in `packages/frame` (`consent.ts`, `full-width.ts`).
+- ↔️ **Full width:** beside the picker, a switch widens the content column to the window
+  (`src/components/full-width-navbar-item.tsx`); the frame stays put. Off by default.
+- 🍪 **Consent first:** the theme and the content width are remembered on the machine only after
+  the visitor accepts the cookie choice, which shows the first time they use either switch
+  (`src/theme/Root.tsx`). Until then the docs are dark and nothing is written to browser storage:
+  Docusaurus's own switch, announcement bar (`src/theme/AnnouncementBar` draws the strip instead),
+  version memory and tab memory (`src/theme/Tabs`) are kept out of storage. The pieces live in
+  `packages/frame` (see its README); `npm run check:storage:docs` checks a build.
 - 🏷️ **Plain navigation:** the sidebar and the table of contents show titles and headings without
   their emoji (`src/theme/DocSidebarItems`, `src/theme/TOCItems`); the pages keep them.
 - 🔤 **Fonts and marks:** Inter and JetBrains Mono come from `packages/frame`, the marks and the

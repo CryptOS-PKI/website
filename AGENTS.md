@@ -24,8 +24,9 @@ Two static sites in one repo, as npm workspaces:
   colours, light and dark; `strip.ts` the strip above the header; `content.ts` the header links,
   the footer and the legal line; `hero.tsx` the hero both homes open with, its copy in
   `hero-content.ts` and its rules in `hero.css`; `theme-toggle.tsx` the light and dark switch;
-  `release.ts` the current product releases; `consent.ts` the cookie choice and
-  `full-width.ts` the docs' full-width setting it remembers (with `consent-banner.tsx`,
+  `release.ts` the current product releases; `consent.ts` the cookie choice, with
+  `theme-pref.ts` (both sites' theme) and `full-width.ts` (the docs' content width) the settings
+  it remembers (with `consent-banner.tsx`,
   `full-width-toggle.tsx` and `use-consent.ts` for React); `emoji.ts` strips emoji from
   navigation labels; `public/fonts/` the self-hosted fonts.
 - `packages/brand` (`@cryptos-pki/brand`): the marks, favicon and touch icon in `public/`.
@@ -49,6 +50,8 @@ Run from the repo root.
 - Typecheck: `npm run typecheck`
 - Build: `npm run build` (or `build:site`, `build:docs`)
 - Site link check (after a build): `npm run check:links`
+- Nothing stored before consent (after a build): `npm run check:storage:site`,
+  `npm run check:storage:docs`
 - Docs version check: `npm run check:docs-version`; cut one: `npm run docs:version`
 - License headers: `task license` (verify) / `task license:fix` (inject)
 
@@ -112,6 +115,10 @@ Follow the logging rules in `CLAUDE.md`. In short:
   minutes".
 - The `🧪 Build & Test` job builds only the app a change touches (`scripts/changed-apps.mjs`);
   anything shared builds both.
+- Nothing writes to browser storage (localStorage, sessionStorage, cookies) before the visitor
+  accepts the cookie choice, on either site. Remembered settings go through the consent store in
+  `packages/frame` (see its README); a library that stores things on its own is kept out of
+  storage or wrapped. The storage checks above enforce it in CI.
 - Docs pages: every page states its status (Works today, In flight, or Roadmap); docs describe
   CryptOS as shipped on `main`; MDX 3, so no explicit `{#id}` heading anchors.
 - `golic` does not descend into `vendor/`; its headers are verified by inspection against the

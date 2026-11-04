@@ -14,13 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import type {ReactNode} from 'react';
-import useIsBrowser from '@docusaurus/useIsBrowser';
 import {useActivePlugin} from '@docusaurus/plugin-content-docs/client';
-import {useConsent} from '@cryptos-pki/frame/use-consent';
+import {useBrowserConsent} from '@cryptos-pki/frame/use-consent';
 import {isFullWidth, setFullWidth} from '@cryptos-pki/frame/full-width';
 import {FullWidthToggle} from '@cryptos-pki/frame/full-width-toggle';
 
-import {docsConsent} from '@site/src/lib/consent';
+import {DOCS_CONSENT_PREFIX} from '@site/src/lib/consent';
 
 // The full-width switch from packages/frame, beside the version picker on
 // doc pages only (either docs), so the docs home's header stays the site's.
@@ -29,9 +28,7 @@ import {docsConsent} from '@site/src/lib/consent';
 // items; the content is already full width there, so it renders nothing.
 export function FullWidthNavbarItem({mobile}: {mobile?: boolean}): ReactNode {
   const activePlugin = useActivePlugin();
-  const isBrowser = useIsBrowser();
-  const consent = isBrowser ? docsConsent() : null;
-  useConsent(consent);
+  const {consent} = useBrowserConsent(DOCS_CONSENT_PREFIX);
   if (mobile || !activePlugin) return null;
   const full = consent ? isFullWidth(consent) : false;
   return (

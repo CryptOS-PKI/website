@@ -16,20 +16,34 @@ limitations under the License.
 import type {ReactNode} from 'react';
 import {useColorMode} from '@docusaurus/theme-common';
 import {ThemeToggle} from '@cryptos-pki/frame/theme-toggle';
+import {chooseTheme, type FrameTheme} from '@cryptos-pki/frame/theme-pref';
+import {useBrowserConsent} from '@cryptos-pki/frame/use-consent';
+
+import {DOCS_CONSENT_PREFIX} from '@site/src/lib/consent';
+
+// setColorMode takes a second argument its type leaves out: {persist: false}
+// sets the colour mode without Docusaurus writing it to storage.
+type SetColorMode = (mode: FrameTheme, options: {persist: boolean}) => void;
 
 // The light and dark switch from packages/frame, the same button the site
-// shows at the same spot, driven by Docusaurus's colour mode, which keeps the
-// choice. The built-in switch is hidden (custom.css). The phone menu repeats
+// shows at the same spot, driven by Docusaurus's colour mode. Docusaurus
+// never stores it; the pick goes to the consent store, which remembers it
+// only after the visitor accepts (packages/frame theme-pref.ts). The phone menu repeats
 // the header's items; the switch stays in the header there, so it renders
 // nothing in the menu.
 export function ThemeToggleNavbarItem({mobile}: {mobile?: boolean}): ReactNode {
   const {colorMode, setColorMode} = useColorMode();
+  const {consent} = useBrowserConsent(DOCS_CONSENT_PREFIX);
   if (mobile) return null;
+  const choose = (next: FrameTheme) => {
+    (setColorMode as SetColorMode)(next, {persist: false});
+    if (consent) chooseTheme(consent, next);
+  };
   return (
     <div className="navbar__item navbar__theme">
       <ThemeToggle
         theme={colorMode}
-        onToggle={() => setColorMode(colorMode === 'dark' ? 'light' : 'dark')}
+        onToggle={() => choose(colorMode === 'dark' ? 'light' : 'dark')}
       />
     </div>
   );

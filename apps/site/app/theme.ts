@@ -13,15 +13,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-// The site's light and dark theme. Dark is the default, as on the docs. A
-// choice is kept in localStorage under "theme", the key Docusaurus uses, and
-// lands on <html> twice: the kit's tokens switch on the "dark" class and the
-// shared frame on data-theme, the attribute the docs set.
-import type { FrameTheme } from "@cryptos-pki/frame/theme-toggle";
+// The site's light and dark theme. Dark is the default, as on the docs. The
+// theme lands on <html> twice: the kit's tokens switch on the "dark" class
+// and the shared frame on data-theme, the attribute the docs set. A pick is
+// remembered only after the visitor accepts the cookie choice
+// (packages/frame theme-pref.ts and consent.ts, under SITE_CONSENT_PREFIX);
+// until then nothing is stored.
+import { themeBootScript, type FrameTheme } from "@cryptos-pki/frame/theme-pref";
 
-export const THEME_KEY = "theme";
+export const SITE_CONSENT_PREFIX = "cryptos-site";
 
-export const storedTheme = (value: string | null): FrameTheme =>
+export const pageTheme = (value: string | null): FrameTheme =>
   value === "light" ? "light" : "dark";
 
 export const nextTheme = (theme: FrameTheme): FrameTheme => (theme === "dark" ? "light" : "dark");
@@ -38,6 +40,6 @@ export function applyTheme(root: ThemeRoot, theme: FrameTheme) {
   root.style.colorScheme = theme;
 }
 
-// Runs in <head> before the page paints, so a stored light choice never
-// flashes dark first. Storage can be missing or blocked; dark stays then.
-export const themeInitScript = `(function(){try{var t=localStorage.getItem("${THEME_KEY}");if(t==="light"){var r=document.documentElement;r.classList.remove("dark");r.setAttribute("data-theme","light");r.style.colorScheme="light";}}catch(e){}})();`;
+// Runs in <head> before the page paints, so a remembered light choice never
+// flashes dark first. It only reads storage, and only after consent.
+export const themeInitScript = themeBootScript(SITE_CONSENT_PREFIX);

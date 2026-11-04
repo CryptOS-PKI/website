@@ -33,9 +33,9 @@
   --docusaurus-announcement-bar-height: auto;
 }
 
-/* The strip: Docusaurus's announcement bar holds the same markup the site
-   renders (packages/frame/strip.ts); this is the band behind it, as the site's
-   .strip. */
+/* The strip: src/theme/AnnouncementBar draws the same markup the site
+   renders (packages/frame/strip.ts) in the announcement bar's place; this is
+   the band behind it, as the site's .strip. */
 .theme-announcement-bar {
   display: block;
   height: auto;
@@ -193,9 +193,9 @@
   text-decoration: none;
 }
 
-/* Docusaurus's own colour switch, in the bar and in the phone menu: the
-   shared switch (custom-themeToggle) replaces it, so it's hidden. It stays
-   enabled so Docusaurus keeps honouring the stored choice. */
+/* Docusaurus's own colour switch, in the bar and in the phone menu: it's
+   turned off (disableSwitch) and the shared switch (custom-themeToggle)
+   replaces it; this keeps it hidden should it ever render. */
 .navbar__items--right > [class*='colorModeToggle_'],
 .navbar-sidebar__brand [class*='toggle_'] {
   display: none;

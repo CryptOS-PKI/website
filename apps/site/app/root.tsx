@@ -14,7 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import type { ReactNode } from "react";
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import { Links, Meta, Outlet, Scripts } from "react-router";
+
+import { ConsentBar } from "./components/consent-bar";
+import { ScrollToTop } from "./components/scroll-to-top";
 
 import { themeInitScript } from "./theme";
 
@@ -28,9 +31,10 @@ const frameFonts = ["inter-latin.woff2", "jetbrains-mono-700-latin.woff2"];
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
-    // Dark is the default. The head script switches <html> to a stored light
-    // choice before React hydrates, so it differs from the prerendered markup
-    // on purpose.
+    // Dark is the default. The head script switches <html> to a remembered
+    // light choice (only kept after the visitor accepts the cookie choice)
+    // before React hydrates, so it differs from the prerendered markup on
+    // purpose.
     <html
       lang="en"
       className="dark"
@@ -60,7 +64,8 @@ export function Layout({ children }: { children: ReactNode }) {
       </head>
       <body>
         {children}
-        <ScrollRestoration />
+        <ConsentBar />
+        <ScrollToTop />
         <Scripts />
       </body>
     </html>

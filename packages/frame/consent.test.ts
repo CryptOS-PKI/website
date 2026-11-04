@@ -145,3 +145,28 @@ test("subscribers hear every change, and can stop listening", () => {
   assert.equal(calls, 2);
   assert.equal(consent.revision(), 3);
 });
+
+test("the browser store is one per prefix, and there is none while prerendering", async () => {
+  const { browserConsent } = await import("./consent.ts");
+  assert.equal(browserConsent("prerender", undefined), null);
+  const storage = memoryStorage();
+  const win = { localStorage: storage };
+  const first = browserConsent("one", win);
+  assert.ok(first);
+  assert.equal(browserConsent("one", win), first);
+  assert.notEqual(browserConsent("two", win), first);
+});
+
+test("the browser store falls back to memory when storage access throws", async () => {
+  const { browserConsent } = await import("./consent.ts");
+  const win = {
+    get localStorage(): StorageLike {
+      throw new Error("blocked");
+    },
+  };
+  const consent = browserConsent("blocked", win);
+  assert.ok(consent);
+  consent.set("theme", "light");
+  consent.accept();
+  assert.equal(consent.get("theme"), "light");
+});

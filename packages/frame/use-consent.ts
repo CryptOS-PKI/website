@@ -15,7 +15,7 @@ limitations under the License.
 */
 import { useSyncExternalStore } from "react";
 
-import type { Consent, ConsentState } from "./consent.ts";
+import { browserConsent, type Consent, type ConsentState } from "./consent.ts";
 
 // Reads a consent store (consent.ts) from React and re-renders on every
 // change. A prerendered page has no store (null), which reads as unanswered
@@ -37,4 +37,24 @@ export function useConsent(consent: Consent | null): {
     asking: consent?.asking() ?? false,
     version,
   };
+}
+
+const noSubscription = () => () => undefined;
+
+// False while prerendering and during hydration, true after: a page reads
+// stored preferences only once it's true, so its first render matches the
+// prerendered markup.
+export function useHydrated(): boolean {
+  return useSyncExternalStore(
+    noSubscription,
+    () => true,
+    () => false,
+  );
+}
+
+// The page's shared consent store for a prefix (consent.ts browserConsent),
+// null until hydrated, with its state.
+export function useBrowserConsent(prefix?: string) {
+  const consent = useHydrated() ? browserConsent(prefix) : null;
+  return { consent, ...useConsent(consent) };
 }

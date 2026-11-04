@@ -14,19 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import type {ReactNode} from 'react';
-import useIsBrowser from '@docusaurus/useIsBrowser';
 import {ConsentBanner} from '@cryptos-pki/frame/consent-banner';
-import {useConsent} from '@cryptos-pki/frame/use-consent';
+import {useBrowserConsent} from '@cryptos-pki/frame/use-consent';
 
-import {docsConsent} from '@site/src/lib/consent';
+import {DOCS_CONSENT_PREFIX} from '@site/src/lib/consent';
 
 // Wraps every page so the cookie choice (packages/frame) can show on any of
 // them. It only shows once a visitor changes a setting that could be
-// remembered (the full-width switch) without having answered yet.
+// remembered (the theme or the full-width switch) without having answered
+// yet.
 export default function Root({children}: {children: ReactNode}): ReactNode {
-  const isBrowser = useIsBrowser();
-  const consent = isBrowser ? docsConsent() : null;
-  const {asking} = useConsent(consent);
+  const {consent, asking} = useBrowserConsent(DOCS_CONSENT_PREFIX);
   return (
     <>
       {children}

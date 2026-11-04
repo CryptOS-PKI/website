@@ -21,6 +21,7 @@ import {frameFooter, frameNav, legalHtml, TAGLINE, taglineHtml} from '@cryptos-p
 import {NAV_LINK_CLASS} from '@cryptos-pki/frame/header-menu-config';
 import {frameLinks, stripHtml} from '@cryptos-pki/frame/strip';
 import {contentWidthBootScript} from '@cryptos-pki/frame/full-width';
+import {themeBootScript} from '@cryptos-pki/frame/theme-pref';
 
 import {oldDocsPaths} from './redirects';
 import {DOCS_CONSENT_PREFIX} from './src/lib/consent';
@@ -91,9 +92,11 @@ const config: Config = {
   url: 'https://docs.cryptos-pki.com',
   baseUrl,
 
-  // Read by the docs home's link back to the product site.
+  // Read by the docs home's link back to the product site, and by the strip
+  // (src/theme/AnnouncementBar).
   customFields: {
     siteUrl: `${links.site}/`,
+    stripHtml: stripHtml(links),
   },
 
   organizationName: 'CryptOS-PKI',
@@ -126,10 +129,6 @@ const config: Config = {
       tagName: 'link',
       attributes: {rel: 'preload', href: `${baseUrl}fonts/${font}`, as: 'font', type: 'font/woff2', crossorigin: 'anonymous'},
     })),
-    // A remembered full-width choice (only stored once the visitor accepts
-    // the cookie choice) goes on <html> before the first paint, so the
-    // content column doesn't jump when the app loads.
-    {tagName: 'script', attributes: {}, innerHTML: contentWidthBootScript(DOCS_CONSENT_PREFIX)},
   ],
 
   presets: [
@@ -166,28 +165,43 @@ const config: Config = {
     // Each page answers at its old paths too (redirects.ts), so links already
     // out there, the console's help links among them, keep working.
     ['@docusaurus/plugin-client-redirects', {createRedirects: oldDocsPaths}],
+    // A remembered theme and full-width choice (only stored once the visitor
+    // accepts the cookie choice) go on <html> before the first paint. These
+    // run at the top of <body>, after Docusaurus's own theme script, which
+    // would otherwise put data-theme back to dark.
+    () => ({
+      name: 'consent-boot',
+      injectHtmlTags: () => ({
+        preBodyTags: [
+          {tagName: 'script', innerHTML: themeBootScript(DOCS_CONSENT_PREFIX)},
+          {tagName: 'script', innerHTML: contentWidthBootScript(DOCS_CONSENT_PREFIX)},
+        ],
+      }),
+    }),
   ],
 
   themeConfig: {
-    // Dark first, as on the site and in the Fleet Manager UI. The header
-    // shows the shared switch from packages/frame (the 'custom-themeToggle'
-    // item below) at the spot the site shows it. The built-in switch stays
-    // enabled but hidden (custom.css): with disableSwitch, Docusaurus ignores
-    // the stored choice, and a reload would fall back to dark.
+    // Dark first, as on the site and in the Fleet Manager UI. Nothing in the
+    // docs writes to browser storage before the visitor accepts the cookie
+    // choice, so Docusaurus's own storage is kept out of it:
+    // - colour mode: Docusaurus's switch is off, so it never stores 'theme'
+    //   (and clears one left from before). The header shows the shared
+    //   switch from packages/frame (the 'custom-themeToggle' item below),
+    //   which sets the colour mode without persisting it and keeps the pick
+    //   in the consent store (packages/frame theme-pref.ts).
+    // - the strip: no announcementBar here, because Docusaurus stores its id
+    //   and dismissal on every page load. src/theme/AnnouncementBar draws the
+    //   strip instead.
+    // - versions: the picked docs version isn't stored (versionPersistence).
+    // - tabs: src/theme/Tabs only lets a tab group remember its choice after
+    //   consent; before that the choice rides in the URL.
     colorMode: {
       defaultMode: 'dark',
-      disableSwitch: false,
+      disableSwitch: true,
       respectPrefersColorScheme: false,
     },
-    // The strip above the header: the same markup the site renders
-    // (packages/frame/strip.ts), drawn by site-frame.css. Its band comes from
-    // custom.css, so no colours are set here.
-    announcementBar: {
-      id: 'release-strip',
-      content: stripHtml(links),
-      isCloseable: false,
-    },
     docs: {
+      versionPersistence: 'none',
       sidebar: {
         hideable: true,
         autoCollapseCategories: true,

@@ -13,28 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import {createConsent, type Consent} from '@cryptos-pki/frame/consent';
-
-// The docs' one consent store (packages/frame consent.ts), made on first use
-// in the browser. While prerendering there's no browser storage and no
-// store. localStorage can also throw when site data is blocked; the store
-// then keeps everything in memory.
-let store: Consent | null = null;
-
-export function docsConsent(): Consent | null {
-  if (typeof window === 'undefined') return null;
-  if (!store) {
-    let storage: Storage | null;
-    try {
-      storage = window.localStorage;
-    } catch {
-      storage = null;
-    }
-    store = createConsent({storage, prefix: DOCS_CONSENT_PREFIX});
-  }
-  return store;
-}
-
-// The storage key prefix, shared with the head script in
-// docusaurus.config.ts that applies a remembered width before first paint.
+// The docs' storage key prefix for the shared consent store (packages/frame
+// consent.ts): the switches and the cookie bar use it through
+// useBrowserConsent, and the head scripts in docusaurus.config.ts read the
+// same keys.
 export const DOCS_CONSENT_PREFIX = 'cryptos-docs';

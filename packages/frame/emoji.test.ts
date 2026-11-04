@@ -32,11 +32,17 @@ test("emoji with a variation selector, a modifier or a joiner come off whole", (
 });
 
 test("text symbols that only look like emoji stay", () => {
-  assert.equal(stripEmoji("CryptOS\u{2122} and \u{A9}, \u{AE}"), "CryptOS\u{2122} and \u{A9}, \u{AE}");
+  assert.equal(
+    stripEmoji("CryptOS\u{2122} and \u{A9}, \u{AE}"),
+    "CryptOS\u{2122} and \u{A9}, \u{AE}",
+  );
   assert.equal(stripEmoji("A \u{2194} B, step 1 \u{2192} 2"), "A \u{2194} B, step 1 \u{2192} 2");
   assert.equal(stripEmoji("RFC 5280 #1"), "RFC 5280 #1");
 });
 
 test("markup in a heading survives", () => {
-  assert.equal(stripEmoji("\u{1F4C4} Machine config: <code>pki</code>"), "Machine config: <code>pki</code>");
+  assert.equal(
+    stripEmoji("\u{1F4C4} Machine config: <code>pki</code>"),
+    "Machine config: <code>pki</code>",
+  );
 });

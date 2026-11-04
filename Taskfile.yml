@@ -26,7 +26,7 @@ tasks:
     cmds:
       - npm run lint
   docs:version:
-    desc: Cut the docs version for the release in packages/frame/release.ts.
+    desc: Cut the CryptOS and FleetOS Manager docs versions for the releases in packages/frame/release.ts.
     cmds:
       - npm run docs:version
   ci:

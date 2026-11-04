@@ -78,7 +78,8 @@ export function createConsent({
 }): Consent {
   const keys = consentKeys(prefix);
   const read = (key: string) => (storage ? safely(() => storage.getItem(key), null) : null);
-  const write = (key: string, value: string) => storage && safely(() => storage.setItem(key, value), undefined);
+  const write = (key: string, value: string) =>
+    storage && safely(() => storage.setItem(key, value), undefined);
   const remove = (key: string) => storage && safely(() => storage.removeItem(key), undefined);
 
   let state: ConsentState = read(keys.consent) === "accepted" ? "accepted" : "unset";

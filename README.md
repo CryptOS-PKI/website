@@ -39,11 +39,14 @@ npm run check:links           # internal links in the prerendered site
 
 ## 📚 Docs versions
 
-v0.1.0-rc.1 is the first docs version and the default at `/docs/`. Next (`main`) is served at
-`/docs/next/` in dev and preview builds, under a banner pointing at the current version; the
-published docs leave it out. A release bumps `packages/frame/release.ts` and runs
-`npm run docs:version` in its own PR, and the deploy refuses to run until that version is cut. See
-[`docs/deploy.md`](docs/deploy.md).
+The docs site holds two docs, each with its own sidebar, versions and version picker: CryptOS at
+`/docs/cryptos` and FleetOS Manager at `/docs/fleet`. Each follows its own product's release in
+`packages/frame/release.ts` (`release` and `fleetRelease`). v0.1.0-rc.1 is the first version of
+both and the default. Next (`main`) is served at `/docs/cryptos/next/` and `/docs/fleet/next/` in
+dev and preview builds, under a banner pointing at the current version; the published docs leave
+it out. A release bumps `release.ts` and runs `npm run docs:version` in its own PR, which cuts
+both, and the deploy refuses to run until both are cut. The old `/docs/<page>` paths redirect to
+the new ones. See [`docs/deploy.md`](docs/deploy.md).
 
 ## 🚀 Deploy
 

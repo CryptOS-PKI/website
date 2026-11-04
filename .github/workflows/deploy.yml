@@ -48,12 +48,14 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
 
-      # The release's docs version must already be cut and merged: the
-      # version in packages/frame/release.ts has to be in
-      # apps/docs/versions.json, newest first. Nothing builds or deploys until
-      # it is, so a release can't ship docs without its own version. The fix
-      # is a PR that runs `npm run docs:version`, then publishing again.
-      - name: Check the docs version for this release
+      # The release's docs versions must already be cut and merged, in both
+      # docs: CryptOS (`release` in packages/frame/release.ts, listed in
+      # apps/docs/versions.json) and FleetOS Manager (`fleetRelease`, listed
+      # in apps/docs/fleet_versions.json), each as the newest version. Nothing
+      # builds or deploys until they are, so a release can't ship docs without
+      # its versions. The fix is a PR that runs `npm run docs:version`, then
+      # publishing again.
+      - name: Check the docs versions for this release
         run: npm run check:docs-version
 
       - name: Install dependencies

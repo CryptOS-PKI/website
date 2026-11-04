@@ -244,6 +244,41 @@
   font-size: var(--frame-nav-size);
 }
 
+/* The full-width switch (packages/frame full-width-toggle.tsx), right after
+   the version picker, in the same nav line so the bar keeps its height. The
+   column only gets narrower than the window above the frame width, so the
+   switch shows only there. */
+.navbar__width {
+  display: none;
+  padding: 0;
+  margin-left: var(--frame-nav-gap);
+}
+
+@media (min-width: 72rem) {
+  .navbar__width {
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* Full width: the doc layout (sidebar, content, table of contents) keeps its
+   left edge on the frame's and runs to the window's right gutter instead of
+   stopping at the frame's right edge. The header, the footer and the strip
+   don't move; only the content column (and the table of contents beside it)
+   widens. */
+html[data-content-width='full'] [class*='docRoot_'] {
+  max-width: none;
+  margin-left: max(0px, calc((100% - var(--frame-max)) / 2));
+  margin-right: 0;
+}
+
+/* The link at the foot of each sidebar to the other docs. */
+.sidebar-other-docs {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--frame-border);
+}
+
 /* The docs sidebar only reaches phones and tablets through the menu button.
    It floats at the bottom left of doc pages, off the header, so the header
    stays the site's exactly; other pages don't need it. */

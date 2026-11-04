@@ -33,5 +33,7 @@ for (const { name, version, versions, cutCommand, versionsFile } of readState())
     cwd: new URL("../apps/docs/", import.meta.url),
     stdio: "inherit",
   });
-  console.log(`cut ${name} docs version ${version}: commit apps/docs/${versionsFile} and its snapshot`);
+  console.log(
+    `cut ${name} docs version ${version}: commit apps/docs/${versionsFile} and its snapshot`,
+  );
 }

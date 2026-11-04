@@ -23,5 +23,8 @@ const EMOJI =
   /(?:\p{Emoji_Presentation}|\p{Extended_Pictographic}\u{FE0F})(?:\p{Emoji_Modifier}|\u{FE0F}|\u{200D}(?:\p{Emoji_Presentation}|\p{Extended_Pictographic}\u{FE0F}?))*\s*/gu;
 
 export function stripEmoji(text: string): string {
-  return text.replace(EMOJI, "").replace(/\s{2,}/g, " ").trim();
+  return text
+    .replace(EMOJI, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
 }

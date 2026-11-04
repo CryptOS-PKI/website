@@ -1,5 +1,25 @@
 .entryPoints {
-  padding: 3.5rem 1.5rem;
+  padding: 3.5rem 1.5rem 0;
+}
+
+.entryPoints + .notice {
+  padding-top: 3.5rem;
+}
+
+.entryGroupHead {
+  max-width: var(--ifm-container-width, 1140px);
+  margin: 0 auto 1.25rem;
+}
+
+.entryGroupTitle {
+  margin: 0 0 0.35rem;
+  font-size: 1.35rem;
+  color: var(--cryptos-foreground);
+}
+
+.entryGroupDescription {
+  margin: 0;
+  color: var(--cryptos-muted-foreground);
 }
 
 .entryGrid {

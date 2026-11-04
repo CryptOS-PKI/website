@@ -14,15 +14,20 @@ Two static sites in one repo, as npm workspaces:
   nothing talks to a backend. The page copy lives in `app/content/cryptos.ts` and the downloads
   in `app/content/release.ts`; the components they feed (`app/components/`) take their content
   as props. No emoji on the site.
-- `apps/docs` (`@cryptos-pki/docs`): the CryptOS docs (docs.cryptos-pki.com), Docusaurus 3,
-  versioned. `docs/` is Next (unreleased `main`); `versioned_docs/` holds one snapshot per
-  release.
+- `apps/docs` (`@cryptos-pki/docs`): the docs site (docs.cryptos-pki.com), Docusaurus 3, with two
+  versioned docs instances: CryptOS at `/docs/cryptos` (`docs/` is Next, `versioned_docs/` the
+  snapshots, `sidebars.ts`) and FleetOS Manager at `/docs/fleet` (`fleet/`,
+  `fleet_versioned_docs/`, `sidebars-fleet.ts`). `redirects.ts` keeps the old `/docs/<page>`
+  paths working. Sidebars and the table of contents show page titles without their emoji.
 - `packages/frame` (`@cryptos-pki/frame`): the frame both sites share. `site-frame.css` holds the
   font faces, the frame tokens (column, header, strip and footer measurements) and the frame
   colours, light and dark; `strip.ts` the strip above the header; `content.ts` the header links,
   the footer and the legal line; `hero.tsx` the hero both homes open with, its copy in
   `hero-content.ts` and its rules in `hero.css`; `theme-toggle.tsx` the light and dark switch;
-  `release.ts` the current product release; `public/fonts/` the self-hosted fonts.
+  `release.ts` the current product releases; `consent.ts` the cookie choice and
+  `full-width.ts` the docs' full-width setting it remembers (with `consent-banner.tsx`,
+  `full-width-toggle.tsx` and `use-consent.ts` for React); `emoji.ts` strips emoji from
+  navigation labels; `public/fonts/` the self-hosted fonts.
 - `packages/brand` (`@cryptos-pki/brand`): the marks, favicon and touch icon in `public/`.
 - `vendor/cryptos-ui` (`@cryptos-pki/ui`): a vendored, read-only copy of cryptos-web's
   `packages/ui` kit (see `vendor/cryptos-ui/NOTICE`). The site depends on it as a `file:` link; it is not a workspace,
@@ -74,12 +79,19 @@ Run from the repo root.
 
 ## Docs versions
 
-- The newest entry in `apps/docs/versions.json` is the default at `/docs/`. Next sits at
-  `/docs/next/` with the unreleased banner, in every build except the deploy
-  (`DOCS_INCLUDE_NEXT=false`).
-- A release bumps `packages/frame/release.ts` and runs `npm run docs:version` in its own PR. The
-  deploy fails closed unless that version is cut and newest.
-- Never edit a snapshot under `versioned_docs/`. Fix the page in `docs/` (Next) instead.
+- Two docs instances, each versioned on its own: CryptOS (`apps/docs/versions.json`, default at
+  `/docs/cryptos`) follows `release` in `packages/frame/release.ts`; FleetOS Manager
+  (`apps/docs/fleet_versions.json`, default at `/docs/fleet`) follows `fleetRelease`. Next sits
+  at `/docs/cryptos/next/` and `/docs/fleet/next/` with the unreleased banner, in every build
+  except the deploy (`DOCS_INCLUDE_NEXT=false`).
+- A release bumps `packages/frame/release.ts` and runs `npm run docs:version` in its own PR; it
+  cuts whichever instance is missing its version. The deploy fails closed unless both are cut
+  and newest.
+- Never edit a snapshot under `versioned_docs/` or `fleet_versioned_docs/`. Fix the page in
+  `docs/` or `fleet/` (Next) instead.
+- A link from one docs instance to the other is an absolute path (`/docs/fleet/<page>`, or
+  `/docs/fleet/next/<page>` from a Next page), since relative `.md` links only resolve inside
+  one instance.
 
 ## Logging
 

@@ -24,7 +24,7 @@ let store: Consent | null = null;
 export function docsConsent(): Consent | null {
   if (typeof window === 'undefined') return null;
   if (!store) {
-    let storage: Storage | null = null;
+    let storage: Storage | null;
     try {
       storage = window.localStorage;
     } catch {

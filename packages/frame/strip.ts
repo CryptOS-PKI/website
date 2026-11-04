@@ -49,7 +49,7 @@ export function frameLinks({ siteUrl, docsUrl }: { siteUrl: string; docsUrl: str
   return {
     site,
     docs,
-    status: `${docs}/docs/introduction/status-roadmap`,
+    status: `${docs}/docs/cryptos/introduction/status-roadmap`,
     // The downloads live on the site's Releases page, never in the footer.
     releases: `${site}/releases`,
   };

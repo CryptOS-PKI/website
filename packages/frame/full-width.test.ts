@@ -25,7 +25,9 @@ import {
   setFullWidth,
 } from "./full-width.ts";
 
-const memoryStorage = (initial: Record<string, string> = {}): StorageLike & { data: Map<string, string> } => {
+const memoryStorage = (
+  initial: Record<string, string> = {},
+): StorageLike & { data: Map<string, string> } => {
   const data = new Map(Object.entries(initial));
   return {
     data,
@@ -77,7 +79,12 @@ test("the choice is remembered on the machine only after the visitor accepts", (
 
 test("applyContentWidth follows the stored choice", () => {
   const root = fakeRoot();
-  applyContentWidth(createConsent({ storage: memoryStorage({ "frame:consent": "accepted", "frame:pref:content-width": "full" }) }), root);
+  applyContentWidth(
+    createConsent({
+      storage: memoryStorage({ "frame:consent": "accepted", "frame:pref:content-width": "full" }),
+    }),
+    root,
+  );
   assert.equal(root.attributes.get(CONTENT_WIDTH_ATTRIBUTE), "full");
 });
 
@@ -91,18 +98,24 @@ const runBootScript = (storage: StorageLike | "throws", prefix?: string) => {
           },
         }
       : storage;
-  new Function("document", "localStorage", contentWidthBootScript(prefix))({ documentElement: root }, localStorage);
+  new Function("document", "localStorage", contentWidthBootScript(prefix))(
+    { documentElement: root },
+    localStorage,
+  );
   return root;
 };
 
 test("the boot script widens the page before it paints, only for an accepted full-width choice", () => {
   assert.equal(
-    runBootScript(memoryStorage({ "frame:consent": "accepted", "frame:pref:content-width": "full" })).attributes.get(
-      CONTENT_WIDTH_ATTRIBUTE,
-    ),
+    runBootScript(
+      memoryStorage({ "frame:consent": "accepted", "frame:pref:content-width": "full" }),
+    ).attributes.get(CONTENT_WIDTH_ATTRIBUTE),
     "full",
   );
-  assert.equal(runBootScript(memoryStorage({ "frame:pref:content-width": "full" })).attributes.size, 0);
+  assert.equal(
+    runBootScript(memoryStorage({ "frame:pref:content-width": "full" })).attributes.size,
+    0,
+  );
   assert.equal(runBootScript(memoryStorage({ "frame:consent": "accepted" })).attributes.size, 0);
   assert.equal(runBootScript(memoryStorage()).attributes.size, 0);
   assert.equal(runBootScript("throws").attributes.size, 0);

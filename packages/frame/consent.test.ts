@@ -63,7 +63,10 @@ test("accepting stores the answer and the preferences already set, and later one
 });
 
 test("an accepted visitor's preferences come back on the next visit", () => {
-  const storage = memoryStorage({ "frame:consent": "accepted", "frame:pref:content-width": "full" });
+  const storage = memoryStorage({
+    "frame:consent": "accepted",
+    "frame:pref:content-width": "full",
+  });
   const consent = createConsent({ storage });
   assert.equal(consent.state(), "accepted");
   assert.equal(consent.get("content-width"), "full");
@@ -82,7 +85,10 @@ test("declining stores nothing, keeps the choice for this page view, and stops a
 });
 
 test("declining after accepting removes what was stored", () => {
-  const storage = memoryStorage({ "frame:consent": "accepted", "frame:pref:content-width": "full" });
+  const storage = memoryStorage({
+    "frame:consent": "accepted",
+    "frame:pref:content-width": "full",
+  });
   const consent = createConsent({ storage });
   consent.decline();
   assert.equal(storage.data.size, 0);

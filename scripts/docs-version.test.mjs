@@ -61,8 +61,14 @@ test("no versions file means no docs versions", () => {
 });
 
 test("a release with no docs version can't deploy, and the message names the docs", () => {
-  assert.match(docsVersionProblem("v0.1.0", ["v0.1.0-rc.1"], "FleetOS Manager"), /FleetOS Manager docs have no v0\.1\.0 version/);
-  assert.match(docsVersionProblem("v0.1.0", [], "CryptOS"), /CryptOS docs have no v0\.1\.0 version/);
+  assert.match(
+    docsVersionProblem("v0.1.0", ["v0.1.0-rc.1"], "FleetOS Manager"),
+    /FleetOS Manager docs have no v0\.1\.0 version/,
+  );
+  assert.match(
+    docsVersionProblem("v0.1.0", [], "CryptOS"),
+    /CryptOS docs have no v0\.1\.0 version/,
+  );
 });
 
 test("the release's docs version must be the newest, so it's the default", () => {

@@ -40,8 +40,8 @@ import {DOCS_CONSENT_PREFIX} from './src/lib/consent';
 const includeNext = process.env.DOCS_INCLUDE_NEXT !== 'false';
 
 // Docusaurus rejects options for a version it isn't building.
-const nextVersion = includeNext
-  ? {current: {label: 'Next', path: 'next', banner: 'unreleased' as const}}
+const nextVersion: {[version: string]: {label: string; path: string; banner: 'unreleased'}} = includeNext
+  ? {current: {label: 'Next', path: 'next', banner: 'unreleased'}}
   : {};
 
 // The frame and the brand assets come from the shared packages: one copy of

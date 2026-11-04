@@ -13,9 +13,16 @@ npm run typecheck -w @cryptos-pki/docs
 
 ## ✨ What is where
 
-- 📝 **`docs/`:** Next, the pages for unreleased `main`. Sidebar order lives in `sidebars.ts`.
-- 🗂️ **`versioned_docs/`, `versioned_sidebars/`, `versions.json`:** one snapshot per released
-  version, cut by `npm run docs:version` from the root. A snapshot is never edited by hand.
+- 📝 **Two docs, one site:** CryptOS at `/docs/cryptos` (`docs/`, sidebar in `sidebars.ts`) and
+  FleetOS Manager at `/docs/fleet` (`fleet/`, sidebar in `sidebars-fleet.ts`), each with its own
+  sidebar, versions and version picker. `docs/` and `fleet/` are Next, the pages for unreleased
+  `main`. A link to the other docs is an absolute path, such as `/docs/fleet/helm`.
+- 🗂️ **Snapshots:** `versioned_docs/`, `versioned_sidebars/` and `versions.json` for CryptOS;
+  `fleet_versioned_docs/`, `fleet_versioned_sidebars/` and `fleet_versions.json` for FleetOS
+  Manager. One snapshot per released version, cut by `npm run docs:version` from the root. A
+  snapshot is never edited by hand.
+- ↪️ **`redirects.ts`:** every page also answers at its path from before the split
+  (`/docs/<page>`, `/docs/next/<page>`), through `@docusaurus/plugin-client-redirects`.
 - 🏠 **`src/pages/index.tsx`:** the docs home.
 - 🎨 **`src/css/theme.css`:** the page theme, taken from the Fleet Manager web UI
   ([`cryptos-web`](https://github.com/CryptOS-PKI/cryptos-web), `apps/console/src/index.css`):
@@ -26,7 +33,14 @@ npm run typecheck -w @cryptos-pki/docs
   and strip markup in `content.ts` and `strip.ts`, the measurements and colours in
   `site-frame.css`, mapped onto Docusaurus's classes in `src/css/custom.css`. The theme switch is
   the shared one (`src/components/theme-toggle-navbar-item.tsx`), and the version picker shows on
-  doc pages only (`src/components/docs-version-navbar-item.tsx`).
+  doc pages only (`src/components/docs-version-navbar-item.tsx`), one per docs.
+- ↔️ **Full width and the cookie choice:** beside the picker, a switch widens the content column
+  to the window (`src/components/full-width-navbar-item.tsx`); the frame stays put. It's off by
+  default and remembered on the machine only after the visitor accepts the cookie choice, which
+  shows the first time they change it (`src/theme/Root.tsx`). Nothing is stored before that, and
+  nothing tracks anyone. Both pieces live in `packages/frame` (`consent.ts`, `full-width.ts`).
+- 🏷️ **Plain navigation:** the sidebar and the table of contents show titles and headings without
+  their emoji (`src/theme/DocSidebarItems`, `src/theme/TOCItems`); the pages keep them.
 - 🔤 **Fonts and marks:** Inter and JetBrains Mono come from `packages/frame`, the marks and the
   favicon from `packages/brand`, both through `staticDirectories`.
 

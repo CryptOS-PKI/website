@@ -55,15 +55,19 @@ request time.
 │   │   ├── react-router.config.ts, vite.config.ts, tailwind.config.js, postcss.config.js
 │   │   └── build/               build output (gitignored): client/ is the deployable site
 │   └── docs/                    @cryptos-pki/docs: docs.cryptos-pki.com
-│       ├── docs/                Next: the pages for unreleased main
-│       ├── versioned_docs/      one snapshot per release (never edited by hand)
-│       ├── versioned_sidebars/, versions.json
-│       ├── sidebars.ts, docusaurus.config.ts
-│       ├── src/                 the docs home, components and theme CSS
+│       ├── docs/                CryptOS docs (/docs/cryptos), Next: the pages for unreleased main
+│       ├── versioned_docs/      one CryptOS snapshot per release (never edited by hand)
+│       ├── versioned_sidebars/, versions.json, sidebars.ts
+│       ├── fleet/               FleetOS Manager docs (/docs/fleet), Next
+│       ├── fleet_versioned_docs/  one FleetOS Manager snapshot per release (never edited by hand)
+│       ├── fleet_versioned_sidebars/, fleet_versions.json, sidebars-fleet.ts
+│       ├── redirects.ts         the old /docs/<page> paths, kept working
+│       ├── docusaurus.config.ts
+│       ├── src/                 the docs home, components, theme wrappers and theme CSS
 │       ├── static/              the docs' own images
 │       └── build/               build output (gitignored)
 ├── packages/
-│   ├── frame/                   @cryptos-pki/frame: site-frame.css, strip, content, hero, theme switch, fonts, release.ts
+│   ├── frame/                   @cryptos-pki/frame: site-frame.css, strip, content, hero, theme switch, consent, full width, fonts, release.ts
 │   └── brand/                   @cryptos-pki/brand: public/ (favicon, touch icon, img/brand/)
 ├── vendor/cryptos-ui/           vendored copy of cryptos-web's packages/ui (see its NOTICE)
 ├── scripts/                     CI path filter and the docs version scripts, with tests
@@ -81,8 +85,8 @@ request time.
   The components and the page stay product-agnostic.
 - `apps/site/app/components/`: presentational pieces, each one taking its content as props. No
   data fetching, no product-specific copy.
-- `apps/docs/docs/`: docs pages for Next. A released version's pages change only by cutting a new
-  version (`npm run docs:version`).
+- `apps/docs/docs/` (CryptOS) and `apps/docs/fleet/` (FleetOS Manager): docs pages for Next. A
+  released version's pages change only by cutting a new version (`npm run docs:version`).
 - `packages/frame`: anything both sites must render the same: the fonts, the frame tokens and
   colours, the strip, the header links, the footer, the hero both homes open with and the theme
   switch, and the current release version.

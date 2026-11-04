@@ -35,7 +35,9 @@ export function isFullWidth(consent: Consent): boolean {
 }
 
 const mark = (root: RootLike, full: boolean) =>
-  full ? root.setAttribute(CONTENT_WIDTH_ATTRIBUTE, "full") : root.removeAttribute(CONTENT_WIDTH_ATTRIBUTE);
+  full
+    ? root.setAttribute(CONTENT_WIDTH_ATTRIBUTE, "full")
+    : root.removeAttribute(CONTENT_WIDTH_ATTRIBUTE);
 
 export function setFullWidth(consent: Consent, full: boolean, root: RootLike): void {
   consent.set(CONTENT_WIDTH_PREF, full ? "full" : "normal");

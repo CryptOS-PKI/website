@@ -103,8 +103,8 @@ Run from the repo root.
 - Two docs instances, each versioned on its own: CryptOS (`apps/docs/versions.json`, default at
   `/docs/cryptos`) follows `release` in `packages/frame/release.ts`; FleetOS Manager
   (`apps/docs/fleet_versions.json`, default at `/docs/fleet`) follows `fleetRelease`. vNext sits
-  at `/docs/cryptos/vnext/` and `/docs/fleet/vnext/` with the unreleased banner, in every build
-  except the deploy (`DOCS_INCLUDE_NEXT=false`).
+  at `/docs/cryptos/vnext/` and `/docs/fleet/vnext/` with the unreleased banner, in every build,
+  the deploy included (`DOCS_INCLUDE_NEXT=true`); only a build that sets it to `false` leaves it out.
 - A release bumps `packages/frame/release.ts` and runs `npm run docs:version` in its own PR; it
   cuts whichever instance is missing its version. The deploy fails closed unless both are cut
   and newest.

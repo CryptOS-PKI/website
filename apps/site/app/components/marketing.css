@@ -120,18 +120,6 @@
   height: var(--frame-nav-line);
 }
 
-@media (max-width: 640px) {
-  .nav__row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--frame-header-stack-gap);
-  }
-
-  .nav__links {
-    flex-wrap: wrap;
-  }
-}
-
 /* The hero is the shared one, drawn by packages/frame/hero.css. */
 
 /* Section */

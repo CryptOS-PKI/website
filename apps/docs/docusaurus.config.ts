@@ -18,6 +18,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 import {themes as prismThemes} from 'prism-react-renderer';
 
 import {frameFooter, frameNav, legalHtml, TAGLINE, taglineHtml} from '@cryptos-pki/frame/content';
+import {NAV_LINK_CLASS} from '@cryptos-pki/frame/header-menu-config';
 import {frameLinks, stripHtml} from '@cryptos-pki/frame/strip';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
@@ -181,12 +182,15 @@ const config: Config = {
         {type: 'custom-docsVersion', position: 'left', className: 'navbar__version', dropdownActiveClassDisabled: true},
         ...frameNav(links).map((link) =>
           link.label === 'Docs'
-            ? {to: '/', label: link.label, activeBaseRegex: '^/', position: 'right' as const}
+            ? {to: '/', label: link.label, activeBaseRegex: '^/', position: 'right' as const, className: NAV_LINK_CLASS}
                         // html, not label: a label on an off-site href gets Docusaurus's
             // external-link icon, which the site's header doesn't have.
-            : {href: link.href, html: link.label, target: '_self', position: 'right' as const},
+            : {href: link.href, html: link.label, target: '_self', position: 'right' as const, className: NAV_LINK_CLASS},
         ),
         {type: 'custom-themeToggle', position: 'right'},
+        // Under the frame's breakpoint the links above hide (NAV_LINK_CLASS)
+        // and this shared menu button shows after the switch, as on the site.
+        {type: 'custom-headerMenu', position: 'right', links: frameNav(links)},
       ],
     },
     // The footer mirrors the site's (apps/site/app/components/footer.tsx): the

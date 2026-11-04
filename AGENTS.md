@@ -62,6 +62,11 @@ Run from the repo root.
 - Dark is the default on both. The site keeps the choice in localStorage `theme` and puts it on
   `<html>` as the kit's `dark` class and `data-theme`; the docs use Docusaurus's colour mode with
   its built-in switch off. Both draw the shared `ThemeToggle`.
+- Under 1168px both headers fold their links into the shared menu button
+  (`packages/frame/header-menu.tsx`), after the theme switch. The width is one media rule in
+  `site-frame.css` and `HEADER_MENU_BREAKPOINT` in `header-menu-config.ts`; `frame.test.ts` keeps
+  them in step and fails if either app sets a header breakpoint of its own. Each site marks its
+  header links with `NAV_LINK_CLASS`. Re-measure the breakpoint when a header link is added.
 - The docs header carries the site's links; the docs sections live in the sidebar and on the docs
   home. The version picker sits right after the wordmark, on doc pages only.
 - Cross-site links come from `VITE_DOCS_URL` (site) and `CRYPTOS_SITE_URL` / `CRYPTOS_DOCS_URL`

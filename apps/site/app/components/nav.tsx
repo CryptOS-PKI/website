@@ -13,6 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import { HeaderMenu } from "@cryptos-pki/frame/header-menu";
+import { NAV_LINK_CLASS } from "@cryptos-pki/frame/header-menu-config";
+
 import { ThemeSwitch } from "./theme-switch";
 
 import "./marketing.css";
@@ -30,7 +33,8 @@ const base = import.meta.env.BASE_URL;
 
 // Base-layer component: the slim top nav. The docs header mirrors it from the
 // same packages/frame tokens: the mark and wordmark, the links, then the
-// theme switch at the right end.
+// theme switch at the right end. Under the frame's breakpoint the links fold
+// into the shared menu button after the switch.
 export const Nav = ({ links }: NavProps) => (
   <header className="nav">
     <div className="container nav__row">
@@ -56,13 +60,14 @@ export const Nav = ({ links }: NavProps) => (
       <nav aria-label="Primary">
         <ul className="nav__links">
           {links.map((link) => (
-            <li key={link.href}>
+            <li key={link.href} className={NAV_LINK_CLASS}>
               <a href={link.href}>{link.label}</a>
             </li>
           ))}
           <li className="nav__theme">
             <ThemeSwitch />
           </li>
+          <HeaderMenu as="li" links={links} />
         </ul>
       </nav>
     </div>

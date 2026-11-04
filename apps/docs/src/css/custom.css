@@ -347,15 +347,18 @@
   }
 }
 
-/* Full width: the doc layout (sidebar, content, table of contents) keeps its
-   left edge on the frame's and runs to the window's right gutter instead of
-   stopping at the frame's right edge. The header, the footer and the strip
-   don't move; only the content column (and the table of contents beside it)
-   widens. */
+/* Full width: the doc layout (sidebar, content, table of contents) spans the
+   window, gutter to gutter, with the sidebar at the window's left edge
+   instead of the frame's. The header, the footer and the strip don't move;
+   only the doc layout widens. */
 html[data-content-width='full'] [class*='docRoot_'] {
   max-width: none;
-  margin-left: max(0px, calc((100% - var(--frame-max)) / 2));
-  margin-right: 0;
+  margin-inline: 0;
+}
+
+html[data-content-width='full'] [class*='docMainContainer_'] > .container {
+  max-width: none;
+  margin-inline: 0;
 }
 
 /* The link at the foot of each sidebar to the other docs. */

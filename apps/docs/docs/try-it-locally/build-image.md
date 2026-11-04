@@ -4,10 +4,6 @@ title: "🛠️ Build the image"
 
 # 🛠️ Build the image
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Turn the source into a bootable image with one task command.
 
 A CryptOS node boots from one file, a **Unified Kernel Image** (UKI). It holds the hardened kernel, a tiny start-up program, and the read-only system image. For QEMU you build the **debug** flavour of it, which sends everything to a serial console so you can watch the node boot in your terminal.

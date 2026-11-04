@@ -4,10 +4,6 @@ title: "▶️ Start the ceremony"
 
 # ▶️ Start the ceremony
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Kick off the first-boot Root ceremony from your workstation.
 
 The **first-boot ceremony** is how a Root CA node gets its identity. In one run the node creates its CA key (inside the TPM on a TPM node), signs its own Root certificate with it, writes a signed **ceremony manifest** that records what happened, and makes your bootstrap identity its standing administrator. It happens once per node, and only on a Root.

@@ -15,15 +15,21 @@ Two static sites in one repo, as npm workspaces:
   nothing talks to a backend. The page copy lives in `app/content/cryptos.ts` and the downloads
   in `app/content/release.ts`; the components they feed (`app/components/`) take their content
   as props. No emoji on the site.
-- `apps/docs` (`@cryptos-pki/docs`): the CryptOS docs (docs.cryptos-pki.com), Docusaurus 3,
-  versioned. `docs/` is Next (unreleased `main`); `versioned_docs/` holds one snapshot per
-  release.
+- `apps/docs` (`@cryptos-pki/docs`): the docs site (docs.cryptos-pki.com), Docusaurus 3, with two
+  versioned docs instances: CryptOS at `/docs/cryptos` (`docs/` is vNext, `versioned_docs/` the
+  snapshots, `sidebars.ts`) and FleetOS Manager at `/docs/fleet` (`fleet/`,
+  `fleet_versioned_docs/`, `sidebars-fleet.ts`). `redirects.ts` keeps the old `/docs/<page>`
+  paths working. Sidebars and the table of contents show page titles without their emoji.
 - `packages/frame` (`@cryptos-pki/frame`): the frame both sites share. `site-frame.css` holds the
   font faces, the frame tokens (column, header, strip and footer measurements) and the frame
   colours, light and dark; `strip.ts` the strip above the header; `content.ts` the header links,
   the footer and the legal line; `hero.tsx` the hero both homes open with, its copy in
   `hero-content.ts` and its rules in `hero.css`; `theme-toggle.tsx` the light and dark switch;
-  `release.ts` the current product release; `public/fonts/` the self-hosted fonts.
+  `release.ts` the current product releases; `consent.ts` the cookie choice, with
+  `theme-pref.ts` (both sites' theme) and `full-width.ts` (the docs' content width) the settings
+  it remembers (with `consent-banner.tsx`,
+  `full-width-toggle.tsx` and `use-consent.ts` for React); `emoji.ts` strips emoji from
+  navigation labels; `public/fonts/` the self-hosted fonts.
 - `packages/brand` (`@cryptos-pki/brand`): the marks, favicon and touch icon in `public/`.
 - `vendor/cryptos-ui` (`@cryptos-pki/ui`): a vendored, read-only copy of cryptos-web's
   `packages/ui` kit (see `vendor/cryptos-ui/NOTICE`). The site depends on it as a `file:` link; it is not a workspace,
@@ -45,6 +51,11 @@ Run from the repo root.
 - Typecheck: `npm run typecheck`
 - Build: `npm run build` (or `build:site`, `build:docs`)
 - Site link check (after a build): `npm run check:links`
+- Nothing stored before consent (after a build): `npm run check:storage:site`,
+  `npm run check:storage:docs`
+- Font check for a sub-path build: `PREVIEW_BASE_PATH=/sub/ npm run build:site`, then
+  `npm run check:fonts -- apps/site/build/client /sub/` (the docs the same way with
+  `-- --out-dir build-sub-path`). CI runs both.
 - Docs version check: `npm run check:docs-version`; cut one: `npm run docs:version`
 - License headers: `task license` (verify) / `task license:fix` (inject)
 
@@ -68,27 +79,41 @@ Run from the repo root.
   "Page · CryptOS" (the home page "CryptOS — tagline"), Open Graph and a large Twitter card with
   absolute URLs, and the link-preview card `packages/brand/public/img/brand/og-card.png`, made
   from `packages/brand/og-card.html`. A test fails if a route doesn't.
-- Dark is the default on both. The site keeps the choice in localStorage `theme` and puts it on
-  `<html>` as the kit's `dark` class and `data-theme`; the docs use Docusaurus's colour mode with
-  its built-in switch off. Both draw the shared `ThemeToggle`.
-- Under 1168px both headers fold their links into the shared menu button
+- The fonts load from the site's base path: `packages/frame/fonts.ts` writes the font faces with
+  the base and each site puts them in its `<head>`. Never put a `url("/fonts/...")` in
+  `site-frame.css`; a test and the sub-path font check fail on it.
+- The theme follows the system setting on both until the visitor picks one, and the switch only
+  works once they've answered the cookie choice (`packages/frame/theme-pref.ts`; the choice is
+  stored only after Accept). The site puts it on `<html>` as the kit's `dark` class and
+  `data-theme`; the docs use Docusaurus's colour mode with its built-in switch off. Both draw the
+  shared `ThemeToggle`.
+- Under 1050px both headers fold their links into the shared menu button
   (`packages/frame/header-menu.tsx`), after the theme switch. The width is one media rule in
   `site-frame.css` and `HEADER_MENU_BREAKPOINT` in `header-menu-config.ts`; `frame.test.ts` keeps
   them in step and fails if either app sets a header breakpoint of its own. Each site marks its
   header links with `NAV_LINK_CLASS`. Re-measure the breakpoint when a header link is added.
-- The docs header carries the site's links; the docs sections live in the sidebar and on the docs
-  home. The version picker sits right after the wordmark, on doc pages only.
+- The docs header carries the site's links and nothing else, so it matches the site's at every
+  width; the docs sections live in the sidebar and on the docs home. The version picker and the
+  full-width switch sit in the doc toolbar on the breadcrumb line.
 - Cross-site links come from `VITE_DOCS_URL` (site) and `CRYPTOS_SITE_URL` / `CRYPTOS_DOCS_URL`
   (docs), defaulting to the live addresses; `PREVIEW_BASE_PATH` builds either app under a sub-path.
 
 ## Docs versions
 
-- The newest entry in `apps/docs/versions.json` is the default at `/docs/`. Next sits at
-  `/docs/next/` with the unreleased banner, in every build except the deploy
-  (`DOCS_INCLUDE_NEXT=false`).
-- A release bumps `packages/frame/release.ts` and runs `npm run docs:version` in its own PR. The
-  deploy fails closed unless that version is cut and newest.
-- Never edit a snapshot under `versioned_docs/`. Fix the page in `docs/` (Next) instead.
+- Two docs instances, each versioned on its own: CryptOS (`apps/docs/versions.json`, default at
+  `/docs/cryptos`) follows `release` in `packages/frame/release.ts`; FleetOS Manager
+  (`apps/docs/fleet_versions.json`, default at `/docs/fleet`) follows `fleetRelease`. vNext sits
+  at `/docs/cryptos/vnext/` and `/docs/fleet/vnext/` with the unreleased banner, in every build
+  except the deploy (`DOCS_INCLUDE_NEXT=false`).
+- A release bumps `packages/frame/release.ts` and runs `npm run docs:version` in its own PR; it
+  cuts whichever instance is missing its version. The deploy fails closed unless both are cut
+  and newest.
+- A snapshot under `versioned_docs/` or `fleet_versioned_docs/` changes only to match what its
+  release ships (checked against that release's tag and assets). Everything else goes in
+  `docs/` or `fleet/` (vNext).
+- A link from one docs instance to the other is an absolute path (`/docs/fleet/<page>`, or
+  `/docs/fleet/vnext/<page>` from a vNext page), since relative `.md` links only resolve inside
+  one instance.
 
 ## Logging
 
@@ -109,8 +134,14 @@ Follow the logging rules in `CLAUDE.md`. In short:
   minutes".
 - The `🧪 Build & Test` job builds only the app a change touches (`scripts/changed-apps.mjs`);
   anything shared builds both.
-- Docs pages: every page states its status (Works today, In flight, or Roadmap); docs describe
-  CryptOS as shipped on `main`; MDX 3, so no explicit `{#id}` heading anchors.
+- Nothing writes to browser storage (localStorage, sessionStorage, cookies) before the visitor
+  accepts the cookie choice, on either site. Remembered settings go through the consent store in
+  `packages/frame` (see its README); a library that stores things on its own is kept out of
+  storage or wrapped. The storage checks above enforce it in CI.
+- Docs pages: a released version holds only what that release ships, and vNext (unreleased
+  `main`) holds the rest under a banner naming the upcoming release, so pages carry no status
+  labels (no "Works today" or "In flight") and no per-page pre-1.0 notice (the strip carries
+  it). vNext describes `main`. MDX 3, so no explicit `{#id}` heading anchors.
 - `golic` does not descend into `vendor/`; its headers are verified by inspection against the
   cryptos-web commit they were copied from, not by CI.
 - The Trust Center's controls (`app/content/trust/controls.ts`) and the FleetOS Manager page

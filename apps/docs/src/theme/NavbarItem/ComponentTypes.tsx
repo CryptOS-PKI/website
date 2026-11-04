@@ -15,15 +15,13 @@ limitations under the License.
 */
 import ComponentTypes from '@theme-original/NavbarItem/ComponentTypes';
 
-import {DocsVersionNavbarItem} from '@site/src/components/docs-version-navbar-item';
 import {HeaderMenuNavbarItem} from '@site/src/components/header-menu-navbar-item';
 import {ThemeToggleNavbarItem} from '@site/src/components/theme-toggle-navbar-item';
 
-// Adds the 'custom-docsVersion', 'custom-themeToggle' and 'custom-headerMenu'
-// navbar item types (docusaurus.config.ts).
+// Adds the 'custom-themeToggle' and 'custom-headerMenu' navbar item types
+// (docusaurus.config.ts).
 export default {
   ...ComponentTypes,
-  'custom-docsVersion': DocsVersionNavbarItem,
   'custom-themeToggle': ThemeToggleNavbarItem,
   'custom-headerMenu': HeaderMenuNavbarItem,
 };

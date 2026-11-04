@@ -4,10 +4,6 @@ title: "💻 Boot it in QEMU"
 
 # 💻 Boot it in QEMU
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Put the UKI, the machine config and an admin identity onto a disk the way the installer would, then start the node in a local virtual machine with a software TPM.
 
 :::info[Before you start]

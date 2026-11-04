@@ -4,10 +4,6 @@ title: "🔑 Run the first-boot ceremony"
 
 # 🔑 Run the first-boot ceremony
 
-:::tip[✅ Works today]
-This describes CryptOS as it works right now.
-:::
-
 With the node trusted and ready ([Reboot into the ceremony](./reboot-ceremony.md)), create its Root CA for the first time.
 
 ## Run the first-boot ceremony

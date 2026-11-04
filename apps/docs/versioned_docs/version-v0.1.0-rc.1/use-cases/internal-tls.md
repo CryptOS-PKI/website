@@ -8,9 +8,7 @@ Your own servers and services need certificates too: the internal web apps, the 
 
 With CryptOS, each service gets a certificate from your own issuing CA. Clients trust **one root**, and everything that chains to it is trusted. The same CA can also issue **client** certificates, so two services can prove who they are to each other (mutual TLS, or mTLS).
 
-:::tip[Works today]
-An intermediate or issuing node issues server and client certificates from a CSR, under a profile you define. You send the CSR with `cryptosctl ca issue-leaf` or through the Fleet Manager. The node records every certificate, revokes on request, and serves a CRL and OCSP.
-:::
+An intermediate or issuing node issues server and client certificates from a CSR, under a profile you define. You send the CSR with `cryptosctl ca issue-leaf` or through the FleetOS Manager. The node records every certificate, revokes on request, and serves a CRL and OCSP.
 
 :::info[Automatic enrolment is off until you switch it on]
 An issuing node can serve ACME (`http-01`) and EST, so clients enrol and renew on their own. Both are off by default; switching one on is a config change that takes effect at the next reboot. See the [overview](./overview.md#enrolment-protocols). This page covers requesting and renewing by hand.
@@ -42,7 +40,7 @@ pki:
 - `allow_request_sans: true` lets you name the host with `--dns` when you issue. Without it, the certificate carries only the SANs listed in the profile's `sans` field, and SANs in the CSR are always ignored.
 - `revocation_base_url` makes every certificate point at the node's CRL (`/crl`), OCSP responder (`/ocsp`) and CA certificate (`/ca.cer`).
 
-Apply the config with `cryptosctl config apply -f machine.yaml`. A change to profiles alone takes effect straight away, with no reboot. Setting or changing `revocation_base_url` needs a reboot, and the apply says so with `requires_reboot=true`. The [certificate profiles](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/certificate-profiles.md) guide lists every field.
+Apply the config with `cryptosctl config apply -f machine.yaml`. A change to profiles alone takes effect straight away, with no reboot. Setting or changing `revocation_base_url` needs a reboot, and the apply says so with `requires_reboot=true`. The [certificate profiles](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/docs/certificate-profiles.md) guide lists every field.
 
 :::caution[Revocation URL must be reachable before you issue]
 When `revocation_base_url` is set, the node checks that the URL resolves and that its own `/crl`, `/ocsp` and `/ca.cer` answer there. While that check fails, every issuance fails with `revocation preflight failing for configured revocation_base_url; issuance blocked`. Fix DNS or the network first. `allow_unverified_revocation_url` overrides the check, but every certificate issued while it is set carries the unchecked pointer for life.
@@ -118,14 +116,14 @@ The node keeps every certificate it issues:
 A revoked certificate stays on the CRL, and OCSP answers "revoked" for it from then on. There is no way to un-revoke it. Issue a replacement before you revoke a certificate that a service is still using.
 :::
 
-See [issued certificates](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/issued-certificates.md) for the full commands and output.
+See [issued certificates](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/docs/issued-certificates.md) for the full commands and output.
 
 ## Renewing
 
-The alpha has no automatic renewal. Before a certificate expires, make a fresh CSR and issue again. With 90-day certificates that is a calendar job.
+This release has no automatic renewal. Before a certificate expires, make a fresh CSR and issue again. With 90-day certificates that is a calendar job.
 
 ## Related
 
 - [Chain of trust](../concepts/chain-of-trust.md) explains why clients need only the root.
-- [Active Directory domain controllers](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/active-directory.md) covers LDAPS and KDC certificates, including `certreq` on Server Core.
+- [Active Directory domain controllers](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/docs/active-directory.md) covers LDAPS and KDC certificates, including `certreq` on Server Core.
 - [Kubernetes workloads](./kubernetes.md) covers certificates for pods and ingress.

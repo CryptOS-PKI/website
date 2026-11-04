@@ -4,10 +4,6 @@ title: "📊 Check status"
 
 # 📊 Check status
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Read a node's role, identity state, and health.
 
 `cryptosctl status` is the first command to run against any node: after an install, after a reboot, before a ceremony, and whenever something looks wrong. It changes nothing on the node.
@@ -69,7 +65,7 @@ A TPM image that cannot open its TPM, or whose TPM lacks ECDSA P-384, does not f
 
 ### etcd
 
-The node's internal database. It reads `OK` on a serving node; the alpha does not report `DEGRADED`.
+The node's internal database. It reads `OK` on a serving node; this release does not report `DEGRADED`.
 
 ### Boot count
 

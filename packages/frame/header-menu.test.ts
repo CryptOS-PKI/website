@@ -18,8 +18,8 @@ import { test } from "node:test";
 
 import { HEADER_MENU_BREAKPOINT, nextMenuState } from "./header-menu-config.ts";
 
-test("the header switches to the menu under 1168px, where the docs' version picker and the links still fit", () => {
-  assert.equal(HEADER_MENU_BREAKPOINT, 1168);
+test("the header switches to the menu under 1050px, where all the links still fit a nav gap clear of the wordmark", () => {
+  assert.equal(HEADER_MENU_BREAKPOINT, 1050);
 });
 
 test("the menu opens on the button and closes on the button, Escape, a link or a click outside", () => {

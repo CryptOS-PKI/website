@@ -3,6 +3,7 @@ node_modules/
 
 # Builds and caches (apps/site and apps/docs)
 build/
+build-sub-path/
 .react-router/
 .docusaurus/
 .cache/

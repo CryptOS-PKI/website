@@ -1,4 +1,5 @@
 build
+build-sub-path
 .react-router
 .docusaurus
 coverage

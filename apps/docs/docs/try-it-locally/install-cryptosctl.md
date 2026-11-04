@@ -4,10 +4,6 @@ title: "⬇️ Install cryptosctl"
 
 # ⬇️ Install cryptosctl
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Get the command-line tool that talks to the node.
 
 `cryptosctl` is the only way to manage a standalone CryptOS node. Every command goes to the node's API over mutual TLS: you prove who you are with your admin identity, and `cryptosctl` checks the node against a certificate you pinned. There is no login and no shell behind it.

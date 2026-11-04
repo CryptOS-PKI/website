@@ -72,6 +72,23 @@ jobs:
         if: steps.changes.outputs.site_changed == 'true'
         run: npm run check:links -w @cryptos-pki/site
 
+      # Nothing may be written to browser storage before the visitor accepts
+      # the cookie choice (scripts/check-no-storage.mjs).
+      - name: Site - nothing stored before consent
+        if: steps.changes.outputs.site_changed == 'true'
+        run: npm run check:storage:site
+
+      # The previews serve the site under a sub-path; a font URL that ignores
+      # the base path only breaks there, so this builds under one and checks
+      # every font URL resolves.
+      - name: Site - check fonts in a sub-path build
+        if: steps.changes.outputs.site_changed == 'true'
+        env:
+          PREVIEW_BASE_PATH: /sub-path-check/
+        run: |
+          npm run build -w @cryptos-pki/site
+          node scripts/check-fonts.mjs apps/site/build/client "$PREVIEW_BASE_PATH"
+
       - name: Docs - typecheck
         if: steps.changes.outputs.docs_changed == 'true'
         run: npm run typecheck -w @cryptos-pki/docs
@@ -79,6 +96,38 @@ jobs:
       # onBrokenLinks and the markdown link hook are set to throw, so a broken
       # internal link fails this step. This build includes Next, so it checks
       # the released versions and main's pages.
+      # Built under a base path, as the hand-off previews are, so a link or an
+      # image that skips the base path (a bare '/img/...') fails here rather
+      # than only in a preview. The checks below read the same build.
       - name: Docs - build
         if: steps.changes.outputs.docs_changed == 'true'
+        env:
+          PREVIEW_BASE_PATH: /docs-ci/
         run: npm run build -w @cryptos-pki/docs
+
+      # Every image every page uses, in both docs and every version, must be
+      # in the build (scripts/check-images.mjs).
+      - name: Docs - no missing images
+        if: steps.changes.outputs.docs_changed == 'true'
+        env:
+          PREVIEW_BASE_PATH: /docs-ci/
+        run: npm run check:images:docs
+
+      # Loads every page, then hydrates a few and uses the theme, full-width
+      # and tab switches: nothing may be stored before consent.
+      - name: Docs - nothing stored before consent
+        if: steps.changes.outputs.docs_changed == 'true'
+        env:
+          PREVIEW_BASE_PATH: /docs-ci/
+        run: npm run check:storage:docs
+
+      # The same font check for the docs, built under a sub-path into its own
+      # folder (released versions only, to keep it quick).
+      - name: Docs - check fonts in a sub-path build
+        if: steps.changes.outputs.docs_changed == 'true'
+        env:
+          PREVIEW_BASE_PATH: /sub-path-check/
+          DOCS_INCLUDE_NEXT: "false"
+        run: |
+          npm run build -w @cryptos-pki/docs -- --out-dir build-sub-path
+          node scripts/check-fonts.mjs apps/docs/build-sub-path "$PREVIEW_BASE_PATH"

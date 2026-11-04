@@ -7,10 +7,6 @@ import TabItem from '@theme/TabItem';
 
 # ⚙️ Setup
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Point cryptosctl at a node: endpoint, identity, trust, and the local socket.
 
 Every `cryptosctl` command that talks to a node needs to know three things: **where** the node is, **who you are**, and **which certificate the node must show**. This page sets up all three once, so later commands stay short.
@@ -94,7 +90,7 @@ Pin verified: the SHA-256 matches --expect-sha256.
 If the fingerprint does not match, the command fails with `does not match --expect-sha256` and saves nothing. Stop and find out what is answering on that address.
 :::
 
-Spaces, colons and case in `--expect-sha256` are ignored, so the `AB:CD:...` form openssl prints works too. No client certificate is needed for the fetch. The [management trust guide](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/management-trust.md) in the `cryptos-node` repository explains what the pin does and does not prove, and how to get the same certificate with openssl.
+Spaces, colons and case in `--expect-sha256` are ignored, so the `AB:CD:...` form openssl prints works too. No client certificate is needed for the fetch. The [management trust guide](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/docs/management-trust.md) in the `cryptos-node` repository explains what the pin does and does not prove, and how to get the same certificate with openssl.
 
 ### Several nodes
 

@@ -7,10 +7,6 @@ import TabItem from '@theme/TabItem';
 
 # 🔁 Reboot into the ceremony
 
-:::tip[✅ Works today]
-This describes CryptOS as it works right now.
-:::
-
 After the install the node reboots from its own disk. This first real boot sets up the encrypted disk and brings the node onto its permanent address. From there, a Root is ready for its **first-boot ceremony**, where it creates its CA key inside the TPM and signs its own Root certificate. This page gets you to that point, with a trusted connection to the node; [Run the first-boot ceremony](./run-the-ceremony.md) covers the ceremony itself.
 
 ## The first boot from disk
@@ -33,7 +29,7 @@ Until the node has its CA, it cannot present a certificate from that CA on this 
 
 ### Read the fingerprint off the console
 
-Once the node is up, its console (the physical screen or the hypervisor console) shows that it is waiting for its ceremony, what to do next, and the SHA-256 of this boot's management certificate:
+Once the node is up, its console (the VM console in your hypervisor) shows that it is waiting for its ceremony, what to do next, and the SHA-256 of this boot's management certificate:
 
 ```text
 Awaiting ceremony
@@ -45,7 +41,7 @@ Mgmt SHA-256   2D71 1642 B726 B044 0162 7CA9 FBAC 32F5
 Mgmt cert      self-signed, compare the fingerprint
 ```
 
-**check 2/2** is the second fingerprint check of a Fleet Manager adoption. Without a Fleet Manager, compare the fingerprint with `trust fetch --expect-sha256` as below.
+**check 2/2** is the second fingerprint check of a FleetOS Manager adoption. Without a FleetOS Manager, compare the fingerprint with `trust fetch --expect-sha256` as below.
 
 The fingerprint is shown in the same form after the ceremony, on the serving dashboard. It changes on every boot, like the certificate.
 
@@ -62,7 +58,7 @@ The fingerprint is on all three screens, so you check the pin the same way on a 
 ### Fetch the certificate
 
 :::danger[Verify the fingerprint before the first ceremony]
-The ceremony runs over this pin, and the Root certificate it returns is the one you publish. If you skip the check, whatever answered the fetch could hand you a Root that isn't your node's. Always pass the console's value to `--expect-sha256`, and never run `ceremony start` over a pin you haven't checked. The [management trust guide](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/management-trust.md) in the `cryptos-node` repository goes through what the pin does and does not prove.
+The ceremony runs over this pin, and the Root certificate it returns is the one you publish. If you skip the check, whatever answered the fetch could hand you a Root that isn't your node's. Always pass the console's value to `--expect-sha256`, and never run `ceremony start` over a pin you haven't checked. The [management trust guide](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/docs/management-trust.md) in the `cryptos-node` repository goes through what the pin does and does not prove.
 :::
 
 ```bash

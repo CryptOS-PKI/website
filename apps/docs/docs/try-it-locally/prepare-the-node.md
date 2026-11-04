@@ -35,7 +35,7 @@ cp /usr/share/OVMF/OVMF_VARS_4M.fd "$LAB/OVMF_VARS.fd"
 The node trusts exactly one client on first boot: the **bootstrap admin** named in its machine config. Make that identity now with `cryptosctl bootstrap`. You install `cryptosctl` properly on a later page; for now run it straight from the source:
 
 ```bash
-go run ./cmd/cryptosctl bootstrap
+go run github.com/CryptOS-PKI/cryptos-node/cmd/cryptosctl bootstrap
 ```
 
 :::tip[Expected output]

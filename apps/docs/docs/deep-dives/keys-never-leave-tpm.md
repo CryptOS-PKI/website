@@ -6,9 +6,7 @@ title: "🗝️ How keys never leave the TPM"
 
 Following the private key from creation to signing without it ever touching disk.
 
-:::tip[Works today]
 On a node built with the default `tpm` state-key mode, the CA key is created inside the TPM, is marked non-exportable by the TPM itself, and signs only inside the TPM. The rest of this page shows where that holds and where it doesn't.
-:::
 
 ## First, which key and which mode
 
@@ -110,7 +108,7 @@ So an attacker who copies the disk gets an encrypted volume and a sealed blob th
 
 ## Where it falls short
 
-| Design goal | What the alpha does |
+| Design goal | What this release does |
 |---|---|
 | Private keys are TPM-sealed and never live on the filesystem in the clear. | True for the CA key in `tpm` mode, ECDSA P-384 or RSA. Every key in `nodeid` and `kms` mode is a software key stored inside the encrypted volume. |
 | RSA CA keys in the TPM. | Built, for RSA-3072 and RSA-4096 on a TPM that implements the size. Many TPM 2.0 parts implement only RSA-2048, which is below the RSA-3072 floor, and on those the node refuses rather than fall back. |
@@ -119,7 +117,7 @@ So an attacker who copies the disk gets an encrypted volume and a sealed blob th
 | A hardware presence check before a Root key unseals. | Not built. |
 | HA pairs share one CA key with `TPM2_Duplicate`. | Not built. The key is created with `fixedTPM` and `fixedParent`, so it can't be duplicated as it stands. |
 | Extensions are measured into PCR 14, and the seal binds to it. | Not built. `ExtendPCR` exists in `internal/tpm`, but nothing calls it and the seal set is PCR 7 and 11. |
-| The CA key signs only certificates, CRLs and OCSP material built by the policy path. | The CA key also answers `Attest`, the Fleet Manager enrollment challenge. The node never signs the bare nonce: it signs the SHA-384 of `CryptOS-PKI attestation v1`, a zero byte, the nonce length as a 4-byte big-endian integer, and the nonce. That message can't parse as a TBSCertificate, TBSCertList or OCSP ResponseData, so an `Attest` signature can't be passed off as a certificate, CRL or OCSP signature. The audit entry records the attestation context, the nonce length and the nonce's SHA-256. The key still does both jobs; there is no separate attestation key. |
+| The CA key signs only certificates, CRLs and OCSP material built by the policy path. | The CA key also answers `Attest`, the FleetOS Manager enrollment challenge. The node never signs the bare nonce: it signs the SHA-384 of `CryptOS-PKI attestation v1`, a zero byte, the nonce length as a 4-byte big-endian integer, and the nonce. That message can't parse as a TBSCertificate, TBSCertList or OCSP ResponseData, so an `Attest` signature can't be passed off as a certificate, CRL or OCSP signature. The audit entry records the attestation context, the nonce length and the nonce's SHA-256. The key still does both jobs; there is no separate attestation key. |
 
 ## Where this lives in the code
 

@@ -39,7 +39,7 @@ export const kubernetes = {
   chart: "oci://ghcr.io/cryptos-pki/charts/fleet-manager",
   chartVersion: release.version.slice(1),
   image: `ghcr.io/cryptos-pki/cryptos-manager:${release.version}`,
-  guideHref: `${links.docs}/docs/fleet-manager/helm`,
+  guideHref: `${links.docs}/docs/fleet/helm`,
 };
 
 // Every way to run this release, and where each one stands. Only an
@@ -60,7 +60,7 @@ export const installTargets: InstallTarget[] = [
     status: "Available",
     arch: "amd64 only",
     guideLabel: "Download and sign the image",
-    guideHref: `${links.docs}/docs/install-deploy/build-bootable-image#download-the-unsigned-image`,
+    guideHref: `${links.docs}/docs/cryptos/install-deploy/build-bootable-image#download-the-unsigned-image`,
   },
   {
     id: "iso-nodeid",
@@ -68,7 +68,7 @@ export const installTargets: InstallTarget[] = [
     status: "Available",
     arch: "amd64 only",
     guideLabel: "Where the CA key lives",
-    guideHref: `${links.docs}/docs/deep-dives/keys-never-leave-tpm`,
+    guideHref: `${links.docs}/docs/cryptos/deep-dives/keys-never-leave-tpm`,
   },
   {
     id: "cli",
@@ -76,7 +76,7 @@ export const installTargets: InstallTarget[] = [
     status: "Available",
     arch: "amd64 and arm64",
     guideLabel: "cryptosctl reference",
-    guideHref: `${links.docs}/docs/reference/cryptosctl`,
+    guideHref: `${links.docs}/docs/cryptos/reference/cryptosctl`,
   },
   {
     id: "manager",
@@ -163,5 +163,5 @@ export const downloads: DownloadAsset[] = [
 
 export const verify = {
   command: "sha256sum -c SHA256SUMS --ignore-missing",
-  secureBootHref: `${links.docs}/docs/install-deploy/secure-boot`,
+  secureBootHref: `${links.docs}/docs/cryptos/install-deploy/secure-boot`,
 };

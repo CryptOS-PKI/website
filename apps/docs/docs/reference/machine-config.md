@@ -4,10 +4,6 @@ title: "📄 Machine config schema"
 
 # 📄 Machine config schema
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Every field in `machine.yaml` and what it means.
 
 A CryptOS node is described by one YAML document, the **machine config**. It sets the node's role, its network, the administrator it trusts on first boot, and every certificate setting. The node has no other settings and no way to change them by hand. See [Declarative config](../concepts/declarative-config.md) for the idea behind it.
@@ -85,7 +81,7 @@ The node keeps the applied config at `/var/lib/cryptos/config/machine.yaml` on i
 | `pki` | object | yes | CA settings. See [Machine config: pki](./machine-config-pki.md). |
 | `install` | object | for an install | The disk the maintenance-mode installer writes to. |
 | `state_key` | object | no | How the state-partition key is protected. |
-| `management` | object | no | Set when a Fleet Manager links the node. |
+| `management` | object | no | Set when a FleetOS Manager links the node. |
 
 | Rule | Error |
 |---|---|
@@ -227,12 +223,12 @@ With `mode: tpm` and an RSA `pki.root_key_alg`, the CA key is created in the TPM
 
 ## 🛰️ management
 
-Set by the Fleet Manager when it links the node (the node's `SetManagement` RPC writes it). Leave it out on an unmanaged node. It takes effect on the next reboot.
+Set by the FleetOS Manager when it links the node (the node's `SetManagement` RPC writes it). Leave it out on an unmanaged node. It takes effect on the next reboot.
 
 | Field | Type | Default | Meaning |
 |---|---|---|---|
-| `management.manager_cn` | string | none | The subject CN of the managing Fleet Manager's operator identity. Required when the block is set. |
-| `management.trust_pem` | string | none | The PEM trust anchor (operator CA) for the Fleet Manager. Required when the block is set. |
+| `management.manager_cn` | string | none | The subject CN of the managing FleetOS Manager's operator identity. Required when the block is set. |
+| `management.trust_pem` | string | none | The PEM trust anchor (operator CA) for the FleetOS Manager. Required when the block is set. |
 | `management.operator_surface_readonly` | boolean | `false` | Marks the node's own operator surface as read-only. |
 
 | Rule | Error |
@@ -241,12 +237,12 @@ Set by the Fleet Manager when it links the node (the node's `SetManagement` RPC 
 | `trust_pem` empty | `config: management.trust_pem: required when management is set` |
 
 :::info[Stored, not enforced]
-In this alpha the node validates and keeps the `management` block, but its mTLS listener still verifies clients against the bootstrap admin certificate only.
+In this release the node validates and keeps the `management` block, but its mTLS listener still verifies clients against the bootstrap admin certificate only.
 :::
 
 ## 🔁 Applying a change
 
-Apply a new config with `cryptosctl config apply -f machine.yaml` (see [Apply a config](../using/config-apply.md)) or from the Fleet Manager. The reply names the new generation and whether the change needs a reboot:
+Apply a new config with `cryptosctl config apply -f machine.yaml` (see [Apply a config](../using/config-apply.md)) or from the FleetOS Manager. The reply names the new generation and whether the change needs a reboot:
 
 :::tip[Expected output]
 A successful apply prints one line. `requires_reboot=false` means the change is already live.
@@ -263,7 +259,7 @@ applied: generation=<n> requires_reboot=<true|false> digest=<sha256 of the store
 `cryptosctl config apply` also prints a `WARNING:` line for each profile whose `validity_days` already runs past the node's own CA certificate. It's a warning; the config is still applied.
 
 :::caution[What an apply can't carry]
-`cryptosctl config apply` and the Fleet Manager send the config as the API's `MachineConfig` message, which doesn't cover every YAML field. **A profile's `subject.province` and `subject.locality`** are dropped, because the profile subject in the message carries only `common_name`, `organization` and `country`. The CA's own `root_subject` keeps all five.
+`cryptosctl config apply` and the FleetOS Manager send the config as the API's `MachineConfig` message, which doesn't cover every YAML field. **A profile's `subject.province` and `subject.locality`** are dropped, because the profile subject in the message carries only `common_name`, `organization` and `country`. The CA's own `root_subject` keeps all five.
 
 `cryptosctl ceremony start --config machine.yaml` sends your file as-is, so those fields survive there.
 :::

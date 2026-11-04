@@ -1,0 +1,84 @@
+{
+  "fleet": [
+    {
+      "type": "category",
+      "label": "Introduction",
+      "items": [
+        "overview",
+        "node-lifecycle"
+      ],
+      "collapsed": false
+    },
+    {
+      "type": "category",
+      "label": "Install and run",
+      "items": [
+        "helm",
+        {
+          "type": "category",
+          "label": "First run",
+          "link": {
+            "type": "doc",
+            "id": "first-run/index"
+          },
+          "items": [
+            "first-run/create-operator-ca",
+            "first-run/start-first-run",
+            "first-run/register-operator-ca",
+            "first-run/first-admin-certificate",
+            "first-run/web-wizard",
+            "first-run/break-glass"
+          ]
+        },
+        "cutover-cryptos-node-v1"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Operator CA and credentials",
+      "items": [
+        "operator-ca",
+        "rotating-the-operator-ca",
+        "operator-credentials",
+        "migrating-from-operator-ca-node",
+        "web-operator-cas"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Node trust",
+      "items": [
+        "node-trust",
+        "upgrade-node-trust"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Using the web UI",
+      "items": [
+        "web-ui",
+        "web-fleet-and-nodes",
+        "web-node-detail",
+        "web-catalogs",
+        "web-operators-audit",
+        "web-operator-credentials",
+        "make-a-credential-request",
+        "approvals"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Contributing",
+      "items": [
+        "contributing/ui-issue-button",
+        "contributing/accessibility-checks"
+      ]
+    },
+    {
+      "type": "link",
+      "label": "CryptOS docs",
+      "href": "/docs/cryptos",
+      "className": "sidebar-other-docs"
+    }
+  ]
+}

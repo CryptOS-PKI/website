@@ -7,10 +7,6 @@ import TabItem from '@theme/TabItem';
 
 # 🔁 Reboot into the ceremony
 
-:::tip[✅ Works today]
-This describes CryptOS as it works right now.
-:::
-
 After the install the node reboots from its own disk. This first real boot sets up the encrypted disk and brings the node onto its permanent address. From there, a Root is ready for its **first-boot ceremony**, where it creates its CA key inside the TPM and signs its own Root certificate. This page gets you to that point, with a trusted connection to the node; [Run the first-boot ceremony](./run-the-ceremony.md) covers the ceremony itself.
 
 ## The first boot from disk
@@ -45,7 +41,7 @@ Mgmt SHA-256   2D71 1642 B726 B044 0162 7CA9 FBAC 32F5
 Mgmt cert      self-signed, compare the fingerprint
 ```
 
-**check 2/2** is the second fingerprint check of a Fleet Manager adoption. Without a Fleet Manager, compare the fingerprint with `trust fetch --expect-sha256` as below.
+**check 2/2** is the second fingerprint check of a FleetOS Manager adoption. Without a FleetOS Manager, compare the fingerprint with `trust fetch --expect-sha256` as below.
 
 The fingerprint is shown in the same form after the ceremony, on the serving dashboard. It changes on every boot, like the certificate.
 

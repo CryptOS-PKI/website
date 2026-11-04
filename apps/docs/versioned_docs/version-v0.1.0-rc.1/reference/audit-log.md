@@ -4,13 +4,11 @@ title: "📚 Audit log format"
 
 # 📚 Audit log format
 
-:::tip[Works today]
-The node writes and chains its audit log today, and `cryptosctl audit list` and `audit verify` read and check it (see [Check the audit log](../using/audit-log.md)). Exporting the raw files for verification off the node is not available; see [What you can't do today](#-what-you-cant-do-today).
-:::
+The node writes and chains its audit log, and `cryptosctl audit list` and `audit verify` read and check it (see [Check the audit log](../using/audit-log.md)). Exporting the raw files for verification off the node is not available; see [What you can't do yet](#-what-you-cant-do-yet).
 
 How the tamper-evident log is structured and verified.
 
-Every CryptOS node keeps an **audit log**: one entry for every call to its API except the status polls, each entry signed and chained to the one before it. A changed, removed or reordered entry breaks the chain from that point on. For the reasoning behind the design, see [How the audit log proves integrity](../deep-dives/audit-integrity.md). The Fleet Manager keeps a separate log of its own, described [at the end of this page](#-the-fleet-manager-audit-log).
+Every CryptOS node keeps an **audit log**: one entry for every call to its API except the status polls, each entry signed and chained to the one before it. A changed, removed or reordered entry breaks the chain from that point on. For the reasoning behind the design, see [How the audit log proves integrity](../deep-dives/audit-integrity.md). The FleetOS Manager keeps a separate log of its own, described [at the end of this page](#-the-fleetos-manager-audit-log).
 
 ## 📝 What gets recorded
 
@@ -22,7 +20,7 @@ These are not recorded:
 
 | What | Why, and where it shows instead |
 |---|---|
-| `GetStatus` and `GetIdentity`, from any caller | The node console polls both every 2 seconds and the Fleet Manager calls them whenever it shows a node. They change nothing and return only what the node publishes anyway (its status and its CA certificate), so recording them would fill the log with reads. Every other read is recorded, including `GetConfig`, `ListIssued`, `GetIssuedCertificate`, `ExportCAKey`, `ListAuditEvents` and `VerifyAuditChain`. |
+| `GetStatus` and `GetIdentity`, from any caller | The node console polls both every 2 seconds and the FleetOS Manager calls them whenever it shows a node. They change nothing and return only what the node publishes anyway (its status and its CA certificate), so recording them would fill the log with reads. Every other read is recorded, including `GetConfig`, `ListIssued`, `GetIssuedCertificate`, `ExportCAKey`, `ListAuditEvents` and `VerifyAuditChain`. |
 | Maintenance mode, including the installer's first `ApplyConfig` | There is no state partition to write to yet, so the install is recorded nowhere. The log starts on the installed node's first boot. |
 | ACME, EST, CRL and OCSP requests, and SCEP `GetCACert` and `GetCACaps` | They run on their own HTTP listeners, not the gRPC API. Every certificate ACME or EST issues is in the node's issued set (`cryptosctl ca list-issued`). Protocol events go to the node's kernel log, which is held in memory only and lost at reboot. |
 | A client whose certificate fails the TLS handshake | It never reaches an API call. |
@@ -110,10 +108,10 @@ Protobuf JSON output isn't byte-stable: the spacing and order can differ between
 
 The audit key is an Ed25519 key derived, not stored. The node generates a 32-byte master seed at first boot and keeps it at `/var/lib/cryptos/seed` on the encrypted state partition. The audit key is HKDF-SHA256 over that seed, with no salt and the info string `cryptos.dev/audit-signer/v1`. The key is separate from the CA key, so audit signing never touches the key that issues certificates. The [ceremony manifest](../deep-dives/ceremony-walkthrough.md) is signed by a second key from the same seed, with the info string `cryptos.dev/ceremony-signer/v1`.
 
-## 🚧 What you can't do today
+## 🚧 What you can't do yet
 
 :::info[Verification runs on the node]
-`ListAuditEvents` returns each entry and its SHA-256, and `VerifyAuditChain` checks the chain on the node. Neither returns the entry signatures or the audit public key, and the node doesn't ship entries to a SIEM, so you can't verify the log independently off the node in this alpha.
+`ListAuditEvents` returns each entry and its SHA-256, and `VerifyAuditChain` checks the chain on the node. Neither returns the entry signatures or the audit public key, and the node doesn't ship entries to a SIEM, so you can't verify the log independently off the node in this release.
 :::
 
 :::caution[A failed audit write doesn't fail the call]
@@ -128,9 +126,9 @@ The node keeps one file per UTC day and never trims or deletes them, so the log 
 `cryptosctl reset` erases the state partition's key material, and the audit log lives on that partition, so a reset takes the node's audit history with it. `cryptosctl audit list --all -o json` saves a readable copy first, but that copy can't be verified off the node.
 :::
 
-## 🧭 The Fleet Manager audit log
+## 🧭 The FleetOS Manager audit log
 
-The Fleet Manager records its own actions (approving an enrolment, applying a profile, issuing, revoking, and so on) in its database. It's hash-chained too, but its format differs from the node's.
+The FleetOS Manager records its own actions (approving an enrolment, applying a profile, issuing, revoking, and so on) in its database. It's hash-chained too, but its format differs from the node's.
 
 `ListAudit` returns the entries as `cryptos.fleet.v1.AuditEvent` messages:
 

@@ -1,5 +1,21 @@
 .entryPoints {
-  padding: 3.5rem 1.5rem;
+  padding: 3.5rem 1.5rem 0;
+}
+
+.entryGroupHead {
+  max-width: var(--ifm-container-width, 1140px);
+  margin: 0 auto 1.25rem;
+}
+
+.entryGroupTitle {
+  margin: 0 0 0.35rem;
+  font-size: 1.35rem;
+  color: var(--cryptos-foreground);
+}
+
+.entryGroupDescription {
+  margin: 0;
+  color: var(--cryptos-muted-foreground);
 }
 
 .entryGrid {
@@ -52,34 +68,12 @@
   color: var(--cryptos-muted-foreground);
 }
 
-.notice {
-  padding: 0 1.5rem 3rem;
-}
 
-.noticeCard {
-  max-width: var(--ifm-container-width, 1140px);
-  margin: 0 auto;
-  padding: 1.1rem 1.4rem;
-  border: 1px solid var(--cryptos-warning);
-  border-left: 0.3rem solid var(--cryptos-warning);
-  border-radius: var(--cryptos-radius);
-  background: rgba(var(--cryptos-warning-rgb), 0.1);
-}
 
-.noticeTitle {
-  margin: 0 0 0.35rem;
-  font-weight: 700;
-  color: var(--cryptos-foreground);
-}
 
-.noticeBody {
-  margin: 0;
-  color: var(--cryptos-foreground);
-  line-height: 1.6;
-}
 
 .productLink {
-  padding: 0 1.5rem 3.5rem;
+  padding: 3.5rem 1.5rem;
   text-align: center;
   color: var(--cryptos-muted-foreground);
 }

@@ -95,11 +95,11 @@ To confirm, type the node's CA common name exactly. A refusal, such as the node 
 This is the node's own record of calls to its API, distinct from the Fleet Manager's own actions (approving an enrolment, issuing, revoking and so on), which are on the [Audit](./web-operators-audit.md#audit) page instead.
 :::
 
-Every managed node keeps a signed, hash-chained audit log of every call to its API. The panel lists it oldest entry first, with the same sequence, time, actor and summary as [`cryptosctl audit list`](../using/audit-log.md#1-list-the-entries), plus the call itself under **Action** and whether it was allowed under **Outcome**. **Load more** fetches the next page.
+Every managed node keeps a signed, hash-chained audit log of every call to its API. The panel lists it oldest entry first, with the same sequence, time, actor and summary as [`cryptosctl audit list`](/docs/cryptos/using/audit-log#1-list-the-entries), plus the call itself under **Action** and whether it was allowed under **Outcome**. **Load more** fetches the next page.
 
 {/* screenshot: fleet-manager/node-audit-log.png: a node's audit log panel with a few entries and the Verify chain button */}
 
-**Verify chain** asks the node to walk its whole log the same way [`cryptosctl audit verify`](../using/audit-log.md#2-verify-the-chain) does — every entry's signature and its link to the one before it — and reports the result:
+**Verify chain** asks the node to walk its whole log the same way [`cryptosctl audit verify`](/docs/cryptos/using/audit-log#2-verify-the-chain) does — every entry's signature and its link to the one before it — and reports the result:
 
 | Result | What it means |
 |---|---|
@@ -107,14 +107,14 @@ Every managed node keeps a signed, hash-chained audit log of every call to its A
 | `Chain broken at sequence N: <reason>` | An entry was altered after it was written. The node keeps adding new entries after the break; nothing is repaired automatically. |
 
 :::caution[A broken chain means the log was changed]
-Leave the node as it is and read [Verify the chain](../using/audit-log.md#2-verify-the-chain) before you change anything. Don't reset the node: a reset destroys the log.
+Leave the node as it is and read [Verify the chain](/docs/cryptos/using/audit-log#2-verify-the-chain) before you change anything. Don't reset the node: a reset destroys the log.
 :::
 
-See [Audit log format](../reference/audit-log.md) for what each entry holds and what a node does and doesn't record.
+See [Audit log format](/docs/cryptos/reference/audit-log) for what each entry holds and what a node does and doesn't record.
 
 ## TSA certificates
 
-Shown only once [the node's time-stamp authority](../using/serve-timestamps-tsa.md) is switched on; while it isn't, the panel says so instead of listing nothing. Lists every certificate the node has issued to sign timestamp tokens, each with its serial, SHA-256 fingerprint and validity window: **Current** for the one actually signing tokens now, **Past** for a retired one the node keeps so it can still verify tokens it signed earlier.
+Shown only once [the node's time-stamp authority](/docs/cryptos/using/serve-timestamps-tsa) is switched on; while it isn't, the panel says so instead of listing nothing. Lists every certificate the node has issued to sign timestamp tokens, each with its serial, SHA-256 fingerprint and validity window: **Current** for the one actually signing tokens now, **Past** for a retired one the node keeps so it can still verify tokens it signed earlier.
 
 {/* screenshot: fleet-manager/node-tsa-certificates.png: a node's TSA certificates list with one current and one past certificate */}
 
@@ -128,7 +128,7 @@ Paste a certificate's PEM and check whether it chains to this node's CA, without
 
 ## OS image lifecycle
 
-The web equivalent of [`cryptosctl image status/stage/rollback/activate`](../reference/cryptosctl.md#image-upgrades). The **OS image** panel shows the node's running, active (next boot) and previous image digests, with a **Reboot pending** badge when the active image differs from the one currently running. Reading it needs no particular level and isn't audited.
+The web equivalent of [`cryptosctl image status/stage/rollback/activate`](/docs/cryptos/reference/cryptosctl#image-upgrades). The **OS image** panel shows the node's running, active (next boot) and previous image digests, with a **Reboot pending** badge when the active image differs from the one currently running. Reading it needs no particular level and isn't audited.
 
 - **Stage image…** (`admin`) takes an image URL and the detached release signature file; the manager fetches the image itself and streams it into the node, so a gigabyte-sized image never has to pass through your browser. An optional SHA-256 is checked against what the node received.
 - **Activate image…** (`admin`, only once a staged image makes it **Reboot pending**) reboots the node into the staged image, with the same type-the-CA-common-name confirmation as **Reboot…**, because activating is itself a reboot.
@@ -140,7 +140,7 @@ Staging, activating and rolling back are all audited; a refusal the node makes i
 
 ## SCEP challenge passwords
 
-The web equivalent of [`cryptosctl scep challenge mint/list/revoke`](../using/enrol-devices-scep.md#2-mint-a-challenge-for-the-device). The **SCEP challenges** panel lists the node's usable challenges, each with its profile, bound names, expiry and who minted it. A `viewer` sees the list only; minting and revoking need `operator` level or above.
+The web equivalent of [`cryptosctl scep challenge mint/list/revoke`](/docs/cryptos/using/enrol-devices-scep#2-mint-a-challenge-for-the-device). The **SCEP challenges** panel lists the node's usable challenges, each with its profile, bound names, expiry and who minted it. A `viewer` sees the list only; minting and revoking need `operator` level or above.
 
 - **Mint challenge…** takes a profile, a TTL and optional bound names, and mints a one-time challenge password for a device to enrol with. The password is shown once, the same way an agent key is: the manager keeps only the challenge's metadata, never the password, so if you close the dialog without copying it there is no way to get it back.
 - **Revoke** on a challenge's row withdraws it before it is used.
@@ -151,7 +151,7 @@ Both actions are audited by the challenge's id and profile, never the password i
 
 ## SCEP enrolment queue
 
-The web equivalent of [`cryptosctl scep enrollments list/approve/reject`](../using/enrol-devices-scep.md#holding-enrolments-for-approval). The **SCEP enrolment queue** panel proxies the node's own queue of pending device enrolments, each with its subject, profile, SANs, key algorithm and when it arrived. A `viewer` sees the queue only; approving and rejecting need `operator` level or above.
+The web equivalent of [`cryptosctl scep enrollments list/approve/reject`](/docs/cryptos/using/enrol-devices-scep#holding-enrolments-for-approval). The **SCEP enrolment queue** panel proxies the node's own queue of pending device enrolments, each with its subject, profile, SANs, key algorithm and when it arrived. A `viewer` sees the queue only; approving and rejecting need `operator` level or above.
 
 - **Approve** issues the device a certificate under the request's profile and shows the issued serial, so you can find it again under Certificates.
 - **Reject** takes a reason, recorded in the node's own audit log. The device itself is only ever told a SCEP failure code, never the reason text.

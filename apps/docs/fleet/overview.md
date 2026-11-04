@@ -1,5 +1,6 @@
 ---
 title: "Fleet Manager overview"
+slug: "/"
 ---
 
 import ThemedImage from '@theme/ThemedImage';
@@ -74,5 +75,5 @@ The manager's [Operator PKI guide](https://github.com/CryptOS-PKI/cryptos-manage
 - [A node's lifecycle in the fleet](./node-lifecycle.md): how a node joins, switches protocols and leaves.
 - [The web UI](./web-ui.md): logging in, finding your way around, and where each page lives.
 - [Deploy with Helm](./helm.md): the supported chart, and what to use today.
-- [Machine config](../reference/machine-config.md): the node config the adopt wizard fills in.
-- [cryptosctl](../reference/cryptosctl.md): managing a node without the Fleet Manager.
+- [Machine config](/docs/cryptos/next/reference/machine-config): the node config the adopt wizard fills in.
+- [cryptosctl](/docs/cryptos/next/reference/cryptosctl): managing a node without the Fleet Manager.

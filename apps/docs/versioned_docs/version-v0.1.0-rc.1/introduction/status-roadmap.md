@@ -23,7 +23,7 @@ The core of a certificate authority is built, tested, and running on real hardwa
 - Signing subordinate CAs and issuing end-entity certificates from a CSR, and enrolling devices over **SCEP** (RFC 8894). See [Enrol devices with SCEP](../using/enrol-devices-scep.md).
 - Building the OS image and turning it into a bootable **ISO** for a platform such as VMware.
 - Installing a node from start to finish: **maintenance mode** on the very first boot, **install to disk**, then the reboot into the ceremony. See [Install & Deploy](../install-deploy/build-bootable-image.md).
-- The **Fleet Manager** web app, for watching and managing several nodes from one place. See [Fleet Manager overview](../fleet-manager/overview.md).
+- The **Fleet Manager** web app, for watching and managing several nodes from one place. See [Fleet Manager overview](/docs/fleet).
 
 ## 🧭 Roadmap
 

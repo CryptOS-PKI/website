@@ -106,7 +106,7 @@ Once the identity is committed, the node is serving: it signs, publishes revocat
 
 ## Using the Fleet Manager instead
 
-A [Fleet Manager](../fleet-manager/overview.md) can do stages 2 to 4 for you. It adopts a node from its maintenance endpoint: it makes a bootstrap credential for the node, sends the install config, and runs the ceremony. Adoption is safe to retry if it stops partway.
+A [Fleet Manager](/docs/fleet) can do stages 2 to 4 for you. It adopts a node from its maintenance endpoint: it makes a bootstrap credential for the node, sends the install config, and runs the ceremony. Adoption is safe to retry if it stops partway.
 
 ## Re-provisioning after a reset
 

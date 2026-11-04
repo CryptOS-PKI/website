@@ -24,7 +24,7 @@ With Postgres, the manager copies the `nodes:` list into the database on its fir
 
 ### Adopting a new node
 
-Adoption takes a node that has just booted into [maintenance mode](../concepts/maintenance-mode.md) and turns it into a working CA, from the web UI. It needs `admin`.
+Adoption takes a node that has just booted into [maintenance mode](/docs/cryptos/next/concepts/maintenance-mode) and turns it into a working CA, from the web UI. It needs `admin`.
 
 1. **You give the node's address.** The manager connects without trusting anything yet, reads the certificate the node presents, and shows you its SHA-256 fingerprint and subject.
 

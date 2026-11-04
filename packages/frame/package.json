@@ -16,10 +16,16 @@
     "./header-menu": "./header-menu.tsx",
     "./header-menu-config": "./header-menu-config.ts",
     "./public": "./public/",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./emoji": "./emoji.ts",
+    "./consent": "./consent.ts",
+    "./full-width": "./full-width.ts",
+    "./consent-banner": "./consent-banner.tsx",
+    "./full-width-toggle": "./full-width-toggle.tsx",
+    "./use-consent": "./use-consent.ts"
   },
   "scripts": {
-    "test": "node --experimental-strip-types --test frame.test.ts strip.test.ts content.test.ts hero.test.ts header-menu.test.ts"
+    "test": "node --experimental-strip-types --test frame.test.ts strip.test.ts content.test.ts hero.test.ts header-menu.test.ts emoji.test.ts consent.test.ts full-width.test.ts"
   },
   "peerDependencies": {
     "react": "^19.0.0"

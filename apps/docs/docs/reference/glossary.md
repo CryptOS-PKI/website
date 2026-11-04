@@ -62,7 +62,7 @@ Terms are in alphabetical order. Where a term names something CryptOS doesn't ha
 
 ## F
 
-**Fleet Manager:** the separate web application and API for running many CryptOS nodes from one place. It holds no CA keys. See the [Fleet Manager overview](../fleet-manager/overview.md).
+**Fleet Manager:** the separate web application and API for running many CryptOS nodes from one place. It holds no CA keys. See the [Fleet Manager overview](/docs/fleet/next).
 
 ## G
 

@@ -100,7 +100,7 @@ The Fleet Manager is never an issuing authority. Its certificate lacks `keyCertS
 
 A release tag builds the container image `ghcr.io/cryptos-pki/cryptos-manager` and pushes the chart to `oci://ghcr.io/cryptos-pki/charts/fleet-manager`. Pull either directly, or build the image yourself from a folder that holds the `cryptos-manager` and `cryptos-web` checkouts side by side, as `manager` and `web`.
 
-See the [Fleet Manager overview](../fleet-manager/overview.md).
+See the [Fleet Manager overview](/docs/fleet).
 
 ## 🎨 cryptos-web
 
@@ -110,7 +110,7 @@ The Fleet Manager web UI, and the only web UI in the project. CA nodes ship no w
 
 `cryptos-manager` and `cryptos-web` are one application in two repos, so the frontend and backend can be built and tested on their own. You do not deploy `cryptos-web` on its own; it ships inside the manager image.
 
-See [The web UI](../fleet-manager/web-ui.md).
+See [The web UI](/docs/fleet/web-ui).
 
 ## The other public repos
 

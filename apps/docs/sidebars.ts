@@ -15,7 +15,9 @@ limitations under the License.
 */
 import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
 
-// Explicit information architecture for the CryptOS docs.
+// The CryptOS docs (/docs/cryptos): the OS itself, for the people who run
+// nodes and the people who get certificates from them. FleetOS Manager has
+// its own docs and sidebar (sidebars-fleet.ts, /docs/fleet).
 // Order here is the sidebar order; ids are file paths under docs/ minus ".md".
 const sidebars: SidebarsConfig = {
   docs: [
@@ -102,45 +104,6 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Fleet Manager',
-      items: [
-        'fleet-manager/overview',
-        'fleet-manager/node-lifecycle',
-        'fleet-manager/node-trust',
-        'fleet-manager/upgrade-node-trust',
-        'fleet-manager/cutover-cryptos-node-v1',
-        {
-          type: 'category',
-          label: 'First run',
-          link: {type: 'doc', id: 'fleet-manager/first-run/index'},
-          items: [
-            'fleet-manager/first-run/create-operator-ca',
-            'fleet-manager/first-run/start-first-run',
-            'fleet-manager/first-run/register-operator-ca',
-            'fleet-manager/first-run/first-admin-certificate',
-            'fleet-manager/first-run/web-wizard',
-            'fleet-manager/first-run/break-glass',
-          ],
-        },
-        'fleet-manager/operator-ca',
-        'fleet-manager/rotating-the-operator-ca',
-        'fleet-manager/operator-credentials',
-        'fleet-manager/migrating-from-operator-ca-node',
-        'fleet-manager/helm',
-        'fleet-manager/kv-storage',
-        'fleet-manager/web-ui',
-        'fleet-manager/web-fleet-and-nodes',
-        'fleet-manager/web-node-detail',
-        'fleet-manager/web-catalogs',
-        'fleet-manager/web-operators-audit',
-        'fleet-manager/web-operator-credentials',
-        'fleet-manager/make-a-credential-request',
-        'fleet-manager/approvals',
-        'fleet-manager/web-operator-cas',
-      ],
-    },
-    {
-      type: 'category',
       label: 'Integrations',
       items: [
         {
@@ -173,7 +136,6 @@ const sidebars: SidebarsConfig = {
         'reference/machine-config-enrollment',
         'reference/machine-config-tsa',
         'reference/cryptosctl',
-        'reference/cryptos-managerctl',
         'reference/grpc-api',
         'reference/root-cert-profile',
         'reference/audit-log',
@@ -193,14 +155,10 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Contributing',
-      items: ['contributing/ui-issue-button', 'contributing/accessibility-checks'],
-    },
-    {
-      type: 'category',
       label: 'About',
       items: ['about/repos', 'about/verify-source', 'about/license', 'about/cncf'],
     },
+    {type: 'link', label: 'FleetOS Manager docs', href: '/docs/fleet', className: 'sidebar-other-docs'},
   ],
 };
 

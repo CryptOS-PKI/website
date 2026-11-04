@@ -16,7 +16,7 @@ A CryptOS node boots from one file: a **Unified Kernel Image** (UKI). The UKI ho
 
 This page shows how to build the ISO from the `cryptos-appliance` source code, which pins the `cryptos-node` engine at a version and builds `init`, `cryptosctl` and the console from it by import path.
 
-The CA runs only on the image you build here — its own hardware or VM — never on Kubernetes: a CA there can't be TPM-sealed and would be a single point of failure. FleetOS Manager, the optional multi-node console, runs separately, on Kubernetes or standalone (a VM); see the [Fleet Manager overview](../fleet-manager/overview.md).
+The CA runs only on the image you build here — its own hardware or VM — never on Kubernetes: a CA there can't be TPM-sealed and would be a single point of failure. FleetOS Manager, the optional multi-node console, runs separately, on Kubernetes or standalone (a VM); see the [Fleet Manager overview](/docs/fleet).
 
 ## Two choices to make first
 

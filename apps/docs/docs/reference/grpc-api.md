@@ -187,7 +187,7 @@ Timestamps are RFC 3339 strings; an unset one is empty.
 ## Certificate requests
 
 :::info[No web page yet]
-`CreateCertificateRequest`, `ListCertificateRequests`, `GetCertificateRequestByID` and `CancelCertificateRequest` are reachable over the API today. The Fleet Manager web UI doesn't have a **Request a certificate** or **My requests** page yet; that ships in a later wave, on the same screens as [Make a credential request](../fleet-manager/make-a-credential-request.md).
+`CreateCertificateRequest`, `ListCertificateRequests`, `GetCertificateRequestByID` and `CancelCertificateRequest` are reachable over the API today. The Fleet Manager web UI doesn't have a **Request a certificate** or **My requests** page yet; that ships in a later wave, on the same screens as [Make a credential request](/docs/fleet/next/make-a-credential-request).
 :::
 
 Any signed-in user, not only an operator or admin, can ask for a certificate under a profile an admin has marked `requestable`. The flow reuses the step-up approvals queue: filing a request opens an `Approval` of kind `certificate_request`, and an operator or admin other than the requester has to decide it before anything is signed.

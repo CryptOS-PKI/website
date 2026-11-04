@@ -20,16 +20,29 @@ import {themes as prismThemes} from 'prism-react-renderer';
 import {frameFooter, frameNav, legalHtml, TAGLINE, taglineHtml} from '@cryptos-pki/frame/content';
 import {NAV_LINK_CLASS} from '@cryptos-pki/frame/header-menu-config';
 import {frameLinks, stripHtml} from '@cryptos-pki/frame/strip';
+import {contentWidthBootScript} from '@cryptos-pki/frame/full-width';
+
+import {oldDocsPaths} from './redirects';
+import {DOCS_CONSENT_PREFIX} from './src/lib/consent';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
-// Versioned docs. Each release's snapshot lives in versioned_docs/ and is
-// listed in versions.json; the newest one is the default at /docs/. The pages
-// in docs/ are "Next", unreleased main, served at /docs/next/ under a banner
-// that points at the current version. The deploy builds with
+// Two docs, one site: CryptOS itself at /docs/cryptos (the default docs
+// instance: docs/, versioned_docs/, versions.json, sidebars.ts) and FleetOS
+// Manager at /docs/fleet (fleet/, fleet_versioned_docs/, fleet_versions.json,
+// sidebars-fleet.ts). Each has its own sidebar and is versioned on its own,
+// following its own product's release (packages/frame/release.ts): the
+// newest cut version is the default, and the pages in docs/ and fleet/ are
+// "Next", unreleased main, at /docs/cryptos/next/ and /docs/fleet/next/ under
+// a banner that points at the current version. The deploy builds with
 // DOCS_INCLUDE_NEXT=false, so the published site has the released versions
 // only; every other build (dev, CI, previews) includes Next.
 const includeNext = process.env.DOCS_INCLUDE_NEXT !== 'false';
+
+// Docusaurus rejects options for a version it isn't building.
+const nextVersion = includeNext
+  ? {current: {label: 'Next', path: 'next', banner: 'unreleased' as const}}
+  : {};
 
 // The frame and the brand assets come from the shared packages: one copy of
 // site-frame.css, the fonts, the header links, the footer, the strip, the
@@ -108,20 +121,26 @@ const config: Config = {
   // The fonts the strip, header and footer draw with, preloaded the same way
   // on the site (apps/site/app/root.tsx), so the frame never paints in a
   // fallback face first.
-  headTags: ['inter-latin.woff2', 'jetbrains-mono-700-latin.woff2'].map((font) => ({
-    tagName: 'link',
-    attributes: {rel: 'preload', href: `${baseUrl}fonts/${font}`, as: 'font', type: 'font/woff2', crossorigin: 'anonymous'},
-  })),
+  headTags: [
+    ...['inter-latin.woff2', 'jetbrains-mono-700-latin.woff2'].map((font) => ({
+      tagName: 'link',
+      attributes: {rel: 'preload', href: `${baseUrl}fonts/${font}`, as: 'font', type: 'font/woff2', crossorigin: 'anonymous'},
+    })),
+    // A remembered full-width choice (only stored once the visitor accepts
+    // the cookie choice) goes on <html> before the first paint, so the
+    // content column doesn't jump when the app loads.
+    {tagName: 'script', attributes: {}, innerHTML: contentWidthBootScript(DOCS_CONSENT_PREFIX)},
+  ],
 
   presets: [
     [
       'classic',
       {
         docs: {
+          routeBasePath: 'docs/cryptos',
           sidebarPath: './sidebars.ts',
           includeCurrentVersion: includeNext,
-          // Docusaurus rejects options for a version it isn't building.
-          versions: includeNext ? {current: {label: 'Next', path: 'next', banner: 'unreleased'}} : {},
+          versions: nextVersion,
         },
         blog: false,
         theme: {
@@ -129,6 +148,24 @@ const config: Config = {
         },
       } satisfies Preset.Options,
     ],
+  ],
+
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'fleet',
+        path: 'fleet',
+        routeBasePath: 'docs/fleet',
+        sidebarPath: './sidebars-fleet.ts',
+        includeCurrentVersion: includeNext,
+        versions: nextVersion,
+      },
+    ],
+    // Before the split every page lived at /docs/<page> and /docs/next/<page>.
+    // Each page answers at its old paths too (redirects.ts), so links already
+    // out there, the console's help links among them, keep working.
+    ['@docusaurus/plugin-client-redirects', {createRedirects: oldDocsPaths}],
   ],
 
   themeConfig: {
@@ -179,7 +216,16 @@ const config: Config = {
         // header shows nothing, so the rest of the header lines up with the
         // site's to the pixel. It shows on doc pages only, so the docs home's
         // header matches the site's home exactly.
-        {type: 'custom-docsVersion', position: 'left', className: 'navbar__version', dropdownActiveClassDisabled: true},
+        // One picker per docs, each showing only on its own pages.
+        ...['default', 'fleet'].map((docsPluginId) => ({
+          type: 'custom-docsVersion',
+          docsPluginId,
+          position: 'left' as const,
+          className: 'navbar__version',
+          dropdownActiveClassDisabled: true,
+        })),
+        // The full-width switch, beside the picker on doc pages only.
+        {type: 'custom-fullWidth', position: 'left'},
         ...frameNav(links).map((link) =>
           link.label === 'Docs'
             ? {to: '/', label: link.label, activeBaseRegex: '^/', position: 'right' as const, className: NAV_LINK_CLASS}

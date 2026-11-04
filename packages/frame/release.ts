@@ -22,3 +22,11 @@ export const release = {
   kind: "prerelease" as const,
   publishedOn: "2026-10-24",
 };
+
+// The current FleetOS Manager release, the version the FleetOS Manager docs
+// (/docs/fleet) follow, so apps/docs/fleet_versions.json must list it before
+// a release can go out. It ships alongside CryptOS today, so the two match,
+// but each docs instance follows its own product.
+export const fleetRelease = {
+  version: "v0.1.0-rc.1",
+};

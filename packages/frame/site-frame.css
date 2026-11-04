@@ -370,6 +370,114 @@ html {
   display: block;
 }
 
+/* The full-width content switch (full-width-toggle.tsx): the nav links'
+   type and line in the mono face, so it sits beside the docs version picker
+   without changing the header's height. Pressed, it takes the ink colour. */
+.width-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--frame-muted);
+  font-family: var(--frame-font-mono);
+  font-size: var(--frame-nav-size);
+  line-height: var(--frame-nav-line);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.width-toggle:hover,
+.width-toggle[aria-pressed="true"] {
+  color: var(--frame-ink);
+}
+
+.width-toggle:focus-visible {
+  outline: 2px solid var(--frame-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.width-toggle__icon {
+  width: var(--frame-toggle-icon);
+  height: var(--frame-toggle-icon);
+  flex-shrink: 0;
+}
+
+/* The cookie choice (consent-banner.tsx): a bar on the frame's surface at
+   the bottom of the window, in the page column, over the content and never
+   moving it. */
+.frame-consent {
+  position: fixed;
+  z-index: 300;
+  left: 50%;
+  bottom: calc(1rem + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  width: min(var(--frame-max), calc(100% - 2 * var(--frame-gutter)));
+  padding: 0.875rem 1rem;
+  transform: translateX(-50%);
+  border: 1px solid var(--frame-border);
+  border-radius: var(--frame-radius);
+  background: var(--frame-surface);
+  box-shadow: 0 12px 32px -16px rgb(0 0 0 / 0.45);
+  color: var(--frame-ink);
+  font-family: var(--frame-font-sans);
+  font-size: var(--frame-nav-size);
+  line-height: var(--frame-nav-line);
+}
+
+.frame-consent__text {
+  flex: 1 1 20rem;
+  margin: 0;
+  color: var(--frame-muted);
+}
+
+.frame-consent__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.frame-consent__button {
+  box-sizing: border-box;
+  height: var(--frame-toggle);
+  margin: 0;
+  padding: 0 0.875rem;
+  border: 1px solid var(--frame-border);
+  border-radius: calc(var(--frame-radius) - 2px);
+  background: transparent;
+  color: var(--frame-ink);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.frame-consent__button:hover {
+  background: var(--frame-border);
+}
+
+.frame-consent__button--primary {
+  border-color: var(--frame-primary);
+  background: var(--frame-primary);
+  /* The page colour on primary meets WCAG AA in both themes. */
+  color: var(--frame-bg);
+}
+
+.frame-consent__button--primary:hover {
+  background: color-mix(in srgb, var(--frame-primary) 88%, var(--frame-ink));
+}
+
+.frame-consent__button:focus-visible {
+  outline: 2px solid var(--frame-primary);
+  outline-offset: 2px;
+}
+
 @font-face {
   font-family: "Inter Variable";
   font-style: normal;

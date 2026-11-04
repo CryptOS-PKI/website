@@ -89,4 +89,4 @@ With `--expect-sha256`, `trust fetch` refuses any certificate that does not matc
 
 ## What is not available today
 
-There are no extensions or add-ons, such as hypervisor guest agents or extra hardware drivers. The image is exactly what was built, with nothing added at boot.
+There are no extensions or add-ons, such as extra hardware drivers. The image is exactly what was built, with nothing added at boot. The [QEMU guest agent](../install-deploy/qemu-guest-agent.md) isn't an add-on: it's part of the node's init process, and it answers only status questions and the power commands.

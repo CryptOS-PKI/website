@@ -14,10 +14,6 @@ The supported chart is `chart/fleet-manager` in the [`cryptos-manager`](https://
 
 A checkout's `Chart.yaml` says version `0.1.0`, app version `0.1.0`; the release workflow sets both to the tag without its leading `v` (`0.1.0-rc.2` for `v0.1.0-rc.2`).
 
-:::info[Pre-1.0: 0.x]
-Every CryptOS release before `1.0.0` is a `0.x` pre-release. `1.0.0` will be the first GA release, once the whole system lands. It isn't out yet.
-:::
-
 The chart renders four objects:
 
 | Object | What it is for |

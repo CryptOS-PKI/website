@@ -231,9 +231,11 @@
   margin-bottom: 0;
 }
 
-/* Each crumb shrinks and ends in an ellipsis rather than dropping out, so
-   a long trail still shows where it leads; the home icon and the
-   separators keep their size. */
+/* The crumbs keep their size and their separators (drawn by Infima after
+   each item) stay inside them; src/theme/DocBreadcrumbs folds the crumbs
+   above the page into one "…" item when the trail doesn't fit. Only the
+   current page's name gives way, last, with an ellipsis, and never below
+   a few characters. */
 .doc-toolbar-row__crumbs .breadcrumbs {
   display: flex;
   flex-wrap: nowrap;
@@ -244,28 +246,28 @@
 
 .doc-toolbar-row__crumbs .breadcrumbs__item {
   display: flex;
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   align-items: center;
-  min-width: 0;
+  white-space: nowrap;
 }
 
-/* The trail above the page gives way first; the current page keeps its
-   name longest. */
-.doc-toolbar-row__crumbs .breadcrumbs__item:not(:last-child) {
-  flex-shrink: 4;
+/* The folded crumbs' "…" is plain text, not a pill, so it takes little
+   room. */
+.doc-toolbar-row__crumbs .breadcrumbs__item--folded .breadcrumbs__link {
+  padding-inline: 0.25rem;
 }
 
-.doc-toolbar-row__crumbs .breadcrumbs__item:first-child,
-.doc-toolbar-row__crumbs .breadcrumbs__item::after {
-  flex-shrink: 0;
+.doc-toolbar-row__crumbs .breadcrumbs__item:last-child {
+  flex: 0 1 auto;
+  min-width: 5em;
+  overflow: hidden;
 }
 
-.doc-toolbar-row__crumbs .breadcrumbs__link {
+.doc-toolbar-row__crumbs .breadcrumbs__item:last-child .breadcrumbs__link {
   display: block;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .doc-toolbar-row .doc-toolbar {

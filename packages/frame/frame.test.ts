@@ -17,6 +17,11 @@ import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import { test } from "node:test";
 
+import {
+  HEADER_MENU_BREAKPOINT,
+  HEADER_MENU_MAX_WIDTH,
+  NAV_LINK_CLASS,
+} from "./header-menu-config.ts";
 import { release } from "./release.ts";
 
 const frame = readFileSync(new URL("./site-frame.css", import.meta.url), "utf8");
@@ -49,4 +54,41 @@ test("the release version is a v-prefixed semver tag", () => {
   assert.match(release.version, /^v\d+\.\d+\.\d+(-[0-9A-Za-z.]+)?$/);
   assert.equal(release.kind === "prerelease", release.version.includes("-"));
   assert.match(release.publishedOn, /^\d{4}-\d{2}-\d{2}$/);
+});
+
+// The header switches to the menu button at one breakpoint, set once in
+// site-frame.css, so the site and the docs collapse at the same width.
+const mediaWidths = (css: string) =>
+  [...css.matchAll(/@media[^{]*\((max|min)-width:\s*(\d+)px\)/g)].map((match) => [
+    match[1],
+    Number(match[2]),
+  ]);
+
+test("the header menu breakpoint is one shared rule in site-frame.css", () => {
+  assert.equal(HEADER_MENU_MAX_WIDTH, HEADER_MENU_BREAKPOINT - 1);
+  const rule = new RegExp(
+    `@media \\(max-width: ${HEADER_MENU_MAX_WIDTH}px\\) \\{[^}]*\\.${NAV_LINK_CLASS}\\s*\\{\\s*display: none !important;`,
+  );
+  assert.match(frame, rule);
+  assert.match(frame, /\.frame-menu\s*\{[^}]*display: none;/);
+});
+
+test("neither site sets a header breakpoint of its own", () => {
+  const site = readFileSync(
+    new URL("../../apps/site/app/components/marketing.css", import.meta.url),
+    "utf8",
+  );
+  const docs = readFileSync(new URL("../../apps/docs/src/css/custom.css", import.meta.url), "utf8");
+  for (const css of [site, docs]) {
+    assert.doesNotMatch(
+      css,
+      /\.(nav__row|nav__links|navbar__inner|navbar__items--right)\s*\{[^}]*flex-direction: column/,
+    );
+    for (const [, width] of mediaWidths(css)) {
+      assert.ok(
+        width !== HEADER_MENU_MAX_WIDTH && width !== HEADER_MENU_BREAKPOINT,
+        "the header breakpoint lives in site-frame.css only",
+      );
+    }
+  }
 });

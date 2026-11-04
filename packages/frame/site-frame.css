@@ -42,8 +42,7 @@
   --frame-nav-size: 0.875rem;
   --frame-nav-line: 1.3125rem;
   --frame-nav-gap: 2rem;
-  --frame-header-stack-gap: 0.75rem;
-  --frame-nav-gap-stacked: 1rem;
+  --frame-nav-gap-menu: 0.5rem;
   --frame-toggle: 2rem;
   --frame-toggle-icon: 1rem;
   --frame-radius: 0.5rem;
@@ -92,14 +91,10 @@
   --frame-strip-bg: color-mix(in srgb, var(--frame-warning) 10%, var(--frame-surface));
 }
 
-/* Breakpoints, the same on both sites: at 640px and under, the header stacks,
-   the brand on one line and the links under it, wrapping as they need; at
-   720px and under, the footer drops to two columns under the brand. */
-@media (max-width: 640px) {
-  :root {
-    --frame-nav-gap: var(--frame-nav-gap-stacked);
-  }
-}
+/* Breakpoints, the same on both sites. Under 1168px the header folds its
+   links into the menu button (header-menu-config.ts; the rule is below), so
+   it stays one row and never wraps or overlaps; at 720px and under, the
+   footer drops to two columns under the brand. */
 
 /* Dark (the kit's .dark palette). Screens only, so print stays on paper
    colours. */
@@ -156,6 +151,117 @@ html {
    copyright and licence, each on its own line. */
 .footer__legal-line {
   display: block;
+}
+
+/* The header menu (header-menu.tsx): under 1168px each site's header links
+   (.frame-nav__link) hide and this button shows at the right end, after the
+   theme switch, opening a panel of the same links under the header. The one
+   media rule for both sites; !important because the docs' own navbar rules
+   are more specific than one class. HEADER_MENU_BREAKPOINT in
+   header-menu-config.ts is the same width. */
+.frame-menu {
+  display: none;
+  align-items: center;
+  height: var(--frame-nav-line);
+}
+
+@media (max-width: 1167px) {
+  .frame-nav__link {
+    display: none !important;
+  }
+
+  /* Closer to the switch than the links' gap; the gap itself stays, so the
+     version picker after the wordmark doesn't move. */
+  .frame-menu {
+    display: flex;
+    margin-inline-start: calc(var(--frame-nav-gap-menu) - var(--frame-nav-gap));
+  }
+}
+
+/* The kit's ghost icon button, as the theme switch. */
+.frame-menu__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--frame-toggle);
+  height: var(--frame-toggle);
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--frame-border);
+  border-radius: calc(var(--frame-radius) - 2px);
+  background: transparent;
+  color: var(--frame-ink);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.frame-menu__button:hover,
+.frame-menu__button[aria-expanded="true"] {
+  background: var(--frame-border);
+}
+
+.frame-menu__button:focus-visible {
+  outline: 2px solid var(--frame-primary);
+  outline-offset: 2px;
+}
+
+.frame-menu__icon {
+  display: block;
+  width: var(--frame-toggle-icon);
+  height: var(--frame-toggle-icon);
+  flex-shrink: 0;
+}
+
+/* The panel hangs from the header's bottom edge, across the full width, with
+   the links in the page column. */
+.frame-menu__panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid var(--frame-border);
+  background: var(--frame-bg);
+  box-shadow: 0 16px 32px -24px rgb(0 0 0 / 0.5);
+  font-family: var(--frame-font-sans);
+}
+
+.frame-menu__panel[hidden] {
+  display: none;
+}
+
+.frame-menu__links {
+  box-sizing: border-box;
+  max-width: var(--frame-max);
+  margin: 0 auto;
+  padding: 0.5rem var(--frame-gutter);
+  list-style: none;
+}
+
+.frame-menu__panel .frame-menu__links li {
+  margin: 0;
+  border-bottom: 1px solid var(--frame-border);
+}
+
+.frame-menu__panel .frame-menu__links li:last-child {
+  border-bottom: 0;
+}
+
+/* Two classes deep, so the sites' own header link rules don't reach in. */
+.frame-menu__panel .frame-menu__links a {
+  display: block;
+  padding: 0.75rem 0;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 400;
+  color: var(--frame-ink);
+  text-decoration: none;
+}
+
+.frame-menu__panel .frame-menu__links a:hover,
+.frame-menu__panel .frame-menu__links a:focus-visible {
+  color: var(--frame-primary);
+  text-decoration: none;
 }
 
 /* The strip above the header (strip.ts): the release badge, the release and

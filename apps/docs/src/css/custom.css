@@ -279,21 +279,6 @@ html:not(.plugin-docs) .navbar__toggle {
   }
 }
 
-/* At 640px and under the header stacks, as the site's does: the brand on one
-   line and the links under it, wrapping as they need. */
-@media (max-width: 640px) {
-  .navbar__inner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--frame-header-stack-gap);
-  }
-
-  .navbar__items--right {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-  }
-}
-
 /* Footer, on Docusaurus's footer classes: the brand and tagline, three link
    groups, then the legal line, in the page column. */
 .footer {

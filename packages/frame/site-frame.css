@@ -156,11 +156,15 @@ html {
 /* Links in body text, on both sites: the site marks its page content with
    .frame-prose, the docs' pages are Docusaurus's .markdown. Only links with
    no class of their own, so buttons, cards, the hero's calls to action,
-   heading anchors and the header and footer keep their own look. The colour
+   heading anchors and the header and footer keep their own look; Docusaurus
+   writes a markdown link with an empty class attribute, so that counts as
+   none. Links in the docs' callouts take one more class, to outrank the docs
+   theme's admonition link rule, which loads after this file. The colour
    alone sits too close to the muted body text, so prose links are always
    underlined. */
-.frame-prose a:not([class]),
-.markdown a:not([class]) {
+.frame-prose a:is(:not([class]), [class=""]),
+.markdown a:is(:not([class]), [class=""]),
+.markdown .theme-admonition a:is(:not([class]), [class=""]) {
   color: var(--frame-link);
   text-decoration-line: underline;
   text-decoration-thickness: 1px;
@@ -168,10 +172,9 @@ html {
   text-underline-offset: 0.2em;
 }
 
-.frame-prose a:not([class]):hover,
-.markdown a:not([class]):hover,
-.frame-prose a:not([class]):focus-visible,
-.markdown a:not([class]):focus-visible {
+.frame-prose a:is(:not([class]), [class=""]):is(:hover, :focus-visible),
+.markdown a:is(:not([class]), [class=""]):is(:hover, :focus-visible),
+.markdown .theme-admonition a:is(:not([class]), [class=""]):is(:hover, :focus-visible) {
   color: var(--frame-link);
   text-decoration-line: underline;
   text-decoration-color: currentColor;

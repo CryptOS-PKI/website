@@ -148,11 +148,24 @@ test("body-text links meet WCAG AA on the page and card in light and dark", () =
   }
 });
 
-test("body-text links are underlined on both sites, and only unclassed links in prose", () => {
-  const rule = frame.match(
-    /\.frame-prose a:not\(\[class\]\),\s*\.markdown a:not\(\[class\]\)\s*\{([^}]*)\}/,
-  );
-  assert.ok(rule, "no shared body-text link rule");
-  assert.match(rule[1], /color: var\(--frame-link\);/);
-  assert.match(rule[1], /text-decoration-line: underline;/);
+// Docusaurus renders a markdown link with an empty class attribute
+// (class=""), so "no class" has to mean no class attribute or an empty one.
+// Links in callouts need one more class than the docs theme's
+// ".theme-admonition.alert a", which loads after this file.
+const BODY_LINK = ':is(:not([class]), [class=""])';
+
+test("body-text links are underlined on both sites, callouts included", () => {
+  const start = frame.indexOf(`.frame-prose a${BODY_LINK},`);
+  assert.ok(start !== -1, "no shared body-text link rule");
+  const rule = frame.slice(start, frame.indexOf("}", start));
+  for (const selector of [
+    `.frame-prose a${BODY_LINK}`,
+    `.markdown a${BODY_LINK}`,
+    `.markdown .theme-admonition a${BODY_LINK}`,
+  ]) {
+    assert.ok(rule.includes(selector), `the rule misses ${selector}`);
+  }
+  assert.match(rule, /color: var\(--frame-link\);/);
+  assert.match(rule, /text-decoration-line: underline;/);
+  assert.match(frame, /:hover[^{]*\{[^}]*text-decoration-thickness: 2px;/);
 });

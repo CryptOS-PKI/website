@@ -1,0 +1,198 @@
+{
+  "docs": [
+    {
+      "type": "category",
+      "label": "Introduction",
+      "collapsed": false,
+      "items": [
+        "introduction/what-is-cryptos",
+        "introduction/why",
+        "introduction/status-roadmap"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Core Concepts",
+      "items": [
+        "concepts/certificates-101",
+        "concepts/chain-of-trust",
+        "concepts/immutable-no-login",
+        "concepts/tpm-sealed-keys",
+        "concepts/ca-roles",
+        "concepts/declarative-config",
+        "concepts/maintenance-mode",
+        "concepts/image-factory"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Use Cases",
+      "items": [
+        "use-cases/overview",
+        "use-cases/internal-tls",
+        "use-cases/kubernetes",
+        "use-cases/devices-iot",
+        "use-cases/code-signing",
+        "use-cases/air-gapped-root"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Try It Locally",
+      "items": [
+        "try-it-locally/requirements",
+        "try-it-locally/build-image",
+        "try-it-locally/prepare-the-node",
+        "try-it-locally/boot-qemu",
+        "try-it-locally/install-cryptosctl",
+        "try-it-locally/first-boot-ceremony",
+        "try-it-locally/check-status"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Install & Deploy",
+      "items": [
+        "install-deploy/build-bootable-image",
+        "install-deploy/boot-maintenance",
+        "install-deploy/bootstrap-apply",
+        "install-deploy/install-to-disk",
+        "install-deploy/reboot-ceremony",
+        "install-deploy/run-the-ceremony",
+        "install-deploy/subordinate-nodes",
+        "install-deploy/secure-boot",
+        "install-deploy/upgrade-in-place"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Using CryptOS",
+      "items": [
+        "using/setup",
+        "using/bootstrap",
+        "using/ceremony-start",
+        "using/status",
+        "using/identity",
+        "using/config-apply",
+        "using/time-sync",
+        "using/audit-log",
+        "using/enrol-devices-scep",
+        "using/tsa-policy-oid",
+        "using/serve-timestamps-tsa"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Fleet Manager",
+      "items": [
+        "fleet-manager/overview",
+        "fleet-manager/node-lifecycle",
+        "fleet-manager/node-trust",
+        "fleet-manager/upgrade-node-trust",
+        "fleet-manager/cutover-cryptos-node-v1",
+        {
+          "type": "category",
+          "label": "First run",
+          "link": {
+            "type": "doc",
+            "id": "fleet-manager/first-run/index"
+          },
+          "items": [
+            "fleet-manager/first-run/create-operator-ca",
+            "fleet-manager/first-run/start-first-run",
+            "fleet-manager/first-run/register-operator-ca",
+            "fleet-manager/first-run/first-admin-certificate",
+            "fleet-manager/first-run/web-wizard",
+            "fleet-manager/first-run/break-glass"
+          ]
+        },
+        "fleet-manager/operator-ca",
+        "fleet-manager/rotating-the-operator-ca",
+        "fleet-manager/operator-credentials",
+        "fleet-manager/migrating-from-operator-ca-node",
+        "fleet-manager/helm",
+        "fleet-manager/web-ui",
+        "fleet-manager/web-fleet-and-nodes",
+        "fleet-manager/web-node-detail",
+        "fleet-manager/web-catalogs",
+        "fleet-manager/web-operators-audit",
+        "fleet-manager/web-operator-credentials",
+        "fleet-manager/make-a-credential-request",
+        "fleet-manager/approvals",
+        "fleet-manager/web-operator-cas"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Integrations",
+      "items": [
+        {
+          "type": "category",
+          "label": "vSphere: subordinate VMCA",
+          "className": "sidebar-integration-vmware",
+          "link": {
+            "type": "doc",
+            "id": "integrations/vmware-vmca/index"
+          },
+          "items": [
+            "integrations/vmware-vmca/safety-gate",
+            "integrations/vmware-vmca/profile",
+            "integrations/vmware-vmca/generate-csr",
+            "integrations/vmware-vmca/sign-and-chain",
+            "integrations/vmware-vmca/cluster-prep",
+            "integrations/vmware-vmca/import",
+            "integrations/vmware-vmca/esxi-hosts",
+            "integrations/vmware-vmca/restore",
+            "integrations/vmware-vmca/verify",
+            "integrations/vmware-vmca/rollback",
+            "integrations/vmware-vmca/troubleshooting"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Reference",
+      "items": [
+        "reference/machine-config",
+        "reference/machine-config-pki",
+        "reference/machine-config-enrollment",
+        "reference/machine-config-tsa",
+        "reference/cryptosctl",
+        "reference/grpc-api",
+        "reference/root-cert-profile",
+        "reference/audit-log",
+        "reference/glossary"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Deep Dives",
+      "items": [
+        "deep-dives/trust-from-zero",
+        "deep-dives/keys-never-leave-tpm",
+        "deep-dives/ceremony-walkthrough",
+        "deep-dives/audit-integrity",
+        "deep-dives/clock-safety"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Contributing",
+      "items": [
+        "contributing/ui-issue-button",
+        "contributing/accessibility-checks"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "About",
+      "items": [
+        "about/repos",
+        "about/verify-source",
+        "about/license",
+        "about/cncf"
+      ]
+    }
+  ]
+}

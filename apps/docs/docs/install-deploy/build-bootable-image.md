@@ -1,0 +1,156 @@
+---
+title: "💿 Build a bootable image"
+---
+
+import Pre10Notice from '@site/docs/_partials/pre-1-0-notice.mdx';
+
+# 💿 Build a bootable image
+
+:::tip[✅ Works today]
+This describes CryptOS as it works right now.
+:::
+
+<Pre10Notice />
+
+A CryptOS node boots from one file: a **Unified Kernel Image** (UKI). The UKI holds the kernel, a tiny start-up program, and the read-only system image, all in one signed file. To install a node you usually wrap that UKI in an **ISO** and boot the machine or virtual machine from it.
+
+This page shows how to build the ISO from the `cryptos-appliance` source code, which pins the `cryptos-node` engine at a version and builds `init`, `cryptosctl` and the console from it by import path.
+
+The CA runs only on the image you build here, in its own VM, never on Kubernetes: a CA there can't be TPM-sealed and would be a single point of failure. FleetOS Manager, the optional multi-node console, runs separately, on Kubernetes or standalone (a VM); see the [Fleet Manager overview](../fleet-manager/overview.md).
+
+## Two choices to make first
+
+Two settings shape the image. Both are chosen when you build, not later.
+
+| Setting | Values | What it decides |
+|---|---|---|
+| `PLATFORM` | `vmware` | Which extra hardware drivers go into the kernel. `vmware` adds the NVMe, AHCI and PVSCSI disk drivers and the e1000e and vmxnet3 network drivers. |
+| `STATEKEY` | `tpm` (default) or `nodeid` | How the node protects its encrypted disk and its CA key. |
+
+### `STATEKEY=tpm` or `STATEKEY=nodeid`
+
+- 🔐 **`tpm`** is the real thing. The key that unlocks the node's encrypted state disk is sealed to the TPM security chip, and the CA key is created inside the TPM and can never be exported. The machine needs a TPM 2.0 (a vTPM on a virtual machine) that supports ECDSA P-384, or the node refuses to boot.
+- 🧪 **`nodeid`** is for hosts that cannot give the guest a vTPM, such as a standalone ESXi host. It uses no TPM at all. The disk key is derived from the machine's SMBIOS product UUID, and the CA key is made in software and stored on the encrypted disk. `cryptosctl status` shows `TPM: UNAVAILABLE` on these nodes so the weaker setup is never hidden.
+
+:::danger[nodeid is for testing only]
+A machine UUID is not a secret. Anyone who has both a copy of the disk and the UUID can recover the CA key. Use `nodeid` to try CryptOS where no vTPM is available, never for a CA that guards real trust.
+:::
+
+## What you need
+
+The image build runs on a **Linux** build host. You need:
+
+- The `cryptos-appliance` source: `git clone https://github.com/CryptOS-PKI/cryptos-appliance`.
+- Go, at the version in `go.mod`, and [go-task](https://taskfile.dev) (the `task` command).
+- Docker. The static disk tools (`cryptsetup`, `mkfs.ext4`, `sgdisk`, `mkfs.vfat`) are built from source inside containers.
+- The kernel and image tools. On Debian or Ubuntu:
+
+```bash
+sudo apt-get install -y --no-install-recommends \
+  build-essential bc flex bison libelf-dev libssl-dev xz-utils \
+  squashfs-tools sbsigntool systemd-ukify systemd-boot-efi cpio \
+  python3-pefile xorriso mtools dosfstools
+```
+
+`ukify` needs the Python `pefile` module. If a version manager such as pyenv hides the system Python, install `pefile` into the Python that `ukify` actually runs (`python3 -m pip install pefile`).
+
+## Build a signed ISO (for real use)
+
+A signed image is the only kind a node can later **upgrade in place**. You sign it with your own Secure Boot key; CryptOS ships no key of its own. Make the key first, as shown in [Secure Boot enrollment](./secure-boot.md), then build:
+
+```bash
+export SB_KEY="$HOME/cryptos-sb/sb.key"
+export SB_CERT="$HOME/cryptos-sb/sb.crt"
+
+task iso PLATFORM=vmware              # TPM-backed image
+task iso PLATFORM=vmware STATEKEY=nodeid   # TPM-less test image
+```
+
+Keep both variables set for the whole run. `SB_CERT` is read twice: once to stamp the certificate into the image as its **upgrade anchor** (the key a later image must be signed with), and once to sign the finished UKI.
+
+The files land in `build/out/`:
+
+| File | What it is |
+|---|---|
+| `cryptos-amd64.uki` | the signed UKI |
+| `cryptos-amd64.uki.sig` | the detached signature a node checks before it accepts an upgrade |
+| `cryptos-amd64-vmware.iso` | the bootable installer ISO (`cryptos-amd64-vmware-nodeid.iso` for `STATEKEY=nodeid`) |
+
+`task image` runs the same chain but stops at the signed UKI, without making an ISO.
+
+## Build an unsigned ISO (for evaluation)
+
+To try CryptOS with Secure Boot turned off, you can skip the key:
+
+:::danger[An unsigned image has no upgrade anchor until you sign it]
+An unsigned image carries **no upgrade anchor** as built, even if `SB_KEY` and `SB_CERT` are set in your shell, so a node installed from it as-is can never be upgraded in place. Replacing its image means installing again, which destroys its CA key. For a node you plan to keep, build a signed ISO instead, or sign this unsigned image afterwards with `cryptosctl image sign` (see [Download the unsigned image](#download-the-unsigned-image)).
+:::
+
+```bash
+task iso:unsigned PLATFORM=vmware
+task iso:unsigned PLATFORM=vmware STATEKEY=nodeid
+```
+
+This writes `build/out/cryptos-amd64-vmware-unsigned.iso` (or `...-vmware-nodeid-unsigned.iso`).
+
+## Download the unsigned image
+
+Every image you run is signed by you. The project never signs one: nothing it publishes
+is ready to boot with Secure Boot on until you sign it yourself, or build and sign from
+source.
+
+Each tagged `cryptos-appliance` release attaches an unsigned image built this way from
+that tag: the ISO for both `STATEKEY` variants, the UKI inside it (renamed with the build
+tag), `cryptosctl` for Linux and macOS on amd64 and arm64 (and Windows from `v0.1.0-rc.2`), a `build-manifest.json` build
+record and a `SHA256SUMS` file. Verify what you downloaded before using it -- either check
+it against the published sums, or rebuild from the same tag and compare:
+
+```bash
+sha256sum -c SHA256SUMS
+```
+
+The build is meant to be bit-for-bit reproducible, so rebuilding `task iso:unsigned` from
+the tagged source and diffing the hash is an equally valid check.
+
+From there you have two paths:
+
+- **Sign it with your own key**, with `cryptosctl image sign`:
+
+  ```bash
+  cryptosctl image sign \
+    --image cryptos-amd64-vmware-unsigned-<build>.iso \
+    --key sb.key --cert sb.crt
+  ```
+
+  With no `--out`, this writes three files next to the input:
+
+  | File | What it is |
+  |---|---|
+  | `cryptos-amd64-vmware-<build>.iso` | the signed, installable ISO (the input name without `-unsigned`) |
+  | `cryptos-amd64-vmware-<build>.uki` | the signed UKI beside it |
+  | `cryptos-amd64-vmware-<build>.uki.sig` | that UKI's detached signature |
+
+  Keep the `.uki` and `.sig`: that pair is what `cryptosctl image stage` sends, so any
+  later image you sign with the same key upgrades a node installed from this one. It
+  needs no root, no `xorriso` and no rebuild, and the same command signs a standalone
+  unsigned UKI, with `.unsigned` dropped from the output name instead.
+  See [Signing an image with your own key](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/image-sign.md)
+  in the `cryptos-node` repository for the full command reference.
+- **Build from source** instead (above), with `SB_KEY` and `SB_CERT` set, for the same
+  result without downloading a release asset. See [Secure Boot](./secure-boot.md).
+
+Either way, see [Check the source you built](../about/verify-source.md).
+
+:::danger[A v0.1.0-rc.1 node has no upgrade anchor and can't move forward in place]
+The first `v0.1.0-rc.1` release assets (now withdrawn) were published before `cryptosctl
+image sign` existed, so a node installed from one of them carries no upgrade anchor at all
+-- signing or building a later image changes nothing for a node already running that
+asset. Moving it to a newer release means reinstalling, which wipes its state, including
+the CA key. CryptOS is pre-1.0 and makes no compatibility promise across releases. A node
+installed from a build-from-source image with your own key stamped in, or from an asset
+you ran through `cryptosctl image sign`, keeps its anchor and upgrades in place normally.
+:::
+
+## Next step
+
+Boot the ISO on the target machine: [Boot and maintenance mode](./boot-maintenance.md).

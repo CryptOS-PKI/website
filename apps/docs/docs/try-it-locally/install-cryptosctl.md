@@ -1,0 +1,95 @@
+---
+title: "⬇️ Install cryptosctl"
+---
+
+# ⬇️ Install cryptosctl
+
+:::tip[Works today]
+This describes CryptOS as it works right now.
+:::
+
+Get the command-line tool that talks to the node.
+
+`cryptosctl` is the only way to manage a standalone CryptOS node. Every command goes to the node's API over mutual TLS: you prove who you are with your admin identity, and `cryptosctl` checks the node against a certificate you pinned. There is no login and no shell behind it.
+
+`cryptosctl` runs on Linux and macOS, and on Windows from `v0.1.0-rc.2`. The build steps here are for Linux and macOS; on Windows, follow [the download steps](../install-deploy/bootstrap-apply.md#1-get-cryptosctl) instead.
+
+:::info[Before you start]
+You need the `cryptos-node` checkout and Go from [What you need](./requirements.md). If you followed [Prepare the node](./prepare-the-node.md), your admin identity is already in `~/.cryptos/`, and the node is running in another terminal from [Boot it in QEMU](./boot-qemu.md).
+:::
+
+## 1. Build it
+
+From the root of the `cryptos-node` checkout:
+
+```bash
+task build
+```
+
+This builds the CryptOS binaries into `bin/`, stamped with the version, commit and build date of your checkout. The one you need is `bin/cryptosctl`.
+
+To build only the CLI, run the same `go build` the task runs for it:
+
+```bash
+go build -ldflags "$(bash scripts/buildinfo.sh)" -o bin/cryptosctl ./cmd/cryptosctl
+```
+
+## 2. Put it on your PATH
+
+```bash
+sudo install -m 0755 bin/cryptosctl /usr/local/bin/cryptosctl
+```
+
+Any folder on your `PATH` works. The rest of this section assumes you can type `cryptosctl`.
+
+## 3. Check it runs
+
+```bash
+cryptosctl version
+```
+
+:::tip[Expected output]
+The build identity of the binary you just installed:
+
+```text
+Client version:  <git describe of your checkout>
+Client commit:   <full commit hash>
+Client built:    <commit date, UTC>
+Go version:      go1.26...
+```
+
+The version is what `git describe --tags --always --dirty` says about your checkout. It reads `dev`, with the commit and date `unknown`, when the source had no Git history. That is harmless here, but build from a full clone if you want to tell builds apart.
+:::
+
+Pass a node address and `version` also asks the node which version it runs, so a stale CLI or a node on the wrong image stands out. You try that on [Check identity and status](./check-status.md).
+
+## Where cryptosctl keeps its files
+
+By default `cryptosctl` reads three files from `~/.cryptos/` (`%USERPROFILE%\.cryptos` on Windows). Each has a flag to point somewhere else.
+
+| File | Flag | What it is | Made by |
+|---|---|---|---|
+| `identity.crt` | `--identity` | your admin certificate | `cryptosctl bootstrap` |
+| `identity.key` | `--identity-key` | your admin private key | `cryptosctl bootstrap` |
+| `trust.crt` | `--trust` | the node's management certificate, pinned | `cryptosctl trust fetch` |
+
+You made the identity pair on [Prepare the node](./prepare-the-node.md), with the same code you just installed. You fetch `trust.crt` on the next page.
+
+:::caution[Keep ~/.cryptos private]
+`identity.key` is the admin key for your node, and on Linux and macOS `cryptosctl bootstrap` writes it readable only by you. On Windows the file takes the permissions of its folder instead. Do not copy it into shared folders, backups you do not control, or chat. Anyone with it can run every command on these pages against your node.
+:::
+
+## Flags you will use here
+
+The node in QEMU is reachable as `127.0.0.1:4443`, but its management certificate names `10.0.0.10`, not `127.0.0.1`. So every command on the next pages passes the same two flags:
+
+| Flag | Value | Why |
+|---|---|---|
+| `--endpoint` | `127.0.0.1:4443` | the port QEMU forwards to the node's API. The default is `localhost:443`. |
+| `--server-name` | `10.0.0.10` | the name to check on the node's certificate, before and after the ceremony |
+
+The [cryptosctl command reference](../reference/cryptosctl.md) lists every command and flag.
+
+## Next step
+
+Create the Root: [Run the first-boot ceremony](./first-boot-ceremony.md).

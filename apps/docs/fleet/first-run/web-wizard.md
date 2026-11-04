@@ -38,7 +38,7 @@ Find the newest token:
 
 ```bash
 docker logs <container> 2>&1 | grep 'bootstrap token'
-journalctl -u fleet-manager | grep 'bootstrap token'
+journalctl -u cryptos-fleet-manager | grep 'bootstrap token'
 ```
 
 </TabItem>

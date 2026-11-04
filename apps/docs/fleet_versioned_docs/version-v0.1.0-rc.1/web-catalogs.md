@@ -33,6 +33,6 @@ What each managed node actually reports serving, not a fleet-wide setting. The l
 
 ACME (RFC 8555) and EST (RFC 7030) are served by the nodes themselves, set per node under `pki.acme` and `pki.est`; the switch calls `SetNodeProtocol` (see [Switching an enrolment protocol on a node](./node-lifecycle.md#switching-an-enrolment-protocol-on-a-node)) and takes effect at that node's next reboot. A node that cannot serve the protocol -- a Root or Intermediate, or an Issuing node that is not yet ESTABLISHED -- shows why instead of a switch.
 
-:::info[SCEP and Windows autoenrollment are not wired up]
-Neither protocol has a config block on the node yet, so this page has nothing to read or switch for them and says so instead of showing an empty table.
+:::info[SCEP and Windows autoenrollment have no switch here]
+The manager doesn't report or switch SCEP or Windows autoenrollment, so this page shows a note instead of a table for them. SCEP itself runs on the node, set under `pki.scep` with `cryptosctl config apply`; its challenges and enrolment queue are on [a node's page](./web-node-detail.md#scep-challenge-passwords). Windows autoenrollment is not built.
 :::

@@ -19,12 +19,12 @@ The Fleet Manager is optional. A node never needs it to issue certificates, and 
 The Fleet Manager is one Go program, [`cryptos-manager`](https://github.com/CryptOS-PKI/cryptos-manager). It does three things on one HTTPS port:
 
 - **Serves the web UI.** The browser app from the [`cryptos-web`](https://github.com/CryptOS-PKI/cryptos-web) repo is built into the manager binary, so there is nothing else to install. See [The web UI](./web-ui.md).
-- **Answers the Fleet API.** The web UI calls it. The API is defined as `FleetService` in the [`cryptos-manager`](https://github.com/CryptOS-PKI/cryptos-manager/tree/main/proto/cryptos/fleet/v1) repo.
+- **Answers the Fleet API.** The web UI calls it. The API is defined as `FleetService` in the [`cryptos-manager`](https://github.com/CryptOS-PKI/cryptos-manager/tree/v0.1.0-rc.1/proto/cryptos/fleet/v1) repo.
 - **Talks to your nodes.** For every node it manages, the manager dials the node's management API over mutual TLS, the same API `cryptosctl` uses. It verifies the node's server certificate on every connection, against the node's CA chain or a pinned copy, and refuses a node it can't verify; see [Verifying a node's certificate](./node-trust.md).
 
-Two small routes answer without a login: `/healthz` for health checks (`200` when the manager can serve and reach its Postgres, `503` when it can't) and `/version` for the build details.
+Two small routes answer without a login: `/healthz` for health checks (`200` when the manager can serve and reach its Postgres, `503` when it can't; with `storage.mode: memory` it answers `200` with status `degraded`) and `/version` for the build details.
 
-It can also serve an MCP endpoint at `/mcp` for AI agents. That is off by default; the manager's [MCP guide](https://github.com/CryptOS-PKI/cryptos-manager/blob/main/docs/mcp.md) covers it.
+It can also serve an MCP endpoint at `/mcp` for AI agents. That is off by default; the manager's [MCP guide](https://github.com/CryptOS-PKI/cryptos-manager/blob/v0.1.0-rc.1/docs/mcp.md) covers it.
 
 ## What it keeps, and what it never holds
 
@@ -40,8 +40,8 @@ Each node's own state (its CA, its issued certificates, its config) stays on the
 
 It also keeps one file pair per adopted node: the admin certificate and key it uses to manage that node. They live in `MANAGER_NODE_CREDS_DIR`, which defaults to `/var/lib/cryptos-manager/node-creds`. In the container image that folder is the only place the manager writes, and the rest of its filesystem is read-only, so give the folder a volume. The manager's Docker Compose example mounts one.
 
-:::caution[Without database_url nothing is saved]
-If `database_url` is not set, the manager uses an in-memory store filled with a demo catalog and logs `no database_url configured, using in-memory store (demo catalog seeded)`. Everything is lost on restart. That mode is for trying the UI offline. Set `database_url` for any real fleet.
+:::caution[database_url or storage.mode: memory is required]
+The manager refuses to start unless its config sets `database_url` or `storage.mode: memory`. Memory mode keeps nothing across a restart: operator registrations, enrollments and the manager's own audit log are lost, and only the nodes listed in the config come back. It runs as one replica only and has no first run or MCP, so it needs `operatorCAPath`. Set `database_url` for any real fleet.
 :::
 
 What it never holds is a CA's private key. Those keys are made and kept on the nodes. When you back up a CA key from the web UI, the node seals the key with your passphrase before it leaves, and the manager only passes the sealed copy through. The passphrase is never stored. A node whose CA key lives in the TPM refuses the export.
@@ -60,13 +60,13 @@ There are three levels. Each includes the one before it.
 | `operator` | Issue and revoke certificates, re-key a subordinate CA, read a node's config, open enrollments and approve subordinate ones, and list operator certificates. |
 | `admin` | Adopt and decommission nodes, approve a node link, edit and apply configs and profiles, turn protocol adapters on or off, switch a node's enrolment protocols, back up and restore CA keys, and revoke operator certificates on the manager's denylist. |
 
-The manager's [Operator PKI guide](https://github.com/CryptOS-PKI/cryptos-manager/blob/main/docs/operator-pki.md) shows how to mint the first operator certificate.
+[First run](./first-run/index.md) shows how to register your operator CA and get the first admin certificate.
 
 ## What it doesn't do yet
 
 - A node can't start its own enrollment. The manager starts every link, adoption and enrollment, and the challenge in a `LINK` is signed by the node's CA identity key, not the TPM endorsement key.
 
-- Switching a protocol adapter on in the manager's protocol catalog only records the intent; the web UI no longer offers that switch. ACME and EST are switched per node with `SetNodeProtocol` (see [A node's lifecycle in the fleet](./node-lifecycle.md#switching-an-enrolment-protocol-on-a-node)), which the web UI's Protocols page now uses; SCEP and Windows autoenrollment are not built, and have no per-node switch anywhere.
+- Switching a protocol adapter on in the manager's protocol catalog only records the intent; the web UI no longer offers that switch. ACME and EST are switched per node with `SetNodeProtocol` (see [A node's lifecycle in the fleet](./node-lifecycle.md#switching-an-enrolment-protocol-on-a-node)), which the web UI's Protocols page now uses; SCEP is served by the node and set under `pki.scep` with `cryptosctl config apply`, but the manager has no per-node switch for it; Windows autoenrollment is not built.
 - The manager records the read-only flag on a linked node, but the node does not enforce it.
 
 ## Where to go next

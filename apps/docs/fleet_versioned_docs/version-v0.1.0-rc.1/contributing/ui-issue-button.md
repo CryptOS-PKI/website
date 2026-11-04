@@ -34,22 +34,11 @@ The button needs two separate switches on. Each is off by default, and either on
 
 2. **The manager you're pointed at.** The console only renders the button when the page it's served from advertises `<meta name="cryptos-dev-ui-issue-copy" content="true">`. The manager adds that tag when it starts with `CRYPTOS_DEV_UI_ISSUE_COPY=true` set.
 
-   <Tabs groupId="os" queryString>
-   <TabItem value="unix" label="Linux / macOS" default>
+   The manager runs on Linux and macOS:
 
    ```bash
    CRYPTOS_DEV_UI_ISSUE_COPY=true ./manager
    ```
-
-   </TabItem>
-   <TabItem value="windows" label="Windows (PowerShell)">
-
-   ```powershell
-   $env:CRYPTOS_DEV_UI_ISSUE_COPY = "true"; .\manager.exe
-   ```
-
-   </TabItem>
-   </Tabs>
 
 With both set, a small copy button appears over the console. Selecting it copies a single line of JSON to your clipboard and announces "Copied".
 

@@ -1,0 +1,73 @@
+{
+  "name": "@cryptos-pki/website-monorepo",
+  "private": true,
+  "type": "module",
+  "description": "The CryptOS product site and docs site, with the frame and brand they share.",
+  "author": "The CryptOS Authors",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CryptOS-PKI/website.git"
+  },
+  "homepage": "https://github.com/CryptOS-PKI/website#readme",
+  "bugs": {
+    "url": "https://github.com/CryptOS-PKI/website/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "packages/frame",
+    "packages/brand",
+    "apps/site",
+    "apps/docs"
+  ],
+  "scripts": {
+    "dev:site": "npm run dev -w @cryptos-pki/site",
+    "dev:docs": "npm run start -w @cryptos-pki/docs",
+    "build": "npm run build -w @cryptos-pki/site -w @cryptos-pki/docs",
+    "build:site": "npm run build -w @cryptos-pki/site",
+    "build:docs": "npm run build -w @cryptos-pki/docs",
+    "typecheck": "npm run typecheck -w @cryptos-pki/site -w @cryptos-pki/docs",
+    "test": "npm test --workspaces --if-present && node --test scripts/*.test.mjs",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check:links": "node apps/site/scripts/check-links.mjs apps/site/build/client",
+    "check:docs-version": "node scripts/check-docs-version.mjs",
+    "docs:version": "node scripts/cut-docs-version.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.0",
+    "eslint": "^10.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react-hooks": "^7.1.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "prettier": "^3.8.0",
+    "typescript-eslint": "^8.60.0"
+  },
+  "overrides": {
+    "shell-quote": "1.11.0",
+    "source-map-js": "1.2.2",
+    "proxy-addr": "2.0.8",
+    "joi": "17.13.9",
+    "compression": "1.8.2",
+    "postcss-selector-parser@^7": "7.1.6",
+    "tinypool@^2": "2.1.2",
+    "fast-uri": "3.1.9",
+    "image-size": "2.0.3",
+    "svgo": "3.3.5",
+    "colord": "2.9.4",
+    "@swc/html": "1.16.18",
+    "qs": "6.16.2",
+    "browserslist": "4.29.3",
+    "postcss": "8.5.30",
+    "serialize-javascript": "7.1.4",
+    "uuid": "11.1.1",
+    "body-parser": "1.20.9",
+    "brace-expansion@^1": "1.1.21",
+    "js-yaml": "4.3.2"
+  }
+}

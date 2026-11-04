@@ -1,0 +1,84 @@
+name: Checks
+
+# Lint, test, typecheck and build both apps on a GitHub-hosted Linux runner.
+#
+# One job for both apps, so there is one required check. A change under
+# apps/site or apps/docs builds that app only; anything shared (the packages,
+# the root manifests, the workflows, the scripts) builds both. Lint and the
+# shared packages' tests are cheap and always run.
+#
+# Pull requests only, and not while the PR is a draft; the PR run covers what
+# merges, so nothing reruns on push to main.
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+# One run per PR per workflow: a new push cancels the older PR run.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: 🧪 Build & Test
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Full history: the path filter diffs against the PR's base.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Decide which apps to build
+        id: changes
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node scripts/changed-apps.mjs "${BASE:-}" "${HEAD_SHA:-}" | tee -a "$GITHUB_OUTPUT"
+
+      - name: Set up Node
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      # `npm ci` installs exactly the lockfile, including the workspace links
+      # and the vendored kit, and fails if a manifest and the lock disagree.
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test the shared packages and the release scripts
+        run: npm test
+
+      - name: Site - typecheck
+        if: steps.changes.outputs.site_changed == 'true'
+        run: npm run typecheck -w @cryptos-pki/site
+
+      - name: Site - build (prerender)
+        if: steps.changes.outputs.site_changed == 'true'
+        run: npm run build -w @cryptos-pki/site
+
+      - name: Site - check internal links in the prerendered output
+        if: steps.changes.outputs.site_changed == 'true'
+        run: npm run check:links -w @cryptos-pki/site
+
+      - name: Docs - typecheck
+        if: steps.changes.outputs.docs_changed == 'true'
+        run: npm run typecheck -w @cryptos-pki/docs
+
+      # onBrokenLinks and the markdown link hook are set to throw, so a broken
+      # internal link fails this step. This build includes Next, so it checks
+      # the released versions and main's pages.
+      - name: Docs - build
+        if: steps.changes.outputs.docs_changed == 'true'
+        run: npm run build -w @cryptos-pki/docs

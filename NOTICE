@@ -8,3 +8,11 @@ Originally written by @Bugs5382 (https://github.com/Bugs5382).
 
 vendor/cryptos-ui is a vendored copy of cryptos-web's packages/ui (see
 vendor/cryptos-ui/NOTICE for its own provenance).
+
+apps/docs/static/img/integrations/vmware.svg is from the dashboard-icons project
+(https://github.com/homarr-labs/dashboard-icons), licensed under the Apache
+License, Version 2.0. VMware is a trademark of Broadcom Inc.; the icon is used
+only to identify the VMware integration.
+
+packages/frame/public/fonts holds the Inter and JetBrains Mono typefaces,
+licensed under the SIL Open Font License 1.1 (see the OFL-*.txt files there).

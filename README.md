@@ -1,35 +1,53 @@
 # website ⚡
 
-> 🧭 The CryptOS product site (www.cryptos-pki.com)
+> 🧭 The CryptOS product site (www.cryptos-pki.com) and the CryptOS docs (docs.cryptos-pki.com), in one repo
 
-A static marketing site: React Router v7 in framework mode, prerendered at build time to plain
-HTML (no Node server at request time), styled with Tailwind CSS and the `@cryptos-pki/ui` design
-kit (vendored from cryptos-web; see `vendor/cryptos-ui/NOTICE`).
+Two static sites and the pieces they share, as npm workspaces:
+
+- 🏠 **`apps/site`:** the product site. React Router v7 in framework mode, prerendered at build
+  time to plain HTML (no Node server at request time), styled with Tailwind CSS and the
+  `@cryptos-pki/ui` design kit.
+- 📚 **`apps/docs`:** the docs. Docusaurus 3, versioned: each product release gets its own docs
+  version, and Next is unreleased `main`.
+- 🔤 **`packages/frame`:** what both sites share: `site-frame.css`, the self-hosted fonts and
+  `release.ts`, the current product release both sites show.
+- 🎨 **`packages/brand`:** the CryptOS and FleetOS marks, the favicon and the touch icon.
+- 🧩 **`vendor/cryptos-ui`:** a vendored, read-only copy of cryptos-web's `packages/ui` kit
+  (see `vendor/cryptos-ui/NOTICE`).
 
 ## 🛠 Develop
 
-Before you start: Node 20+.
+Before you start: Node 20 or newer (CI uses the version in `.nvmrc`).
 
 ```bash
-npm install
-npm run dev         # react-router dev server with HMR
-npm run build       # react-router build -> prerendered static HTML in build/client/
-npm run preview     # serve the prerendered build
-npm run lint        # eslint + prettier
-npm run typecheck   # react-router typegen + tsc --noEmit
+npm ci --ignore-scripts
+npm run dev:site              # the product site with HMR
+npm run dev:docs              # the docs with hot reload, Next included
+npm run lint                  # eslint (and prettier, outside apps/docs)
+npm test                      # the shared packages' and the scripts' tests
+npm run typecheck             # both apps
+npm run build                 # apps/site/build/client and apps/docs/build
+npm run check:links           # internal links in the prerendered site
 ```
 
-`build/client/` is the whole deployable site: static files, no server required.
+[`go-task`](https://taskfile.dev) wraps the same steps: `task ci` runs the local gate, and
+`task license` checks the licence headers.
+
+## 📚 Docs versions
+
+v0.1.0-rc.1 is the first docs version and the default at `/docs/`. Next (`main`) is served at
+`/docs/next/` in dev and preview builds, under a banner pointing at the current version; the
+published docs leave it out. A release bumps `packages/frame/release.ts` and runs
+`npm run docs:version` in its own PR, and the deploy refuses to run until that version is cut. See
+[`docs/deploy.md`](docs/deploy.md).
 
 ## 🚀 Deploy
 
-The site goes live on Cloudflare Pages (project `cryptos-pki-www`, domains `cryptos-pki.com` and
-`www.cryptos-pki.com`) the moment a GitHub Release is published here -- nothing else deploys it.
-A release marked pre-release deploys to `dev.cryptos-pki-www.pages.dev` instead, so an rc can be
-checked before it goes live; a normal release still deploys to production. The first deploy creates
-the Pages project if it doesn't exist yet; the custom domains are attached once by hand in
-Cloudflare after that. See [`docs/deploy.md`](docs/deploy.md) for what that build contains, the
-Cloudflare side of the setup, and how to roll back.
+Both sites go live on Cloudflare Pages the moment a GitHub Release is published here, and nothing
+else deploys them: the site to the project `cryptos-pki-www` (`cryptos-pki.com`,
+`www.cryptos-pki.com`) and the docs to `cryptos-pki-docs` (`docs.cryptos-pki.com`). A release
+marked pre-release deploys to each project's `dev` branch instead. See
+[`docs/deploy.md`](docs/deploy.md) for the build, the Cloudflare side and how to roll back.
 
 ## 🙏 Acknowledgements
 

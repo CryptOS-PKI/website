@@ -1,0 +1,14 @@
+{
+  "name": "@cryptos-pki/brand",
+  "private": true,
+  "type": "module",
+  "description": "The CryptOS and FleetOS marks, the favicon and the touch icon, served by both sites.",
+  "license": "Apache-2.0",
+  "exports": {
+    "./public": "./public/",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test brand.test.ts"
+  }
+}

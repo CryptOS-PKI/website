@@ -17,6 +17,8 @@ limitations under the License.
 // src/content/cryptos.ts, so the two builds are an apples-to-apples
 // comparison. A new product gets its own file in this shape; the page and
 // every component stay unchanged.
+import { release } from "@cryptos-pki/frame/release";
+
 export interface LedeSegment {
   text: string;
   accent?: boolean;
@@ -42,11 +44,11 @@ export const nav = {
 
 export const releaseStatus = {
   badge: "Pre-release",
-  heading: "v0.1.0-rc.1 is out.",
+  heading: `${release.version} is out.`,
   body: "A release candidate for testing, not for production. The unsigned images and the release notes are on GitHub.",
   cta: {
-    label: "Download v0.1.0-rc.1",
-    href: "https://github.com/CryptOS-PKI/cryptos-appliance/releases/tag/v0.1.0-rc.1",
+    label: `Download ${release.version}`,
+    href: `https://github.com/CryptOS-PKI/cryptos-appliance/releases/tag/${release.version}`,
   },
 };
 
@@ -148,7 +150,7 @@ export const footer = {
         { label: "Trust model", href: "/#trust-model" },
         { label: "FleetOS Manager", href: "/#fleetos-manager" },
         { label: "Standards", href: "/#standards" },
-        { label: "Download v0.1.0-rc.1", href: releaseStatus.cta.href },
+        { label: releaseStatus.cta.label, href: releaseStatus.cta.href },
       ],
     },
     {

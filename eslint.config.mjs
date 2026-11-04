@@ -20,10 +20,21 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import prettier from "eslint-plugin-prettier";
 import prettierConfig from "eslint-config-prettier";
 
+// One config for the whole repo: apps/site, apps/docs, packages/frame,
+// packages/brand and the root scripts.
 export default tseslint.config(
-  // vendor/ is a vendored copy of cryptos-web's packages/ui (see vendor/cryptos-ui/NOTICE);
-  // it is linted and typechecked in its own repo, not here.
-  { ignores: ["build", ".react-router", "vendor", "node_modules"] },
+  // vendor/ is a vendored copy of cryptos-web's packages/ui (see
+  // vendor/cryptos-ui/NOTICE); it is linted and typechecked in its own repo, not here.
+  {
+    ignores: [
+      "**/build",
+      "**/.react-router",
+      "**/.docusaurus",
+      "**/node_modules",
+      "vendor",
+      "apps/docs/versioned_docs",
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -39,17 +50,23 @@ export default tseslint.config(
     },
   },
   {
-    // scripts/ runs under Node (CI build-output checks), not the browser.
-    files: ["scripts/**/*.mjs"],
+    // The scripts run under Node (CI build-output checks, the docs version
+    // checks), not the browser.
+    files: ["**/scripts/**/*.mjs"],
     languageOptions: {
       globals: {
         process: "readonly",
         console: "readonly",
+        URL: "readonly",
       },
     },
   },
   prettierConfig,
   {
+    // The docs app keeps the Docusaurus house style (single quotes, no
+    // trailing commas everywhere) it came in with, so Prettier formats the
+    // rest of the repo only.
+    ignores: ["apps/docs/**"],
     plugins: { prettier },
     rules: {
       "prettier/prettier": "error",

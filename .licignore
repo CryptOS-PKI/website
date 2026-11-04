@@ -21,5 +21,7 @@
 **/build/**
 /.react-router/**
 **/.react-router/**
+/.docusaurus/**
+**/.docusaurus/**
 /coverage/**
 **/coverage/**

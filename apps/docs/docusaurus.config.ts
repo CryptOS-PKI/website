@@ -13,20 +13,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import {createRequire} from 'module';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import {themes as prismThemes} from 'prism-react-renderer';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
-const require = createRequire(import.meta.url);
 
-// Versioning fix (docs-theme item): the unversioned "next" docs should be
-// dev-only, not shipped in a release. During 0.x there are no versioned
-// snapshots, so `current` is the whole site and must stay included. Once the
-// first version is cut, the production build sets DOCS_INCLUDE_NEXT=false so
-// "next" is served locally but excluded from the released site.
+// Versioned docs. Each release's snapshot lives in versioned_docs/ and is
+// listed in versions.json; the newest one is the default at /docs/. The pages
+// in docs/ are "Next", unreleased main, served at /docs/next/ under a banner
+// that points at the current version. The deploy builds with
+// DOCS_INCLUDE_NEXT=false, so the published site has the released versions
+// only; every other build (dev, CI, previews) includes Next.
 const includeNext = process.env.DOCS_INCLUDE_NEXT !== 'false';
+
+// The fonts and the brand assets come from the shared packages: one copy of
+// site-frame.css, the fonts, the marks and the touch icon for both sites.
+const framePackage = '../../packages/frame';
+const brandPackage = '../../packages/brand';
 
 // Code blocks sit on the web card colour. On those backgrounds every token of
 // these two themes meets WCAG AA except vsLight's pure red attribute names
@@ -56,15 +60,19 @@ const config: Config = {
   baseUrl: '/',
 
   organizationName: 'CryptOS-PKI',
-  projectName: 'docs',
+  projectName: 'website',
 
-  // Skeleton phase: keep the build resilient while pages are stubs.
-  // Restore 'throw' once the content workstream fills the cross-links in.
-  onBrokenLinks: 'warn',
+  // static/ holds the docs' own images; /fonts/ comes from packages/frame and
+  // /img/brand/ from packages/brand.
+  staticDirectories: ['static', `${framePackage}/public`, `${brandPackage}/public`],
+
+  // A broken internal link fails the build, in Next and in every released
+  // version, so CI catches it before a release does.
+  onBrokenLinks: 'throw',
 
   markdown: {
     hooks: {
-      onBrokenMarkdownLinks: 'warn',
+      onBrokenMarkdownLinks: 'throw',
     },
   },
 
@@ -80,19 +88,12 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
           includeCurrentVersion: includeNext,
+          // Docusaurus rejects options for a version it isn't building.
+          versions: includeNext ? {current: {label: 'Next', path: 'next', banner: 'unreleased'}} : {},
         },
         blog: false,
         theme: {
-          customCss: [
-            require.resolve('@fontsource-variable/inter/index.css'),
-            // Latin only: the other JetBrains Mono subsets are small enough to
-            // be inlined into the stylesheet (about 180 KB), and code is ASCII.
-            require.resolve('@fontsource/jetbrains-mono/latin-400.css'),
-            require.resolve('@fontsource/jetbrains-mono/latin-500.css'),
-            require.resolve('@fontsource/jetbrains-mono/latin-700.css'),
-            './src/css/theme.css',
-            './src/css/custom.css',
-          ],
+          customCss: [`${framePackage}/site-frame.css`, './src/css/theme.css', './src/css/custom.css'],
         },
       } satisfies Preset.Options,
     ],
@@ -190,7 +191,7 @@ const config: Config = {
       // from the CNCF website guidelines apply only once the project is accepted.
       copyright:
         'Copyright © The CryptOS Authors<br />' +
-        'Documentation licensed under the <a href="https://github.com/CryptOS-PKI/docs/blob/main/LICENSE">Apache License 2.0</a>',
+        'Documentation licensed under the <a href="https://github.com/CryptOS-PKI/website/blob/main/LICENSE">Apache License 2.0</a>',
     },
     prism: {
       theme: prismLight,

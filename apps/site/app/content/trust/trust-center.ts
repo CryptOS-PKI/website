@@ -19,7 +19,6 @@ export const SECURITY_POLICY = "https://github.com/CryptOS-PKI/.github/blob/main
 
 export const trustCenter = {
   meta: {
-    title: "Trust Center -- CryptOS",
     description:
       "How CryptOS protects the keys it holds: every control by area with its status and evidence, what is planned and what is deliberately left out, and how to report a vulnerability.",
   },

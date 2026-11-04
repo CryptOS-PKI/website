@@ -53,7 +53,6 @@ export const fleetDocs = (docs: string): DocLink[] => [
 
 export const fleetos = {
   meta: {
-    title: "FleetOS Manager -- CryptOS",
     description:
       "FleetOS Manager is the optional console and API for a fleet of CryptOS nodes: adopt and link nodes, approve requests, issue and revoke through the node that holds the CA, and keep a hash-chained audit trail.",
   },

@@ -21,7 +21,8 @@ import { Nav } from "~/components/nav";
 import { Section } from "~/components/section";
 import { Strip } from "~/components/strip";
 import { StatusBadge } from "~/components/trust";
-import { footer, links, meta as siteMeta, nav } from "~/content/cryptos";
+import { footer, links, nav } from "~/content/cryptos";
+import { pageMeta } from "~/content/meta";
 import { areas, controls } from "~/content/trust/controls";
 import { evidenceHref, issueHref, issueLabel } from "~/content/trust/links";
 import { review } from "~/content/trust/review";
@@ -29,18 +30,12 @@ import type { Block, Control } from "~/content/trust/types";
 
 import "~/components/trust.css";
 
-const title = `${review.title} -- ${siteMeta.siteName}`;
-
-export const meta: MetaFunction = () => [
-  { title },
-  { name: "description", content: review.subtitle },
-  { property: "og:site_name", content: siteMeta.siteName },
-  { property: "og:title", content: title },
-  { property: "og:description", content: review.subtitle },
-  { property: "og:type", content: "article" },
-  { property: "og:url", content: `${siteMeta.url}trust/security-review` },
-  { name: "twitter:card", content: "summary" },
-];
+export const meta: MetaFunction = () =>
+  pageMeta({
+    title: "Security review",
+    description: review.subtitle,
+    path: "/trust/security-review",
+  });
 
 function BlockView({ block }: { block: Block }) {
   switch (block.kind) {
@@ -163,7 +158,7 @@ export default function SecurityReview() {
       </a>
       <Strip links={links} />
       <Nav links={nav.links} />
-      <main id="main" className="sr">
+      <main id="main" className="frame-prose sr">
         <Section eyebrow="Trust Center" heading={review.title} lede={review.subtitle}>
           <dl className="sr-meta">
             <dt>Document</dt>

@@ -21,20 +21,13 @@ import { Nav } from "~/components/nav";
 import { Section } from "~/components/section";
 import { Strip } from "~/components/strip";
 import { ControlExplorer, DocumentList, PostureTiles, SubProcessorTable } from "~/components/trust";
-import { footer, links, meta as siteMeta, nav } from "~/content/cryptos";
+import { footer, links, nav } from "~/content/cryptos";
+import { pageMeta } from "~/content/meta";
 import { areas, controls } from "~/content/trust/controls";
 import { trustCenter } from "~/content/trust/trust-center";
 
-export const meta: MetaFunction = () => [
-  { title: trustCenter.meta.title },
-  { name: "description", content: trustCenter.meta.description },
-  { property: "og:site_name", content: siteMeta.siteName },
-  { property: "og:title", content: trustCenter.meta.title },
-  { property: "og:description", content: trustCenter.meta.description },
-  { property: "og:type", content: "website" },
-  { property: "og:url", content: `${siteMeta.url}trust` },
-  { name: "twitter:card", content: "summary" },
-];
+export const meta: MetaFunction = () =>
+  pageMeta({ title: "Trust Center", description: trustCenter.meta.description, path: "/trust" });
 
 // The Trust Center: the posture, two figures, every control with its status
 // and evidence, the documents, sub-processors and how to report a
@@ -47,7 +40,7 @@ export default function Trust() {
       </a>
       <Strip links={links} />
       <Nav links={nav.links} />
-      <main id="main">
+      <main id="main" className="frame-prose">
         <Section
           id="posture"
           eyebrow="Trust Center"

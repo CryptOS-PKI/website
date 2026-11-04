@@ -26,16 +26,6 @@ limitations under the License.
   font-size: 0.875rem;
 }
 
-.area-nav a {
-  color: hsl(var(--primary));
-  text-decoration: none;
-}
-
-.area-nav a:hover,
-.area-nav a:focus-visible {
-  text-decoration: underline;
-}
-
 .trust-note {
   margin-top: 1rem;
 }
@@ -239,12 +229,6 @@ limitations under the License.
 
 .control-card__reason {
   font-style: italic;
-}
-
-.control-card a,
-.trust-doc-link a,
-.sr a {
-  color: hsl(var(--primary));
 }
 
 .control-card__evidence summary {

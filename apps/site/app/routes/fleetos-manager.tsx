@@ -20,21 +20,18 @@ import { Footer } from "~/components/footer";
 import { Nav } from "~/components/nav";
 import { Section } from "~/components/section";
 import { Strip } from "~/components/strip";
-import { footer, links, meta as siteMeta, nav } from "~/content/cryptos";
+import { footer, links, nav } from "~/content/cryptos";
+import { pageMeta } from "~/content/meta";
 import { fleetDocs, fleetos, type FleetItem } from "~/content/fleetos";
 
 import "~/components/trust.css";
 
-export const meta: MetaFunction = () => [
-  { title: fleetos.meta.title },
-  { name: "description", content: fleetos.meta.description },
-  { property: "og:site_name", content: siteMeta.siteName },
-  { property: "og:title", content: fleetos.meta.title },
-  { property: "og:description", content: fleetos.meta.description },
-  { property: "og:type", content: "website" },
-  { property: "og:url", content: `${siteMeta.url}fleetos-manager` },
-  { name: "twitter:card", content: "summary" },
-];
+export const meta: MetaFunction = () =>
+  pageMeta({
+    title: "FleetOS Manager",
+    description: fleetos.meta.description,
+    path: "/fleetos-manager",
+  });
 
 const NextBadge = () => <span className="status status--planned">{fleetos.nextLabel}</span>;
 
@@ -62,7 +59,7 @@ export default function FleetosManager() {
       </a>
       <Strip links={links} />
       <Nav links={nav.links} />
-      <main id="main">
+      <main id="main" className="frame-prose">
         <Section eyebrow={intro.eyebrow} heading={intro.heading} lede={intro.lede}>
           <div className="fleetos-row">
             <FleetosMark size={48} />

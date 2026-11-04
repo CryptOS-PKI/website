@@ -6,6 +6,7 @@
   "license": "Apache-2.0",
   "exports": {
     "./site-frame.css": "./site-frame.css",
+    "./fonts": "./fonts.ts",
     "./release": "./release.ts",
     "./content": "./content.ts",
     "./strip": "./strip.ts",

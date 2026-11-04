@@ -16,15 +16,17 @@ limitations under the License.
 import type { ReactNode } from "react";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 
+import { fontFaceCss, fontUrl, PRELOAD_FONTS } from "@cryptos-pki/frame/fonts";
+
 import { themeInitScript } from "./theme";
 
 import "./app.css";
 
 const base = import.meta.env.BASE_URL;
 
-// The fonts the strip, header and footer draw with, preloaded the same way on
-// the docs, so the frame never paints in a fallback face first.
-const frameFonts = ["inter-latin.woff2", "jetbrains-mono-700-latin.woff2"];
+// The frame's font faces, written with the base path so a sub-path build
+// (the previews) still finds /fonts/ under it.
+const fontFaces = fontFaceCss(base);
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
@@ -45,11 +47,12 @@ export function Layout({ children }: { children: ReactNode }) {
         <meta name="color-scheme" content="dark light" />
         <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
         <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
-        {frameFonts.map((font) => (
+        <style dangerouslySetInnerHTML={{ __html: fontFaces }} />
+        {PRELOAD_FONTS.map((font) => (
           <link
             key={font}
             rel="preload"
-            href={`${base}fonts/${font}`}
+            href={fontUrl(base, font)}
             as="font"
             type="font/woff2"
             crossOrigin="anonymous"

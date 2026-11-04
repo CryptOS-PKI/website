@@ -72,6 +72,17 @@ jobs:
         if: steps.changes.outputs.site_changed == 'true'
         run: npm run check:links -w @cryptos-pki/site
 
+      # The previews serve the site under a sub-path; a font URL that ignores
+      # the base path only breaks there, so this builds under one and checks
+      # every font URL resolves.
+      - name: Site - check fonts in a sub-path build
+        if: steps.changes.outputs.site_changed == 'true'
+        env:
+          PREVIEW_BASE_PATH: /sub-path-check/
+        run: |
+          npm run build -w @cryptos-pki/site
+          node scripts/check-fonts.mjs apps/site/build/client "$PREVIEW_BASE_PATH"
+
       - name: Docs - typecheck
         if: steps.changes.outputs.docs_changed == 'true'
         run: npm run typecheck -w @cryptos-pki/docs
@@ -82,3 +93,14 @@ jobs:
       - name: Docs - build
         if: steps.changes.outputs.docs_changed == 'true'
         run: npm run build -w @cryptos-pki/docs
+
+      # The same font check for the docs, built under a sub-path into its own
+      # folder (released versions only, to keep it quick).
+      - name: Docs - check fonts in a sub-path build
+        if: steps.changes.outputs.docs_changed == 'true'
+        env:
+          PREVIEW_BASE_PATH: /sub-path-check/
+          DOCS_INCLUDE_NEXT: "false"
+        run: |
+          npm run build -w @cryptos-pki/docs -- --out-dir build-sub-path
+          node scripts/check-fonts.mjs apps/docs/build-sub-path "$PREVIEW_BASE_PATH"

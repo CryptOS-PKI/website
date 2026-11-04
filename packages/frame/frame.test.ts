@@ -17,6 +17,7 @@ import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import { test } from "node:test";
 
+import { fontFaceCss, fontUrl, PRELOAD_FONTS } from "./fonts.ts";
 import {
   HEADER_MENU_BREAKPOINT,
   HEADER_MENU_MAX_WIDTH,
@@ -31,9 +32,28 @@ const fonts = readdirSync(fontsDir)
   .sort();
 
 test("every font the frame declares is a file in public/fonts, and every file is declared", () => {
-  const urls = [...frame.matchAll(/url\("\/fonts\/([^"]+)"\)/g)].map((match) => match[1]);
+  const urls = [...fontFaceCss("/").matchAll(/url\("\/fonts\/([^"]+)"\)/g)].map(
+    (match) => match[1],
+  );
   assert.ok(urls.length > 0);
   assert.deepEqual([...new Set(urls)].sort(), fonts);
+  for (const file of PRELOAD_FONTS) assert.ok(fonts.includes(file), `${file} isn't shipped`);
+});
+
+test("the font faces load from the site's base path, so a sub-path build finds them", () => {
+  const css = fontFaceCss("/cryptos/site-preview/");
+  const urls = [...css.matchAll(/url\("([^"]+)"\)/g)].map((match) => match[1]);
+  assert.ok(urls.length > 0);
+  for (const url of urls) assert.match(url, /^\/cryptos\/site-preview\/fonts\/[^/]+\.woff2$/);
+  assert.equal(
+    fontUrl("/cryptos/docs-preview/", "inter-latin.woff2"),
+    "/cryptos/docs-preview/fonts/inter-latin.woff2",
+  );
+  assert.doesNotMatch(
+    frame,
+    /@font-face\s*\{|url\("\/fonts\//,
+    "site-frame.css must not load fonts from a bare /fonts/ path",
+  );
 });
 
 test("every font ships with its licence", () => {
@@ -45,7 +65,7 @@ test("every font ships with its licence", () => {
 
 test("the font families keep the names the kit's tokens ask for", () => {
   const families = new Set(
-    [...frame.matchAll(/font-family:\s*"([^"]+)"/g)].map((match) => match[1]),
+    [...fontFaceCss("/").matchAll(/font-family:\s*"([^"]+)"/g)].map((match) => match[1]),
   );
   assert.deepEqual([...families].sort(), ["Inter Variable", "JetBrains Mono"]);
 });

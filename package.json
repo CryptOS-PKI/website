@@ -35,6 +35,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check:links": "node apps/site/scripts/check-links.mjs apps/site/build/client",
+    "check:fonts": "node scripts/check-fonts.mjs",
     "check:docs-version": "node scripts/check-docs-version.mjs",
     "docs:version": "node scripts/cut-docs-version.mjs"
   },

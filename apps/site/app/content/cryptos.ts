@@ -80,13 +80,15 @@ export const trustModel = {
   heading: "Tested source, unsigned images, your keys.",
   lede: "We publish and test the source. You decide who signs what runs.",
   body: "CryptOS ships unsigned images built from source you can read and test yourself. Secure Boot enrollment, image signing and the keys behind them stay with you: nothing in the chain of trust for your fleet is signed by us.",
+  link: { label: "See every control in the Trust Center", href: `${links.site}/trust` },
 };
 
 export const fleetosManager = {
   eyebrow: "FleetOS Manager",
   heading: "One view across every linked node.",
   lede: "An optional web console for day-to-day operations -- the nodes keep working without it.",
-  body: "Link a node to the FleetOS Manager for topology, certificate inventory and ceremony history across your fleet. The manager never holds issuance authority -- its own certificate can't sign.",
+  body: "Link a node to the FleetOS Manager for topology, certificate inventory and approvals across your fleet. The manager never holds a CA key: the node that holds the CA issues and revokes, and the manager only carries the request.",
+  link: { label: "How FleetOS Manager works", href: `${links.site}/fleetos-manager` },
 };
 
 export const standards = {

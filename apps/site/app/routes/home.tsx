@@ -73,7 +73,9 @@ export default function Home() {
           tone="card"
           layout="split"
         >
-          <p className="prose">{trustModel.body}</p>
+          <p className="prose">
+            {trustModel.body} <a href={trustModel.link.href}>{trustModel.link.label}</a>
+          </p>
         </Section>
 
         <Section
@@ -85,7 +87,10 @@ export default function Home() {
         >
           <div className="fleetos-row">
             <FleetosMark size={48} />
-            <p className="prose">{fleetosManager.body}</p>
+            <p className="prose">
+              {fleetosManager.body}{" "}
+              <a href={fleetosManager.link.href}>{fleetosManager.link.label}</a>
+            </p>
           </div>
         </Section>
 

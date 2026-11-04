@@ -34,13 +34,38 @@ const siteSide = frameLinks({ siteUrl: "/", docsUrl: "https://docs.example" });
 test("the header links are the site's, in its order, then Releases, Docs and GitHub", () => {
   assert.deepEqual(
     frameNav(docsSide).map((link) => link.label),
-    ["What it is", "Trust model", "FleetOS Manager", "Standards", "Releases", "Docs", "GitHub"],
+    [
+      "What it is",
+      "Trust model",
+      "FleetOS Manager",
+      "Trust Center",
+      "Standards",
+      "Releases",
+      "Docs",
+      "GitHub",
+    ],
   );
   assert.equal(frameNav(docsSide)[0].href, "https://www.example/#what-it-is");
   assert.equal(frameNav(siteSide)[0].href, "/#what-it-is");
-  assert.equal(frameNav(docsSide)[4].href, "https://www.example/releases");
-  assert.equal(frameNav(siteSide)[4].href, "/releases");
-  assert.equal(frameNav(siteSide)[5].href, "https://docs.example/");
+  assert.equal(frameNav(docsSide)[5].href, "https://www.example/releases");
+  assert.equal(frameNav(siteSide)[5].href, "/releases");
+  assert.equal(frameNav(siteSide)[6].href, "https://docs.example/");
+});
+
+test("the header and footer link the FleetOS Manager page and the Trust Center", () => {
+  const hrefOf = (items: { label: string; href: string }[], label: string) =>
+    items.find((link) => link.label === label)?.href;
+  assert.equal(hrefOf(frameNav(siteSide), "FleetOS Manager"), "/fleetos-manager");
+  assert.equal(
+    hrefOf(frameNav(docsSide), "FleetOS Manager"),
+    "https://www.example/fleetos-manager",
+  );
+  assert.equal(hrefOf(frameNav(siteSide), "Trust Center"), "/trust");
+  assert.equal(hrefOf(frameNav(docsSide), "Trust Center"), "https://www.example/trust");
+  const footer = frameFooter(docsSide).groups;
+  assert.equal(hrefOf(footer[0].links, "FleetOS Manager"), "https://www.example/fleetos-manager");
+  assert.equal(footer[2].links[0].label, "Trust Center");
+  assert.equal(footer[2].links[0].href, "https://www.example/trust");
 });
 
 test("the footer has the brand tagline and the Product, Resources and Trust groups", () => {

@@ -18,10 +18,10 @@ import {useColorMode} from '@docusaurus/theme-common';
 import {ThemeToggle} from '@cryptos-pki/frame/theme-toggle';
 
 // The light and dark switch from packages/frame, the same button the site
-// shows at the same spot, driven by Docusaurus's colour mode. The built-in
-// switch is off in docusaurus.config.ts. The phone menu repeats the header's
-// items; the switch stays in the header there, so it renders nothing in the
-// menu.
+// shows at the same spot, driven by Docusaurus's colour mode, which keeps the
+// choice. The built-in switch is hidden (custom.css). The phone menu repeats
+// the header's items; the switch stays in the header there, so it renders
+// nothing in the menu.
 export function ThemeToggleNavbarItem({mobile}: {mobile?: boolean}): ReactNode {
   const {colorMode, setColorMode} = useColorMode();
   if (mobile) return null;

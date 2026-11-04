@@ -16,7 +16,7 @@ limitations under the License.
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { frameFooter, frameNav, legalLine } from "./content.ts";
+import { frameFooter, frameNav, legalHtml, legalLine, TAGLINE, taglineHtml } from "./content.ts";
 import { release } from "./release.ts";
 import { frameLinks } from "./strip.ts";
 
@@ -35,7 +35,8 @@ test("the header links are the site's, in its order, then Docs and GitHub", () =
 
 test("the footer has the brand tagline and the Product, Resources and Trust groups", () => {
   const footer = frameFooter(docsSide);
-  assert.equal(footer.tagline, "An immutable, API-driven PKI operating system.");
+  assert.equal(footer.tagline, TAGLINE);
+  assert.ok(footer.marks.includes(TAGLINE));
   assert.deepEqual(
     footer.groups.map((group) => group.title),
     ["Product", "Resources", "Trust"],
@@ -47,9 +48,22 @@ test("the footer has the brand tagline and the Product, Resources and Trust grou
   );
 });
 
-test("the legal line names every mark, the holder and the licence", () => {
+test("the legal line names every mark, the tagline last, the holder and the licence", () => {
   assert.equal(
-    legalLine(["CryptOS-PKI", "FleetOS", "No shell to break into"], 2026),
-    "CryptOS-PKI™, FleetOS™ and No shell to break into™ are trademarks of the CryptOS-PKI project. © 2026 The CryptOS Authors. Licensed under Apache-2.0.",
+    legalLine(frameFooter(docsSide).marks, 2026),
+    "CryptOS-PKI™, FleetOS™, No shell to break into™ and An immutable, API-driven PKI operating system™ are trademarks of the CryptOS-PKI project. © 2026 The CryptOS Authors. Licensed under Apache-2.0.",
+  );
+});
+
+test("the tagline is a trademark: its last word and ™ never break apart", () => {
+  assert.equal(TAGLINE, "An immutable, API-driven PKI operating system");
+  assert.equal(
+    taglineHtml,
+    'An immutable, API-driven PKI operating <span class="nowrap">system<sup class="tm">™</sup></span>.',
+  );
+  assert.ok(
+    legalHtml([TAGLINE], 2026).includes(
+      '<span class="nowrap">system<sup class="tm">™</sup></span>',
+    ),
   );
 });

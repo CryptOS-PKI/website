@@ -17,7 +17,7 @@ limitations under the License.
 // src/content/cryptos.ts, so the two builds are an apples-to-apples
 // comparison. A new product gets its own file in this shape; the page and
 // every component stay unchanged.
-import { frameFooter, frameNav } from "@cryptos-pki/frame/content";
+import { frameFooter, frameNav, TAGLINE } from "@cryptos-pki/frame/content";
 import { frameLinks } from "@cryptos-pki/frame/strip";
 
 export interface LedeSegment {
@@ -36,16 +36,18 @@ export const links = frameLinks({
 export const meta = {
   siteName: "CryptOS",
   url: "https://www.cryptos-pki.com/",
-  title: "CryptOS -- an immutable, API-driven PKI operating system",
-  description:
-    "CryptOS is an immutable, API-driven, high-assurance PKI operating system. No SSH, no shell: every operation goes through an mTLS-authenticated API.",
+  // The tagline is a trademark, so it carries ™ here too.
+  title: `CryptOS -- ${TAGLINE.charAt(0).toLowerCase()}${TAGLINE.slice(1)}\u2122`,
+  description: `CryptOS: ${TAGLINE}\u2122. High-assurance, with no SSH and no shell: every operation goes through an mTLS-authenticated API.`,
 };
 
 // The header links and the footer are shared with the docs (packages/frame).
 export const nav = { links: frameNav(links) };
 
 export const hero = {
-  eyebrow: "CryptOS-PKI",
+  // The trademarked tagline, with its ™.
+  eyebrow: TAGLINE,
+  eyebrowTrademark: true,
   // Decorative only (rendered aria-hidden next to the headline); written as a
   // Unicode escape rather than the literal character, consistent with the
   // no-emoji-in-source-files rule everywhere else in this repo.

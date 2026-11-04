@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import { markedHtml } from "@cryptos-pki/frame/content";
 import { Button } from "@cryptos-pki/ui";
 import type { ReactNode } from "react";
 
@@ -28,6 +29,8 @@ interface Cta {
 
 interface SplitHeroProps {
   eyebrow: string;
+  /** The eyebrow is a trademark: drawn with its no-break ™ (packages/frame). */
+  eyebrowTrademark?: boolean;
   headlineIcon?: string;
   headlineLine1: string;
   headlineLine2: string;
@@ -49,6 +52,7 @@ interface SplitHeroProps {
 // land on separate lines.
 export const SplitHero = ({
   eyebrow,
+  eyebrowTrademark = false,
   headlineIcon,
   headlineLine1,
   headlineLine2,
@@ -64,7 +68,14 @@ export const SplitHero = ({
       <div className="hero__backdrop" aria-hidden="true" />
       <div className="container hero__grid">
         <div className="hero__copy">
-          <p className="hero__eyebrow">{eyebrow}</p>
+          {eyebrowTrademark ? (
+            <p
+              className="hero__eyebrow"
+              dangerouslySetInnerHTML={{ __html: markedHtml(eyebrow) }}
+            />
+          ) : (
+            <p className="hero__eyebrow">{eyebrow}</p>
+          )}
           <h1 className="hero__headline">
             <span>{headlineLine1}</span>
             <span className="hero__headline-accent">

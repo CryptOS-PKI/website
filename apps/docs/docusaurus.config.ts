@@ -17,7 +17,7 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import {themes as prismThemes} from 'prism-react-renderer';
 
-import {frameFooter, frameNav, legalHtml} from '@cryptos-pki/frame/content';
+import {frameFooter, frameNav, legalHtml, TAGLINE, taglineHtml} from '@cryptos-pki/frame/content';
 import {frameLinks, stripHtml} from '@cryptos-pki/frame/strip';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
@@ -66,7 +66,8 @@ const prismDark = {
 
 const config: Config = {
   title: 'CryptOS',
-  tagline: 'An immutable, API-driven certificate authority operating system',
+  // The product tagline, a trademark, so it carries ™ (packages/frame).
+  tagline: `${TAGLINE}\u2122.`,
   favicon: 'favicon.svg',
 
   future: {
@@ -130,12 +131,14 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // Dark first, as on the site and in the Fleet Manager UI. The built-in
-    // switch is off: the header shows the shared switch from packages/frame
-    // (the 'custom-themeToggle' item below) at the spot the site shows it.
+    // Dark first, as on the site and in the Fleet Manager UI. The header
+    // shows the shared switch from packages/frame (the 'custom-themeToggle'
+    // item below) at the spot the site shows it. The built-in switch stays
+    // enabled but hidden (custom.css): with disableSwitch, Docusaurus ignores
+    // the stored choice, and a reload would fall back to dark.
     colorMode: {
       defaultMode: 'dark',
-      disableSwitch: true,
+      disableSwitch: false,
       respectPrefersColorScheme: false,
     },
     // The strip above the header: the same markup the site renders
@@ -202,7 +205,7 @@ const config: Config = {
                 `<img class="footer__mark mark--light" src="${baseUrl}img/brand/cryptos-mark-light.svg" width="24" height="24" alt="" />` +
                 `<img class="footer__mark mark--dark" src="${baseUrl}img/brand/cryptos-mark-dark.svg" width="24" height="24" alt="" />` +
                 '<span class="footer__wordmark">Crypt<span class="footer__wordmark-accent">OS</span></span></a>' +
-                `<p class="footer__tagline">${footer.tagline}</p></div>`,
+                `<p class="footer__tagline">${taglineHtml}</p></div>`,
             },
           ],
         },

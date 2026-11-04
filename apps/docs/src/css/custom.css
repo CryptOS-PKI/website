@@ -193,6 +193,14 @@
   text-decoration: none;
 }
 
+/* Docusaurus's own colour switch, in the bar and in the phone menu: the
+   shared switch (custom-themeToggle) replaces it, so it's hidden. It stays
+   enabled so Docusaurus keeps honouring the stored choice. */
+.navbar__items--right > [class*='colorModeToggle_'],
+.navbar-sidebar__brand [class*='toggle_'] {
+  display: none;
+}
+
 /* The docs version picker: right after the wordmark, where the site's header
    has empty space, so nothing else in the bar moves. It takes the nav links'
    size and line, so the bar keeps the frame's height, in the mono face the

@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { legalHtml } from "@cryptos-pki/frame/content";
+import { legalHtml, markedHtml } from "@cryptos-pki/frame/content";
 
 import "./marketing.css";
 
@@ -63,7 +63,10 @@ export const Footer = ({ tagline, groups, marks }: FooterProps) => {
                 Crypt<span className="footer__wordmark-accent">OS</span>
               </span>
             </a>
-            <p className="footer__tagline">{tagline}</p>
+            <p
+              className="footer__tagline"
+              dangerouslySetInnerHTML={{ __html: `${markedHtml(tagline)}.` }}
+            />
           </div>
           {groups.map((group) => (
             <nav key={group.title} aria-label={group.title} className="footer__group">

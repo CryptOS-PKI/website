@@ -57,6 +57,7 @@ export default function Home() {
       <main id="main">
         <SplitHero
           eyebrow={hero.eyebrow}
+          eyebrowTrademark={hero.eyebrowTrademark}
           headlineIcon={hero.headlineIcon}
           headlineLine1={hero.headlineLine1}
           headlineLine2={hero.headlineLine2}

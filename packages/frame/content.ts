@@ -37,6 +37,10 @@ export interface FrameFooter {
   marks: string[];
 }
 
+// The CryptOS tagline is a trademark: written with ™ wherever it shows, and
+// listed with the other marks in the legal line.
+export const TAGLINE = "An immutable, API-driven PKI operating system";
+
 const github = "https://github.com/CryptOS-PKI";
 const securityPolicy = "https://github.com/CryptOS-PKI/.github/blob/main/SECURITY.md";
 
@@ -50,8 +54,8 @@ export const frameNav = (links: FrameLinks): FrameLink[] => [
 ];
 
 export const frameFooter = (links: FrameLinks): FrameFooter => ({
-  marks: ["CryptOS-PKI", "FleetOS", "No shell to break into"],
-  tagline: "An immutable, API-driven PKI operating system.",
+  marks: ["CryptOS-PKI", "FleetOS", "No shell to break into", TAGLINE],
+  tagline: TAGLINE,
   groups: [
     {
       title: "Product",
@@ -96,18 +100,21 @@ export const legalLine = (marks: string[], year: number) =>
   marks.map((mark, index) => `${markSeparator(index, marks.length)}${mark}™`).join("") +
   legalTail(marks.length, year);
 
-// The legal line as the site's footer renders it: each mark's last word and
-// its trademark sign held together in a no-break span, so a line never breaks
-// between them. The docs footer uses this markup as its copyright.
+// A mark with its last word and trademark sign held together in a no-break
+// span, so a line never breaks between them.
+export const markedHtml = (mark: string) => {
+  const lastSpace = mark.lastIndexOf(" ");
+  const rest = lastSpace === -1 ? "" : mark.slice(0, lastSpace + 1);
+  const lastWord = lastSpace === -1 ? mark : mark.slice(lastSpace + 1);
+  return `${rest}<span class="nowrap">${lastWord}<sup class="tm">\u2122</sup></span>`;
+};
+
+// The tagline as a sentence, as the footer and the site's hero show it.
+export const taglineHtml = `${markedHtml(TAGLINE)}.`;
+
+// The legal line as the site's footer renders it. The docs footer uses this
+// markup as its copyright.
 export const legalHtml = (marks: string[], year: number) =>
   marks
-    .map((mark, index) => {
-      const lastSpace = mark.lastIndexOf(" ");
-      const rest = lastSpace === -1 ? "" : mark.slice(0, lastSpace + 1);
-      const lastWord = lastSpace === -1 ? mark : mark.slice(lastSpace + 1);
-      return (
-        `<span>${markSeparator(index, marks.length)}${rest}` +
-        `<span class="nowrap">${lastWord}<sup class="tm">™</sup></span></span>`
-      );
-    })
+    .map((mark, index) => `<span>${markSeparator(index, marks.length)}${markedHtml(mark)}</span>`)
     .join("") + legalTail(marks.length, year);

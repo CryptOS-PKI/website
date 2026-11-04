@@ -13,8 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import { widthToggleText } from "./full-width.ts";
+
 // The full-width content switch for a docs header (full-width.ts): a
-// pressed or unpressed button in the nav type, beside the version picker.
+// button in the nav type, beside the version picker, labelled with what
+// pressing it does.
 // Drawn with plain classes from site-frame.css.
 
 const iconProps = {
@@ -44,15 +47,23 @@ const Narrow = () => (
   </svg>
 );
 
-export const FullWidthToggle = ({ full, onToggle }: { full: boolean; onToggle: () => void }) => (
-  <button
-    aria-pressed={full}
-    className="width-toggle"
-    onClick={onToggle}
-    title={full ? "Narrow the content back to the page column" : "Widen the content to the window"}
-    type="button"
-  >
-    {full ? <Narrow /> : <Widen />}
-    <span className="width-toggle__label">Full width</span>
-  </button>
-);
+export const FullWidthToggle = ({ full, onToggle }: { full: boolean; onToggle: () => void }) => {
+  const { label, other, title } = widthToggleText(full);
+  return (
+    <button
+      className="width-toggle"
+      data-full={full ? "true" : undefined}
+      onClick={onToggle}
+      title={title}
+      type="button"
+    >
+      {full ? <Narrow /> : <Widen />}
+      <span className="width-toggle__label">
+        <span>{label}</span>
+        <span aria-hidden="true" className="width-toggle__spacer">
+          {other}
+        </span>
+      </span>
+    </button>
+  );
+};

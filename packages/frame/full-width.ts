@@ -63,3 +63,18 @@ export function contentWidthBootScript(prefix?: string): string {
     `document.documentElement.setAttribute(${attribute},"full")}catch(e){}`
   );
 }
+
+// What the switch says. Its label names what pressing it does, so it reads
+// "Full width" while off and "Standard width" while on, and the label alone
+// carries the state (no aria-pressed as well, which would announce it twice).
+// `other` is the label it isn't showing: the button keeps room for both, so
+// it doesn't change width when pressed.
+export function widthToggleText(full: boolean): { label: string; other: string; title: string } {
+  return full
+    ? {
+        label: "Standard width",
+        other: "Full width",
+        title: "Narrow the content back to the page column",
+      }
+    : { label: "Full width", other: "Standard width", title: "Widen the content to the window" };
+}

@@ -254,7 +254,11 @@
   text-decoration: none;
 }
 
+/* The menu opens under the picker, aligned to its right edge, so it never
+   runs past the right side of a narrow screen. */
 .doc-toolbar .dropdown__menu {
+  left: auto;
+  right: 0;
   min-width: 10rem;
   border: 1px solid var(--frame-border);
   background: var(--frame-surface);

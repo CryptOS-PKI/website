@@ -32,13 +32,16 @@ npm run typecheck -w @cryptos-pki/docs
 - 🧭 **Header, strip and footer:** the product site's, from `packages/frame`: the links, footer
   and strip markup in `content.ts` and `strip.ts`, the measurements and colours in
   `site-frame.css`, mapped onto Docusaurus's classes in `src/css/custom.css`. The theme switch is
-  the shared one (`src/components/theme-toggle-navbar-item.tsx`), and the version picker shows on
-  doc pages only (`src/components/docs-version-navbar-item.tsx`), one per docs.
-- ↔️ **Full width:** beside the picker, a switch widens the content column to the window
-  (`src/components/full-width-navbar-item.tsx`); the frame stays put. Off by default.
+  the shared one (`src/components/theme-toggle-navbar-item.tsx`). The header is the site's, item
+  for item, at every width.
+- 🧰 **Doc toolbar:** at the right end of the breadcrumb line (`src/theme/DocBreadcrumbs`,
+  `src/components/doc-toolbar.tsx`): the version picker for the page's own docs, and a switch that
+  widens the content column to the window (the frame stays put; off by default, shown only above
+  the frame width). On a narrow screen it wraps under the breadcrumbs.
 - 🍪 **Consent first:** the theme and the content width are remembered on the machine only after
   the visitor accepts the cookie choice, which shows the first time they use either switch
-  (`src/theme/Root.tsx`). Until then the docs are dark and nothing is written to browser storage:
+  (`src/theme/Root.tsx`). Until then the theme follows the system setting, the theme switch only
+  opens the cookie bar, and nothing is written to browser storage:
   Docusaurus's own switch, announcement bar (`src/theme/AnnouncementBar` draws the strip instead),
   version memory and tab memory (`src/theme/Tabs`) are kept out of storage. The pieces live in
   `packages/frame` (see its README); `npm run check:storage:docs` checks a build.

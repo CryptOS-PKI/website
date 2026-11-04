@@ -30,24 +30,28 @@ Nothing a site does is written to browser storage until the visitor accepts the 
 There's no tracking behind it; it only decides whether a preference (the theme, the content
 width) is remembered on that machine.
 
-- 🕓 **Before an answer:** a preference lives in memory for the page view and the store starts
-  asking (`asking()`), so the cookie bar shows only to someone who changed a setting. Dark is the
-  theme and the content is the normal width.
+- 🕓 **Before an answer:** the theme follows the visitor's system setting (`prefers-color-scheme`)
+  and nothing is stored. Pressing the theme switch only opens the cookie bar (`ask()`); the page
+  doesn't change. The full-width switch works at once, in memory, and opens the bar too. The bar
+  shows only to someone who touched one of those switches.
 - ✅ **Accept:** the answer and the preferences are stored (`<prefix>:consent`,
-  `<prefix>:pref:<name>` in localStorage), and a small head script applies them before the next
-  page paints.
+  `<prefix>:pref:<name>` in localStorage). From then on the theme switch flips the theme and the
+  choice is stored, and a small head script applies it before the next page paints.
 - 🚫 **Decline:** nothing is stored, not even the refusal, and anything stored before is cleared.
-  The choice lasts for the page view only, and a later visit can ask again.
+  The theme keeps following the system setting; the switch then flips it for this visit only, in
+  memory. A later visit can ask again.
 
 `consent.ts`, `theme-pref.ts` and `full-width.ts` have no framework in them; each site adds a thin
 wrapper:
 
-- **Site (React Router):** `apps/site/app/components/theme-switch.tsx` sets the page's classes and
-  calls `chooseTheme`; `consent-bar.tsx` renders `ConsentBanner` when the store is asking;
+- **Site (React Router):** `apps/site/app/components/theme-switch.tsx` calls `pressThemeSwitch`
+  and applies what it returns to the page's classes, and follows system changes until the
+  visitor picks a theme; `consent-bar.tsx` renders `ConsentBanner` when the store is asking;
   `root.tsx` puts `themeBootScript(prefix)` in `<head>`. React Router's `ScrollRestoration` is
   replaced with `scroll-to-top.tsx`, because it writes to sessionStorage.
 - **Docs (Docusaurus):** `apps/docs/src/components/theme-toggle-navbar-item.tsx` calls
-  `setColorMode(theme, {persist: false})` and `chooseTheme`; `src/theme/Root.tsx` renders the
+  `pressThemeSwitch` and applies what it returns with `setColorMode(theme, {persist: false})`
+  (with `respectPrefersColorScheme: true`, Docusaurus follows the system until then); `src/theme/Root.tsx` renders the
   cookie bar; `docusaurus.config.ts` turns off Docusaurus's own storage (`disableSwitch`, no
   `announcementBar`, `versionPersistence: 'none'`, and `src/theme/Tabs` keeps tab choices in the
   URL until consent) and runs the boot scripts at the top of `<body>`, after Docusaurus's own
@@ -69,8 +73,12 @@ example) can take them as they are:
    `useBrowserConsent(prefix)` and to `themeBootScript(prefix)`.
 3. Add the head script: `themeBootScript(prefix)` inline in `<head>` (or, on Docusaurus, as a
    `preBodyTags` script from a small plugin, so it runs after Docusaurus's theme script).
-4. Wire the switch: on a click, apply the theme to the page, then `chooseTheme(consent, theme)`.
-   On Docusaurus, use `setColorMode(theme, {persist: false})` and set `disableSwitch: true`.
+4. Wire the switch: on a click, call `pressThemeSwitch(consent, currentTheme)`. It returns null
+   before the visitor has answered (it has opened the cookie bar; leave the page alone), or the
+   theme to show, which you apply to the page. Until the visitor picks a theme
+   (`rememberedTheme(consent)` is null), follow `prefers-color-scheme` changes. On Docusaurus,
+   apply with `setColorMode(theme, {persist: false})` and set `disableSwitch: true` and
+   `respectPrefersColorScheme: true`.
 5. Render `<ConsentBanner onAccept={consent.accept} onDecline={consent.decline} />` when
    `useBrowserConsent(prefix).asking` is true.
 6. Remove anything else that writes storage on its own (React Router's `ScrollRestoration`,

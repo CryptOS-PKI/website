@@ -67,16 +67,19 @@ Run from the repo root.
   adds the line saying who the docs are for.
 - The downloads live on the site's Releases page (`/releases`), which the header and the strip
   link; the footer carries no download or release links.
-- Dark is the default on both. The site keeps the choice in localStorage `theme` and puts it on
-  `<html>` as the kit's `dark` class and `data-theme`; the docs use Docusaurus's colour mode with
-  its built-in switch off. Both draw the shared `ThemeToggle`.
+- The theme follows the system setting on both until the visitor picks one, and the switch only
+  works once they've answered the cookie choice (`packages/frame/theme-pref.ts`; the choice is
+  stored only after Accept). The site puts it on `<html>` as the kit's `dark` class and
+  `data-theme`; the docs use Docusaurus's colour mode with its built-in switch off. Both draw the
+  shared `ThemeToggle`.
 - Under 1050px both headers fold their links into the shared menu button
   (`packages/frame/header-menu.tsx`), after the theme switch. The width is one media rule in
   `site-frame.css` and `HEADER_MENU_BREAKPOINT` in `header-menu-config.ts`; `frame.test.ts` keeps
   them in step and fails if either app sets a header breakpoint of its own. Each site marks its
   header links with `NAV_LINK_CLASS`. Re-measure the breakpoint when a header link is added.
-- The docs header carries the site's links; the docs sections live in the sidebar and on the docs
-  home. The version picker sits right after the wordmark, on doc pages only.
+- The docs header carries the site's links and nothing else, so it matches the site's at every
+  width; the docs sections live in the sidebar and on the docs home. The version picker and the
+  full-width switch sit in the doc toolbar on the breadcrumb line.
 - Cross-site links come from `VITE_DOCS_URL` (site) and `CRYPTOS_SITE_URL` / `CRYPTOS_DOCS_URL`
   (docs), defaulting to the live addresses; `PREVIEW_BASE_PATH` builds either app under a sub-path.
 

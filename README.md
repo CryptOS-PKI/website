@@ -4,14 +4,16 @@
 
 Two static sites and the pieces they share, as npm workspaces:
 
-- 🏠 **`apps/site`:** the product site. React Router v7 in framework mode, prerendered at build
-  time to plain HTML (no Node server at request time), styled with Tailwind CSS and the
-  `@cryptos-pki/ui` design kit.
+- 🏠 **`apps/site`:** the product site: the home page and the Releases page with the current
+  release's downloads. React Router v7 in framework mode, prerendered at build time to plain HTML
+  (no Node server at request time), styled with Tailwind CSS and the `@cryptos-pki/ui` design
+  kit.
 - 📚 **`apps/docs`:** the docs. Docusaurus 3, versioned: each product release gets its own docs
   version, and Next is unreleased `main`.
 - 🔤 **`packages/frame`:** the frame both sites share, so they read as one site: the strip,
-  header and footer (`site-frame.css`, `strip.ts`, `content.ts`), the light and dark switch, the
-  self-hosted fonts and `release.ts`, the current product release both sites show.
+  header and footer (`site-frame.css`, `strip.ts`, `content.ts`), the hero both homes open with
+  (`hero.tsx`, `hero-content.ts`, `hero.css`), the light and dark switch, the self-hosted fonts
+  and `release.ts`, the current product release both sites show.
 - 🎨 **`packages/brand`:** the CryptOS and FleetOS marks, the favicon and the touch icon.
 - 🧩 **`vendor/cryptos-ui`:** a vendored, read-only copy of cryptos-web's `packages/ui` kit
   (see `vendor/cryptos-ui/NOTICE`).

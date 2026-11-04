@@ -152,6 +152,12 @@ html {
   line-height: 0;
 }
 
+/* The footer's legal text (content.ts legalHtml): the trademarks, then the
+   copyright and licence, each on its own line. */
+.footer__legal-line {
+  display: block;
+}
+
 /* The strip above the header (strip.ts): the release badge, the release and
    pre-1.0 note, and two links, on a warning-tinted band with a warning rule
    at the column's left edge. Text stays in the ink and muted pair, which

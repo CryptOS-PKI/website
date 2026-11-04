@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { release } from "./release.ts";
 import type { FrameLinks } from "./strip.ts";
 
 // The header links and the footer both sites show, in one place, so the docs
@@ -49,6 +48,7 @@ export const frameNav = (links: FrameLinks): FrameLink[] => [
   { label: "Trust model", href: `${links.site}/#trust-model` },
   { label: "FleetOS Manager", href: `${links.site}/#fleetos-manager` },
   { label: "Standards", href: `${links.site}/#standards` },
+  { label: "Releases", href: links.releases },
   { label: "Docs", href: `${links.docs}/` },
   { label: "GitHub", href: github },
 ];
@@ -64,7 +64,6 @@ export const frameFooter = (links: FrameLinks): FrameFooter => ({
         { label: "Trust model", href: `${links.site}/#trust-model` },
         { label: "FleetOS Manager", href: `${links.site}/#fleetos-manager` },
         { label: "Standards", href: `${links.site}/#standards` },
-        { label: `Download ${release.version}`, href: links.download },
       ],
     },
     {
@@ -72,7 +71,7 @@ export const frameFooter = (links: FrameLinks): FrameFooter => ({
       links: [
         { label: "Docs", href: `${links.docs}/` },
         { label: "GitHub", href: github },
-        { label: "Releases", href: "https://github.com/CryptOS-PKI/cryptos-appliance/releases" },
+        { label: "Releases", href: links.releases },
       ],
     },
     {
@@ -91,14 +90,21 @@ const markSeparator = (index: number, count: number) => {
   return index === count - 1 ? " and " : ", ";
 };
 
-const legalTail = (count: number, year: number) =>
-  ` ${count > 1 ? "are trademarks" : "is a trademark"} of the CryptOS-PKI project. ` +
-  `© ${year} The CryptOS Authors. Licensed under Apache-2.0.`;
+const marksTail = (count: number) =>
+  ` ${count > 1 ? "are trademarks" : "is a trademark"} of the CryptOS-PKI project.`;
 
-// The legal line as plain text, for checks and metadata.
-export const legalLine = (marks: string[], year: number) =>
+const copyrightLine = (year: number) => `© ${year} The CryptOS Authors. Licensed under Apache-2.0.`;
+
+// The legal text as the footer sets it, in two short lines: the trademarks,
+// then the copyright and licence.
+export const legalLines = (marks: string[], year: number): [string, string] => [
   marks.map((mark, index) => `${markSeparator(index, marks.length)}${mark}™`).join("") +
-  legalTail(marks.length, year);
+    marksTail(marks.length),
+  copyrightLine(year),
+];
+
+// The legal text as one plain string, for checks and metadata.
+export const legalLine = (marks: string[], year: number) => legalLines(marks, year).join(" ");
 
 // A mark with its last word and trademark sign held together in a no-break
 // span, so a line never breaks between them.
@@ -112,9 +118,12 @@ export const markedHtml = (mark: string) => {
 // The tagline as a sentence, as the footer and the site's hero show it.
 export const taglineHtml = `${markedHtml(TAGLINE)}.`;
 
-// The legal line as the site's footer renders it. The docs footer uses this
-// markup as its copyright.
+// The legal lines as the site's footer renders them, each its own block
+// (site-frame.css). The docs footer uses this markup as its copyright.
 export const legalHtml = (marks: string[], year: number) =>
+  `<span class="footer__legal-line">` +
   marks
     .map((mark, index) => `<span>${markSeparator(index, marks.length)}${markedHtml(mark)}</span>`)
-    .join("") + legalTail(marks.length, year);
+    .join("") +
+  `${marksTail(marks.length)}</span>` +
+  `<span class="footer__legal-line">${copyrightLine(year)}</span>`;

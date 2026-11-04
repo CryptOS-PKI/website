@@ -7,20 +7,22 @@ hook-enforced rules). Keep this file current when the build, layout, or public A
 
 Two static sites in one repo, as npm workspaces:
 
-- `apps/site` (`@cryptos-pki/site`): the CryptOS product site (www.cryptos-pki.com), a one-route
-  marketing page, not an app. React Router v7 in framework mode prerenders it to static HTML at
-  build time (`ssr: false` plus a `prerender()` list in `react-router.config.ts`); there is no
-  Node server at request time, and nothing talks to a backend. The page content lives in one
-  place, `app/content/cryptos.ts`; the components it feeds (`app/components/`) take their content
-  as props.
+- `apps/site` (`@cryptos-pki/site`): the CryptOS product site (www.cryptos-pki.com), a marketing
+  site, not an app: the home page and `/releases`, the current release's downloads. React Router
+  v7 in framework mode prerenders it to static HTML at build time (`ssr: false` plus a
+  `prerender()` list in `react-router.config.ts`); there is no Node server at request time, and
+  nothing talks to a backend. The page copy lives in `app/content/cryptos.ts` and the downloads
+  in `app/content/release.ts`; the components they feed (`app/components/`) take their content
+  as props. No emoji on the site.
 - `apps/docs` (`@cryptos-pki/docs`): the CryptOS docs (docs.cryptos-pki.com), Docusaurus 3,
   versioned. `docs/` is Next (unreleased `main`); `versioned_docs/` holds one snapshot per
   release.
 - `packages/frame` (`@cryptos-pki/frame`): the frame both sites share. `site-frame.css` holds the
   font faces, the frame tokens (column, header, strip and footer measurements) and the frame
   colours, light and dark; `strip.ts` the strip above the header; `content.ts` the header links,
-  the footer and the legal line; `theme-toggle.tsx` the light and dark switch; `release.ts` the
-  current product release; `public/fonts/` the self-hosted fonts.
+  the footer and the legal line; `hero.tsx` the hero both homes open with, its copy in
+  `hero-content.ts` and its rules in `hero.css`; `theme-toggle.tsx` the light and dark switch;
+  `release.ts` the current product release; `public/fonts/` the self-hosted fonts.
 - `packages/brand` (`@cryptos-pki/brand`): the marks, favicon and touch icon in `public/`.
 - `vendor/cryptos-ui` (`@cryptos-pki/ui`): a vendored, read-only copy of cryptos-web's
   `packages/ui` kit (see `vendor/cryptos-ui/NOTICE`). The site depends on it as a `file:` link; it is not a workspace,
@@ -38,7 +40,7 @@ Run from the repo root.
 
 - Install: `npm ci --ignore-scripts`
 - Lint: `npm run lint` (one root `eslint.config.mjs`; Prettier applies outside `apps/docs`)
-- Test: `npm test` (`packages/frame`, `packages/brand` and `scripts/` tests)
+- Test: `npm test` (`packages/frame`, `packages/brand`, the site's content and `scripts/` tests)
 - Typecheck: `npm run typecheck`
 - Build: `npm run build` (or `build:site`, `build:docs`)
 - Site link check (after a build): `npm run check:links`
@@ -52,6 +54,11 @@ Run from the repo root.
   in one app. The site lays the frame out in `apps/site/app/components/marketing.css`, the docs in
   `apps/docs/src/css/custom.css` on Docusaurus's navbar and footer classes, both from the
   `--frame-*` tokens.
+- Both homes open with the same hero (`packages/frame/hero.tsx`): change its copy in
+  `hero-content.ts`, never in one app. Each site passes only its calls to action; the docs home
+  adds the line saying who the docs are for.
+- The downloads live on the site's Releases page (`/releases`), which the header and the strip
+  link; the footer carries no download or release links.
 - Dark is the default on both. The site keeps the choice in localStorage `theme` and puts it on
   `<html>` as the kit's `dark` class and `data-theme`; the docs use Docusaurus's colour mode with
   its built-in switch off. Both draw the shared `ThemeToggle`.

@@ -16,21 +16,31 @@ limitations under the License.
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { frameFooter, frameNav, legalHtml, legalLine, TAGLINE, taglineHtml } from "./content.ts";
+import {
+  frameFooter,
+  frameNav,
+  legalHtml,
+  legalLine,
+  legalLines,
+  TAGLINE,
+  taglineHtml,
+} from "./content.ts";
 import { release } from "./release.ts";
 import { frameLinks } from "./strip.ts";
 
 const docsSide = frameLinks({ siteUrl: "https://www.example", docsUrl: "https://docs.example" });
 const siteSide = frameLinks({ siteUrl: "/", docsUrl: "https://docs.example" });
 
-test("the header links are the site's, in its order, then Docs and GitHub", () => {
+test("the header links are the site's, in its order, then Releases, Docs and GitHub", () => {
   assert.deepEqual(
     frameNav(docsSide).map((link) => link.label),
-    ["What it is", "Trust model", "FleetOS Manager", "Standards", "Docs", "GitHub"],
+    ["What it is", "Trust model", "FleetOS Manager", "Standards", "Releases", "Docs", "GitHub"],
   );
   assert.equal(frameNav(docsSide)[0].href, "https://www.example/#what-it-is");
   assert.equal(frameNav(siteSide)[0].href, "/#what-it-is");
-  assert.equal(frameNav(siteSide)[4].href, "https://docs.example/");
+  assert.equal(frameNav(docsSide)[4].href, "https://www.example/releases");
+  assert.equal(frameNav(siteSide)[4].href, "/releases");
+  assert.equal(frameNav(siteSide)[5].href, "https://docs.example/");
 });
 
 test("the footer has the brand tagline and the Product, Resources and Trust groups", () => {
@@ -41,10 +51,32 @@ test("the footer has the brand tagline and the Product, Resources and Trust grou
     footer.groups.map((group) => group.title),
     ["Product", "Resources", "Trust"],
   );
-  assert.ok(
-    footer.groups[0].links.some(
-      (link) => link.label === `Download ${release.version}` && link.href === docsSide.download,
-    ),
+});
+
+test("the footer carries no download or release-candidate links; Releases goes to the site's page", () => {
+  const footerLinks = frameFooter(docsSide).groups.flatMap((group) => group.links);
+  for (const link of footerLinks) {
+    assert.doesNotMatch(link.label, /download/i, `${link.label} is a download link`);
+    assert.ok(!link.label.includes(release.version), `${link.label} names the release`);
+    assert.ok(!link.href.includes("/releases/tag/"), `${link.label} links a release tag`);
+    assert.ok(!link.href.includes("github.com/CryptOS-PKI/cryptos-appliance/releases"));
+  }
+  assert.deepEqual(
+    footerLinks.filter((link) => link.label === "Releases").map((link) => link.href),
+    ["https://www.example/releases"],
+  );
+});
+
+test("the legal line is two short lines: the marks, then the copyright and licence", () => {
+  assert.deepEqual(legalLines(frameFooter(docsSide).marks, 2026), [
+    "CryptOS-PKI™, FleetOS™, No shell to break into™ and An immutable, API-driven PKI operating system™ are trademarks of the CryptOS-PKI project.",
+    "© 2026 The CryptOS Authors. Licensed under Apache-2.0.",
+  ]);
+  const html = legalHtml(frameFooter(docsSide).marks, 2026);
+  assert.equal(html.match(/<span class="footer__legal-line">/g)?.length, 2);
+  assert.match(
+    html,
+    /<span class="footer__legal-line">© 2026 The CryptOS Authors\. Licensed under Apache-2\.0\.<\/span>$/,
   );
 });
 

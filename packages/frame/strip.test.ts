@@ -27,15 +27,12 @@ test("the frame links drop a trailing slash and keep the two sites apart", () =>
   assert.equal(links.status, "https://docs.example/docs/introduction/status-roadmap");
 });
 
-test("the strip names the current release and links its download and the project status", () => {
+test("the strip names the current release and links the site's Releases page and the project status", () => {
   const strip = releaseStrip(links);
   assert.equal(strip.heading, `${release.version} is out.`);
   assert.deepEqual(
     strip.links.map((link) => link.href),
-    [
-      `https://github.com/CryptOS-PKI/cryptos-appliance/releases/tag/${release.version}`,
-      "https://docs.example/docs/introduction/status-roadmap",
-    ],
+    ["https://site.example/releases", "https://docs.example/docs/introduction/status-roadmap"],
   );
 });
 

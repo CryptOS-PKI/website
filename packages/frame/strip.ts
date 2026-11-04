@@ -24,7 +24,7 @@ export interface FrameLinks {
   site: string;
   docs: string;
   status: string;
-  download: string;
+  releases: string;
 }
 
 export interface StripLink {
@@ -50,7 +50,8 @@ export function frameLinks({ siteUrl, docsUrl }: { siteUrl: string; docsUrl: str
     site,
     docs,
     status: `${docs}/docs/introduction/status-roadmap`,
-    download: `https://github.com/CryptOS-PKI/cryptos-appliance/releases/tag/${release.version}`,
+    // The downloads live on the site's Releases page, never in the footer.
+    releases: `${site}/releases`,
   };
 }
 
@@ -60,7 +61,7 @@ export function releaseStrip(links: FrameLinks): ReleaseStrip {
     heading: `${release.version} is out.`,
     body: "Until v1.0.0, any release may change fundamentally.",
     links: [
-      { label: `Download ${release.version}`, href: links.download },
+      { label: `Download ${release.version}`, href: links.releases },
       { label: "Project status", href: links.status },
     ],
   };

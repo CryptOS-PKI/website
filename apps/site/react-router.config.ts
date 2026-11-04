@@ -15,7 +15,7 @@ limitations under the License.
 */
 import type { Config } from "@react-router/dev/config";
 
-// Prerender the one route to static HTML at build time, no Node server at
+// Prerender every route to static HTML at build time, no Node server at
 // request time -- ssr: false plus a prerender list is React Router v7's
 // static-site-generation mode.
 //
@@ -28,6 +28,6 @@ export default {
   ssr: false,
   basename,
   async prerender() {
-    return ["/"];
+    return ["/", "/releases"];
   },
 } satisfies Config;

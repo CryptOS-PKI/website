@@ -56,7 +56,7 @@ const framePackage = '../../packages/frame';
 
 // The share card for link previews, from packages/brand (public/), the same
 // picture the site uses.
-const SHARE_IMAGE = 'img/brand/share-card.png';
+const SHARE_IMAGE = 'img/brand/og-card.png';
 const SHARE_IMAGE_ALT = 'CryptOS: your own certificate authority, on a PKI OS';
 const brandPackage = '../../packages/brand';
 

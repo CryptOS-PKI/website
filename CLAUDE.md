@@ -64,7 +64,7 @@ request time.
 │       └── build/               build output (gitignored)
 ├── packages/
 │   ├── frame/                   @cryptos-pki/frame: site-frame.css, strip, content, hero, theme switch, fonts, release.ts
-│   └── brand/                   @cryptos-pki/brand: public/ (favicon, touch icon, img/brand/)
+│   └── brand/                   @cryptos-pki/brand: public/ (favicon, touch icon, img/brand/ with og-card.png), og-card.html
 ├── vendor/cryptos-ui/           vendored copy of cryptos-web's packages/ui (see its NOTICE)
 ├── scripts/                     CI path filter and the docs version scripts, with tests
 ├── docs/deploy.md               how a release deploys both sites
@@ -86,7 +86,7 @@ request time.
 - `packages/frame`: anything both sites must render the same: the fonts, the frame tokens and
   colours, the strip, the header links, the footer, the hero both homes open with and the theme
   switch, and the current release version.
-- `packages/brand`: the marks and icons both sites serve.
+- `packages/brand`: the marks, icons and link-preview card both sites serve.
 - `vendor/cryptos-ui/`: read-only; re-copy from cryptos-web to update, never edit in place.
 - Configuration comes from `import.meta.env.VITE_*` (site) or the Docusaurus config (docs);
   never put secrets there, it ships to the browser.

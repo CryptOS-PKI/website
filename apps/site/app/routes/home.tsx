@@ -27,23 +27,15 @@ import {
   footer,
   hero,
   links,
-  meta as pageMeta,
+  homeMeta,
   nav,
   standards,
   trustModel,
   whatItIs,
 } from "~/content/cryptos";
+import { pageMeta } from "~/content/meta";
 
-export const meta: MetaFunction = () => [
-  { title: pageMeta.title },
-  { name: "description", content: pageMeta.description },
-  { property: "og:site_name", content: pageMeta.siteName },
-  { property: "og:title", content: pageMeta.title },
-  { property: "og:description", content: pageMeta.description },
-  { property: "og:type", content: "website" },
-  { property: "og:url", content: pageMeta.url },
-  { name: "twitter:card", content: "summary" },
-];
+export const meta: MetaFunction = () => pageMeta({ description: homeMeta.description, path: "/" });
 
 export default function Home() {
   return (
@@ -53,7 +45,7 @@ export default function Home() {
       </a>
       <Strip links={links} />
       <Nav links={nav.links} />
-      <main id="main">
+      <main id="main" className="frame-prose">
         <Hero primaryCta={hero.primaryCta} secondaryCta={hero.secondaryCta} />
 
         <Section

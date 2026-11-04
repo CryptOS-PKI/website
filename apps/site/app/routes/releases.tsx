@@ -20,22 +20,14 @@ import { Footer } from "~/components/footer";
 import { Nav } from "~/components/nav";
 import { Section } from "~/components/section";
 import { Strip } from "~/components/strip";
-import { footer, links, meta as siteMeta, nav } from "~/content/cryptos";
+import { footer, links, nav } from "~/content/cryptos";
+import { pageMeta } from "~/content/meta";
 import { downloads, installTargets, kubernetes, release, verify } from "~/content/release";
 
-const title = `Releases -- ${siteMeta.siteName}`;
 const description = `Download CryptOS ${release.version}: the unsigned installer images, cryptosctl and FleetOS Manager, and how to check them.`;
 
-export const meta: MetaFunction = () => [
-  { title },
-  { name: "description", content: description },
-  { property: "og:site_name", content: siteMeta.siteName },
-  { property: "og:title", content: title },
-  { property: "og:description", content: description },
-  { property: "og:type", content: "website" },
-  { property: "og:url", content: `${siteMeta.url}releases` },
-  { name: "twitter:card", content: "summary" },
-];
+export const meta: MetaFunction = () =>
+  pageMeta({ title: "Releases", description, path: "/releases" });
 
 // The Releases page: the current release's downloads, kept off the home page
 // and out of the footer.
@@ -47,7 +39,7 @@ export default function Releases() {
       </a>
       <Strip links={links} />
       <Nav links={nav.links} />
-      <main id="main">
+      <main id="main" className="frame-prose">
         <Section
           eyebrow="Releases"
           heading={`${release.version} is out.`}

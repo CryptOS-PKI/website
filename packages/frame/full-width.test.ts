@@ -23,6 +23,7 @@ import {
   contentWidthBootScript,
   isFullWidth,
   setFullWidth,
+  widthToggleText,
 } from "./full-width.ts";
 
 const memoryStorage = (
@@ -127,4 +128,17 @@ test("the boot script reads the same keys as the store", () => {
   setFullWidth(consent, true, fakeRoot());
   consent.accept();
   assert.equal(runBootScript(storage, "other").attributes.get(CONTENT_WIDTH_ATTRIBUTE), "full");
+});
+
+test("the switch says what pressing it does: Full width while off, Standard width while on", () => {
+  assert.deepEqual(widthToggleText(false), {
+    label: "Full width",
+    other: "Standard width",
+    title: "Widen the content to the window",
+  });
+  assert.deepEqual(widthToggleText(true), {
+    label: "Standard width",
+    other: "Full width",
+    title: "Narrow the content back to the page column",
+  });
 });

@@ -405,7 +405,7 @@ html {
 
 /* The full-width content switch (full-width-toggle.tsx): the nav links'
    type and line in the mono face, so it sits beside the docs version picker
-   without changing the header's height. Pressed, it takes the ink colour. */
+   without changing the header's height. While on, it takes the ink colour. */
 .width-toggle {
   display: inline-flex;
   align-items: center;
@@ -423,7 +423,7 @@ html {
 }
 
 .width-toggle:hover,
-.width-toggle[aria-pressed="true"] {
+.width-toggle[data-full="true"] {
   color: var(--frame-ink);
 }
 
@@ -431,6 +431,21 @@ html {
   outline: 2px solid var(--frame-primary);
   outline-offset: 2px;
   border-radius: 2px;
+}
+
+/* Both labels share one cell and only the current one shows, so the button
+   is as wide as the longer label either way and the toolbar doesn't move. */
+.width-toggle__label {
+  display: inline-grid;
+  justify-items: start;
+}
+
+.width-toggle__label > span {
+  grid-area: 1 / 1;
+}
+
+.width-toggle__spacer {
+  visibility: hidden;
 }
 
 .width-toggle__icon {
@@ -510,4 +525,3 @@ html {
   outline: 2px solid var(--frame-primary);
   outline-offset: 2px;
 }
-

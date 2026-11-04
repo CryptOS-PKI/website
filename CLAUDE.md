@@ -44,13 +44,15 @@ request time.
 │   ├── site/                    @cryptos-pki/site: www.cryptos-pki.com
 │   │   ├── app/
 │   │   │   ├── root.tsx         the document shell (<html>, meta)
-│   │   │   ├── routes.ts        the route table ("/" and "/releases")
-│   │   │   ├── routes/          home.tsx and releases.tsx: compose components from content
+│   │   │   ├── routes.ts        the route table: /, /releases, /fleetos-manager, /trust, /trust/security-review
+│   │   │   ├── routes/          one file per page: compose components from content
 │   │   │   ├── components/      presentational pieces, product-agnostic (props carry the copy)
 │   │   │   ├── content/cryptos.ts   this product's copy and structure
 │   │   │   ├── content/release.ts   the Releases page's downloads
+│   │   │   ├── content/fleetos.ts   the FleetOS Manager page, checked against cryptos-manager
+│   │   │   ├── content/trust/   the Trust Center and security review: controls, filter, figures' copy
 │   │   │   └── app.css          the frame's fonts, Tailwind, the kit's tokens
-│   │   ├── scripts/check-links.mjs  CI: internal links in the prerendered output
+│   │   ├── scripts/check-links.mjs  CI: internal links and #anchors in the prerendered output
 │   │   ├── shared-public.ts     Vite plugin serving packages/*/public at the site root
 │   │   ├── react-router.config.ts, vite.config.ts, tailwind.config.js, postcss.config.js
 │   │   └── build/               build output (gitignored): client/ is the deployable site

@@ -46,8 +46,9 @@ const securityPolicy = "https://github.com/CryptOS-PKI/.github/blob/main/SECURIT
 export const frameNav = (links: FrameLinks): FrameLink[] => [
   { label: "What it is", href: `${links.site}/#what-it-is` },
   { label: "Trust model", href: `${links.site}/#trust-model` },
-  { label: "FleetOS Manager", href: `${links.site}/#fleetos-manager` },
+  { label: "FleetOS Manager", href: `${links.site}/fleetos-manager` },
   { label: "Standards", href: `${links.site}/#standards` },
+  { label: "Trust Center", href: `${links.site}/trust` },
   { label: "Releases", href: links.releases },
   { label: "Docs", href: `${links.docs}/` },
   { label: "GitHub", href: github },
@@ -62,7 +63,7 @@ export const frameFooter = (links: FrameLinks): FrameFooter => ({
       links: [
         { label: "What it is", href: `${links.site}/#what-it-is` },
         { label: "Trust model", href: `${links.site}/#trust-model` },
-        { label: "FleetOS Manager", href: `${links.site}/#fleetos-manager` },
+        { label: "FleetOS Manager", href: `${links.site}/fleetos-manager` },
         { label: "Standards", href: `${links.site}/#standards` },
       ],
     },
@@ -77,6 +78,7 @@ export const frameFooter = (links: FrameLinks): FrameFooter => ({
     {
       title: "Trust",
       links: [
+        { label: "Trust Center", href: `${links.site}/trust` },
         { label: "Trust model", href: `${links.site}/#trust-model` },
         { label: "Security policy", href: securityPolicy },
         { label: "Report a vulnerability", href: `${securityPolicy}#reporting-a-vulnerability` },

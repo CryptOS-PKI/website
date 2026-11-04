@@ -35,11 +35,13 @@ Hardware differs. A VMware VM needs VMware's disk and network drivers; a KVM VM 
 
 A **platform profile** is how that is chosen. It is a small kernel-config fragment in `build/kernel/profiles/<platform>.config`, merged on top of the base kernel config. The base config alone covers the core system and virtio, which is enough for QEMU. A profile only adds.
 
-The one profile today is `vmware`. It adds:
+There are two profiles today. `vmware` adds:
 
 - disk controllers: NVMe, SATA AHCI, PVSCSI, and the CD-ROM and ISO 9660 support to boot from the ISO;
 - network cards: Intel e1000e and VMware vmxnet3;
 - the PS/2 keyboard driver, so the vSphere console's "Send Ctrl+Alt+Delete" reaches the node.
+
+`proxmox` adds VirtIO SCSI, NVMe, SATA AHCI and the CD-ROM support, the e1000 and e1000e network cards, the virtio-serial channel, VirtIO RNG and the PS/2 keyboard driver ([Install on Proxmox VE](../install-deploy/proxmox.md)).
 
 You pick the platform with `PLATFORM` when you build:
 
@@ -114,5 +116,6 @@ Because the image and the state partition are separate, a node can change images
 ## What is not available today
 
 - There is no hosted image factory or download. You build the image yourself.
-- `vmware` is the only platform profile.
+- The `proxmox` profile has not been run on a real Proxmox host yet.
+- Physical servers aren't supported in v0.1.0. The source has a `baremetal` profile, but it hasn't been proven on real hardware.
 - Only amd64 images have been booted. The pipeline takes an architecture, but there is no arm64 image; arm64 appliance images are planned for a later release ([cryptos-appliance#117](https://github.com/CryptOS-PKI/cryptos-appliance/issues/117)).

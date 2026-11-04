@@ -17,7 +17,7 @@ The first time a machine boots the CryptOS ISO, nothing is installed yet. The no
 
 - **UEFI firmware.** The ISO boots only through UEFI; it has no legacy BIOS boot entry.
 - **Secure Boot.** Turn it off for an unsigned image. For a signed image, enroll your certificate first ([Secure Boot enrollment](./secure-boot.md)).
-- **A TPM**, for a TPM-backed image. On vSphere, add a vTPM to the VM (this needs a key provider). If you cannot, use the `STATEKEY=nodeid` image instead ([Build a bootable image](./build-bootable-image.md)).
+- **A TPM**, for a TPM-backed image. On vSphere, add a vTPM to the VM (this needs a key provider). If you cannot, use the `STATEKEY=nodeid` image instead ([Build a bootable image](./build-bootable-image.md)). On Proxmox VE, add a TPM State disk ([Install on Proxmox VE](./proxmox.md)).
 - **A disk to install to.** The install erases it completely.
 - **A network, with or without DHCP.** In maintenance mode the node takes its address from DHCP. If nothing answers, it gives itself a link-local address in 169.254.0.0/16 instead, so you can also plug a laptop straight into it ([Plug a laptop in directly](#plug-a-laptop-in-directly)).
 

@@ -38,6 +38,7 @@
     "check:storage:site": "node scripts/check-no-storage.mjs --app=site apps/site/build/client",
     "check:storage:docs": "node scripts/check-no-storage.mjs --app=docs apps/docs/build --base=${PREVIEW_BASE_PATH:-/}",
     "check:images:docs": "node scripts/check-images.mjs apps/docs/build --base=${PREVIEW_BASE_PATH:-/} --site-url=https://docs.cryptos-pki.com",
+    "check:fonts": "node scripts/check-fonts.mjs",
     "check:docs-version": "node scripts/check-docs-version.mjs",
     "docs:version": "node scripts/cut-docs-version.mjs"
   },

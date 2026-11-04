@@ -52,6 +52,9 @@ Run from the repo root.
 - Site link check (after a build): `npm run check:links`
 - Nothing stored before consent (after a build): `npm run check:storage:site`,
   `npm run check:storage:docs`
+- Font check for a sub-path build: `PREVIEW_BASE_PATH=/sub/ npm run build:site`, then
+  `npm run check:fonts -- apps/site/build/client /sub/` (the docs the same way with
+  `-- --out-dir build-sub-path`). CI runs both.
 - Docs version check: `npm run check:docs-version`; cut one: `npm run docs:version`
 - License headers: `task license` (verify) / `task license:fix` (inject)
 
@@ -75,6 +78,9 @@ Run from the repo root.
   "Page · CryptOS" (the home page "CryptOS — tagline"), Open Graph and a large Twitter card with
   absolute URLs, and the link-preview card `packages/brand/public/img/brand/og-card.png`, made
   from `packages/brand/og-card.html`. A test fails if a route doesn't.
+- The fonts load from the site's base path: `packages/frame/fonts.ts` writes the font faces with
+  the base and each site puts them in its `<head>`. Never put a `url("/fonts/...")` in
+  `site-frame.css`; a test and the sub-path font check fail on it.
 - The theme follows the system setting on both until the visitor picks one, and the switch only
   works once they've answered the cookie choice (`packages/frame/theme-pref.ts`; the choice is
   stored only after Accept). The site puts it on `<html>` as the kit's `dark` class and

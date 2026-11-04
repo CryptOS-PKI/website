@@ -18,6 +18,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 import {themes as prismThemes} from 'prism-react-renderer';
 
 import {frameFooter, frameNav, legalHtml, TAGLINE, taglineHtml} from '@cryptos-pki/frame/content';
+import {fontFaceCss, fontUrl, PRELOAD_FONTS} from '@cryptos-pki/frame/fonts';
 import {NAV_LINK_CLASS} from '@cryptos-pki/frame/header-menu-config';
 import {frameLinks, stripHtml} from '@cryptos-pki/frame/strip';
 import {contentWidthBootScript} from '@cryptos-pki/frame/full-width';
@@ -137,11 +138,14 @@ const config: Config = {
 
   // The fonts the strip, header and footer draw with, preloaded the same way
   // on the site (apps/site/app/root.tsx), so the frame never paints in a
-  // fallback face first.
+  // fallback face first. The font faces are written here with the base path
+  // (packages/frame fonts.ts), not in site-frame.css, so a sub-path build
+  // still finds /fonts/ under it.
   headTags: [
-    ...['inter-latin.woff2', 'jetbrains-mono-700-latin.woff2'].map((font) => ({
+    {tagName: 'style', attributes: {}, innerHTML: fontFaceCss(baseUrl)},
+    ...PRELOAD_FONTS.map((font) => ({
       tagName: 'link',
-      attributes: {rel: 'preload', href: `${baseUrl}fonts/${font}`, as: 'font', type: 'font/woff2', crossorigin: 'anonymous'},
+      attributes: {rel: 'preload', href: fontUrl(baseUrl, font), as: 'font', type: 'font/woff2', crossorigin: 'anonymous'},
     })),
   ],
 

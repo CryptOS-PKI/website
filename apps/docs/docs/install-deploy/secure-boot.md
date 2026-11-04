@@ -193,6 +193,24 @@ While `uefi.allowAuthBypass` is set, anyone with the VM's console can change `db
 
 Do this before the VM first boots the CryptOS ISO.
 
+### Proxmox VE
+
+:::info[In flight]
+These steps have not been run on a real Proxmox host yet. Proxmox's OVMF firmware is the same code the CI proof boots, with Secure Boot off.
+:::
+
+You add your certificate from the VM's own firmware setup, reading it from a virtual CD.
+
+1. Build `sb-enrol.iso` as in [Build the certificate CD](#build-the-certificate-cd).
+2. Upload it to the host's ISO storage and attach it to the VM's CD/DVD drive.
+3. Open the VM's console, start the VM, and press **Esc** at the Proxmox logo to enter firmware setup.
+4. Choose **Device Manager > Secure Boot Configuration**, and set **Secure Boot Mode** to **Custom Mode**.
+5. Choose **Custom Secure Boot Options > DB Options > Enroll Signature > Enroll Signature Using File**.
+6. Pick the volume labelled `SBCERT`, then `cryptos-sb.der`, and choose **Commit Changes and Exit**.
+7. Back on **Secure Boot Configuration**, check that **Attempt Secure Boot** is ticked, then power the VM off and detach `sb-enrol.iso`.
+
+Do this before the VM first boots the CryptOS ISO. The firmware keeps `db` on the VM's EFI disk, so the VM needs one ([Install on Proxmox VE](./proxmox.md)).
+
 :::info[Physical servers]
 Physical servers aren't supported in v0.1.0, so there are no enrollment steps for server firmware yet.
 :::

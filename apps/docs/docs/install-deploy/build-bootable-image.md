@@ -24,7 +24,7 @@ Two settings shape the image. Both are chosen when you build, not later.
 
 | Setting | Values | What it decides |
 |---|---|---|
-| `PLATFORM` | `vmware` | Which extra hardware drivers go into the kernel. `vmware` adds the NVMe, AHCI and PVSCSI disk drivers and the e1000e and vmxnet3 network drivers. |
+| `PLATFORM` | `vmware` or `proxmox` | Which extra hardware drivers go into the kernel. `vmware` adds the NVMe, AHCI and PVSCSI disk drivers and the e1000e and vmxnet3 network drivers. `proxmox` adds the VirtIO SCSI, NVMe and AHCI disk drivers and the e1000 and e1000e network drivers ([Install on Proxmox VE](./proxmox.md)). |
 | `STATEKEY` | `tpm` (default) or `nodeid` | How the node protects its encrypted disk and its CA key. |
 
 ### `STATEKEY=tpm` or `STATEKEY=nodeid`
@@ -99,8 +99,9 @@ Every image you run is signed by you. The project never signs one: nothing it pu
 is ready to boot with Secure Boot on until you sign it yourself, or build and sign from
 source.
 
-Each tagged `cryptos-appliance` release attaches an unsigned image built this way from
-that tag: the ISO for both `STATEKEY` variants, the UKI inside it (renamed with the build
+Each tagged `cryptos-appliance` release attaches unsigned images built this way from
+that tag: for `vmware`, the ISO for both `STATEKEY` variants; for `proxmox`,
+the `tpm` ISO; the UKI inside each one (renamed with the build
 tag), `cryptosctl` for Linux and macOS on amd64 and arm64 (and Windows from `v0.1.0-rc.2`), a `build-manifest.json` build
 record and a `SHA256SUMS` file. Verify what you downloaded before using it -- either check
 it against the published sums, or rebuild from the same tag and compare:

@@ -17,8 +17,8 @@ import type { ReactNode } from "react";
 
 // The cookie choice, in the frame's style: a small bar at the bottom of the
 // page with Accept and Decline. It shows only when a site's consent store is
-// asking (a visitor changed a preference before answering), so readers who
-// never change anything never see it. Plain classes from site-frame.css, no
+// asking (a visitor used a setting's switch before answering), so readers
+// who never touch one never see it. Plain classes from site-frame.css, no
 // framework beyond React.
 
 export const ConsentBanner = ({
@@ -34,8 +34,8 @@ export const ConsentBanner = ({
     <p className="frame-consent__text">
       {children ?? (
         <>
-          Remember this setting on this device? It&apos;s kept in your browser&apos;s storage and
-          used for nothing else: no tracking, no analytics.
+          Can this site remember your settings, such as the theme, on this device? They&apos;re kept
+          in your browser&apos;s storage and used for nothing else: no tracking, no analytics.
         </>
       )}
     </p>

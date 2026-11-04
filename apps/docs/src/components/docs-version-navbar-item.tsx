@@ -19,10 +19,10 @@ import DocsVersionDropdownNavbarItem from '@theme/NavbarItem/DocsVersionDropdown
 
 type Props = ComponentProps<typeof DocsVersionDropdownNavbarItem>;
 
-// The docs version dropdown, on doc pages only. Off them (the home page) it
-// renders nothing, so that header stays the website's, pixel for pixel. A
-// custom item type skips the config defaults the built-in
-// 'docsVersionDropdown' type gets, so they're set here.
+// The docs version dropdown for one docs instance, in the doc toolbar
+// (doc-toolbar.tsx). Off a doc page it renders nothing. Used outside the
+// navbar config, it skips the defaults the built-in 'docsVersionDropdown'
+// type gets, so they're set here.
 export function DocsVersionNavbarItem({dropdownItemsBefore = [], dropdownItemsAfter = [], ...props}: Props): ReactNode {
   const {activeVersion} = useActiveDocContext(props.docsPluginId);
   if (!activeVersion) return null;

@@ -41,6 +41,9 @@ export type StorageLike = {
 export type Consent = {
   state(): ConsentState;
   asking(): boolean;
+  // Asks for an answer without setting anything (a switch that does nothing
+  // until the visitor answers). No-op once they have.
+  ask(): void;
   accept(): void;
   decline(): void;
   get(name: string): string | null;
@@ -98,6 +101,11 @@ export function createConsent({
   return {
     state: () => state,
     asking: () => asking,
+    ask() {
+      if (state !== "unset" || asking) return;
+      asking = true;
+      changed();
+    },
     accept() {
       state = "accepted";
       asking = false;

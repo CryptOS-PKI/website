@@ -15,38 +15,58 @@ limitations under the License.
 */
 import { type Consent, consentKeys } from "./consent.ts";
 
-// The light and dark choice, consent first, for both sites. Dark is the
-// default. A pick is a preference in the consent store (consent.ts): before
-// the visitor answers it lives in memory and asks for an answer, after they
-// accept it's remembered on the machine, and after they decline it lasts for
-// the page view only. Nothing here writes to storage itself. Framework-free:
-// each site applies the theme to its page (the site's <html> classes,
-// Docusaurus's colour mode) and calls chooseTheme.
+// The light and dark choice, consent first, for both sites.
+//
+// - Before the visitor answers the cookie choice, the page follows the
+//   system setting (prefers-color-scheme) and nothing is stored. Pressing
+//   the switch only asks for an answer; the theme doesn't change.
+// - After Accept, the switch flips the theme and the choice is stored, and
+//   the head script applies it before the next page paints.
+// - After Decline, the page still follows the system setting and nothing is
+//   stored; the switch flips the theme for this visit only, in memory.
+//
+// Framework-free: each site applies the theme to its page (the site's
+// <html>, Docusaurus's colour mode) with what pressThemeSwitch returns.
 
 export type FrameTheme = "dark" | "light";
 
 export const THEME_PREF = "theme";
 
-export function rememberedTheme(consent: Consent): FrameTheme {
-  return consent.get(THEME_PREF) === "light" ? "light" : "dark";
+const asTheme = (value: string | null): FrameTheme | null =>
+  value === "light" || value === "dark" ? value : null;
+
+// The visitor's own choice, stored or for this visit, or null when the page
+// follows the system setting.
+export function rememberedTheme(consent: Consent): FrameTheme | null {
+  return asTheme(consent.get(THEME_PREF));
 }
 
-export function chooseTheme(consent: Consent, theme: FrameTheme): void {
-  consent.set(THEME_PREF, theme);
+// What a press of the switch does, given the theme the page shows now: the
+// theme to show next, or null when the press only asked for an answer.
+export function pressThemeSwitch(consent: Consent, current: FrameTheme): FrameTheme | null {
+  if (consent.state() === "unset") {
+    consent.ask();
+    return null;
+  }
+  const next: FrameTheme = current === "dark" ? "light" : "dark";
+  consent.set(THEME_PREF, next);
+  return next;
 }
 
-// An inline script that puts a remembered light theme on <html> before the
-// first paint: the kit's "dark" class off, data-theme and Docusaurus's
-// data-theme-choice set, and the colour scheme. It only reads, and only
-// acts once the visitor has accepted. On the docs it has to run after
-// Docusaurus's own theme script, which would otherwise reset data-theme.
+// An inline script that settles the theme on <html> before the first paint:
+// the visitor's stored choice once they've accepted, otherwise the system
+// setting. It sets the kit's "dark" class, data-theme, Docusaurus's
+// data-theme-choice ("system" when following it) and the colour scheme. It
+// only reads storage. On the docs it runs after Docusaurus's own theme
+// script, so the two agree.
 export function themeBootScript(prefix?: string): string {
   const keys = consentKeys(prefix);
   return (
-    `try{if(localStorage.getItem(${JSON.stringify(keys.consent)})==="accepted"&&` +
-    `localStorage.getItem(${JSON.stringify(keys.pref(THEME_PREF))})==="light"){` +
-    `var r=document.documentElement;r.classList.remove("dark");` +
-    `r.setAttribute("data-theme","light");r.setAttribute("data-theme-choice","light");` +
-    `r.style.colorScheme="light"}}catch(e){}`
+    `(function(){var c=null;try{if(localStorage.getItem(${JSON.stringify(keys.consent)})==="accepted"){` +
+    `var s=localStorage.getItem(${JSON.stringify(keys.pref(THEME_PREF))});if(s==="light"||s==="dark")c=s}}catch(e){}` +
+    `var t=c;if(!t){t="dark";try{if(matchMedia("(prefers-color-scheme: light)").matches)t="light"}catch(e){}}` +
+    `var r=document.documentElement;r.classList.toggle("dark",t==="dark");` +
+    `r.setAttribute("data-theme",t);r.setAttribute("data-theme-choice",c||"system");` +
+    `r.style.colorScheme=t})();`
   );
 }

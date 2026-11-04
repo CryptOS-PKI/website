@@ -17,7 +17,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import { createConsent, type StorageLike } from "./consent.ts";
-import { chooseTheme, rememberedTheme, themeBootScript } from "./theme-pref.ts";
+import { pressThemeSwitch, rememberedTheme, themeBootScript } from "./theme-pref.ts";
 
 const spyStorage = (initial: Record<string, string> = {}) => {
   const data = new Map(Object.entries(initial));
@@ -42,36 +42,38 @@ const spyStorage = (initial: Record<string, string> = {}) => {
   return storage;
 };
 
-test("the theme is dark until the visitor picks one", () => {
-  assert.equal(rememberedTheme(createConsent({ storage: spyStorage() })), "dark");
+test("with no choice of the visitor's own, the page follows the system setting", () => {
+  assert.equal(rememberedTheme(createConsent({ storage: spyStorage() })), null);
 });
 
-test("picking a theme before consent writes nothing and asks for an answer", () => {
+test("before an answer, the switch only asks: the theme stays and nothing is stored", () => {
   const storage = spyStorage();
   const consent = createConsent({ storage });
-  chooseTheme(consent, "light");
-  assert.equal(rememberedTheme(consent), "light");
-  assert.deepEqual(storage.writes, []);
+  assert.equal(pressThemeSwitch(consent, "light"), null);
   assert.equal(consent.asking(), true);
+  assert.equal(rememberedTheme(consent), null);
+  assert.deepEqual(storage.writes, []);
 });
 
-test("after accepting, the theme is remembered for the next visit", () => {
+test("after accepting, the switch flips the theme and remembers it for the next visit", () => {
   const storage = spyStorage();
   const consent = createConsent({ storage, prefix: "site" });
-  chooseTheme(consent, "light");
   consent.accept();
-  assert.equal(storage.data.get("site:pref:theme"), "light");
-  assert.equal(rememberedTheme(createConsent({ storage, prefix: "site" })), "light");
+  assert.equal(pressThemeSwitch(consent, "light"), "dark");
+  assert.equal(storage.data.get("site:pref:theme"), "dark");
+  assert.equal(rememberedTheme(createConsent({ storage, prefix: "site" })), "dark");
 });
 
-test("after declining, the theme lasts for this page view only", () => {
+test("after declining, the switch flips the theme for this visit only", () => {
   const storage = spyStorage();
   const consent = createConsent({ storage });
-  chooseTheme(consent, "light");
+  consent.ask();
   consent.decline();
+  assert.equal(pressThemeSwitch(consent, "dark"), "light");
   assert.equal(rememberedTheme(consent), "light");
+  assert.equal(consent.asking(), false);
   assert.deepEqual(storage.writes, []);
-  assert.equal(rememberedTheme(createConsent({ storage })), "dark");
+  assert.equal(rememberedTheme(createConsent({ storage })), null);
 });
 
 const fakeRoot = () => {
@@ -81,42 +83,70 @@ const fakeRoot = () => {
     classes,
     attributes,
     style: { colorScheme: "dark" },
-    classList: { remove: (name: string) => void classes.delete(name) },
+    classList: {
+      toggle: (name: string, on: boolean) => void (on ? classes.add(name) : classes.delete(name)),
+    },
     setAttribute: (name: string, value: string) => void attributes.set(name, value),
   };
 };
 
-const runBoot = (storage: StorageLike, prefix?: string) => {
+const runBoot = (storage: StorageLike, systemDark: boolean, prefix?: string) => {
   const root = fakeRoot();
-  new Function("document", "localStorage", themeBootScript(prefix))(
+  const matchMedia = (query: string) => ({
+    matches: query.includes("dark") ? systemDark : !systemDark,
+  });
+  new Function("document", "localStorage", "matchMedia", themeBootScript(prefix))(
     { documentElement: root },
     storage,
+    matchMedia,
   );
   return root;
 };
 
-test("the head script puts a remembered light theme on <html> before the page paints", () => {
-  const root = runBoot(spyStorage({ "frame:consent": "accepted", "frame:pref:theme": "light" }));
-  assert.equal(root.attributes.get("data-theme"), "light");
-  assert.equal(root.attributes.get("data-theme-choice"), "light");
-  assert.equal(root.classes.has("dark"), false);
-  assert.equal(root.style.colorScheme, "light");
+test("the head script follows the system setting when there's no stored choice", () => {
+  const light = runBoot(spyStorage(), false);
+  assert.equal(light.attributes.get("data-theme"), "light");
+  assert.equal(light.attributes.get("data-theme-choice"), "system");
+  assert.equal(light.classes.has("dark"), false);
+  assert.equal(light.style.colorScheme, "light");
+  const dark = runBoot(spyStorage(), true);
+  assert.equal(dark.attributes.get("data-theme"), "dark");
+  assert.equal(dark.classes.has("dark"), true);
 });
 
-test("the head script leaves dark alone without consent, and never writes", () => {
-  for (const initial of [{}, { "frame:pref:theme": "light" }, { "frame:consent": "accepted" }]) {
+test("a stored choice only counts once the visitor has accepted", () => {
+  assert.equal(
+    runBoot(spyStorage({ "frame:pref:theme": "light" }), true).attributes.get("data-theme"),
+    "dark",
+  );
+  const chosen = runBoot(
+    spyStorage({ "frame:consent": "accepted", "frame:pref:theme": "dark" }),
+    false,
+  );
+  assert.equal(chosen.attributes.get("data-theme"), "dark");
+  assert.equal(chosen.attributes.get("data-theme-choice"), "dark");
+  assert.equal(chosen.classes.has("dark"), true);
+});
+
+test("the head script never writes", () => {
+  for (const initial of [{}, { "frame:consent": "accepted", "frame:pref:theme": "light" }]) {
     const storage = spyStorage(initial);
-    const root = runBoot(storage);
-    assert.equal(root.attributes.get("data-theme"), "dark");
+    runBoot(storage, true);
     assert.deepEqual(storage.writes, []);
   }
 });
 
-test("the head script survives blocked storage", () => {
+test("the head script survives blocked storage and a missing matchMedia", () => {
   const blocked = {
     getItem: () => {
       throw new Error("blocked");
     },
   } as unknown as StorageLike;
-  assert.equal(runBoot(blocked).attributes.get("data-theme"), "dark");
+  const root = fakeRoot();
+  new Function("document", "localStorage", "matchMedia", themeBootScript())(
+    { documentElement: root },
+    blocked,
+    undefined,
+  );
+  assert.equal(root.attributes.get("data-theme"), "dark");
 });

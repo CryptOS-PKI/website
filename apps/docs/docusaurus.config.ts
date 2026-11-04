@@ -181,14 +181,16 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // Dark first, as on the site and in the Fleet Manager UI. Nothing in the
-    // docs writes to browser storage before the visitor accepts the cookie
-    // choice, so Docusaurus's own storage is kept out of it:
+    // The theme follows the system setting until the visitor picks one, as
+    // on the site. Nothing in the docs writes to browser storage before the
+    // visitor accepts the cookie choice, so Docusaurus's own storage is kept
+    // out of it:
     // - colour mode: Docusaurus's switch is off, so it never stores 'theme'
     //   (and clears one left from before). The header shows the shared
-    //   switch from packages/frame (the 'custom-themeToggle' item below),
-    //   which sets the colour mode without persisting it and keeps the pick
-    //   in the consent store (packages/frame theme-pref.ts).
+    //   switch from packages/frame (the 'custom-themeToggle' item below):
+    //   before an answer it only opens the cookie bar; after one it sets the
+    //   colour mode without persisting it and keeps the pick in the consent
+    //   store (packages/frame theme-pref.ts).
     // - the strip: no announcementBar here, because Docusaurus stores its id
     //   and dismissal on every page load. src/theme/AnnouncementBar draws the
     //   strip instead.
@@ -198,7 +200,7 @@ const config: Config = {
     colorMode: {
       defaultMode: 'dark',
       disableSwitch: true,
-      respectPrefersColorScheme: false,
+      respectPrefersColorScheme: true,
     },
     docs: {
       versionPersistence: 'none',
@@ -226,20 +228,9 @@ const config: Config = {
         height: 28,
       },
       items: [
-        // The version picker sits right after the wordmark, where the site's
-        // header shows nothing, so the rest of the header lines up with the
-        // site's to the pixel. It shows on doc pages only, so the docs home's
-        // header matches the site's home exactly.
-        // One picker per docs, each showing only on its own pages.
-        ...['default', 'fleet'].map((docsPluginId) => ({
-          type: 'custom-docsVersion',
-          docsPluginId,
-          position: 'left' as const,
-          className: 'navbar__version',
-          dropdownActiveClassDisabled: true,
-        })),
-        // The full-width switch, beside the picker on doc pages only.
-        {type: 'custom-fullWidth', position: 'left'},
+        // The header is the site's, item for item, on every page. The docs
+        // version picker and the full-width switch live in the doc toolbar
+        // on the breadcrumb line (src/theme/DocBreadcrumbs), not here.
         ...frameNav(links).map((link) =>
           link.label === 'Docs'
             ? {to: '/', label: link.label, activeBaseRegex: '^/', position: 'right' as const, className: NAV_LINK_CLASS}

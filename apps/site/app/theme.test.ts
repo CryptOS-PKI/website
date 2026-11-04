@@ -16,7 +16,7 @@ limitations under the License.
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { applyTheme, nextTheme, pageTheme, themeInitScript } from "./theme.ts";
+import { applyTheme, pageTheme, themeInitScript } from "./theme.ts";
 
 const fakeRoot = () => {
   const classes = new Set<string>();
@@ -32,16 +32,11 @@ const fakeRoot = () => {
   };
 };
 
-test("dark is the default, and only light or dark on the page counts", () => {
+test("only light or dark on the page counts, dark otherwise", () => {
   assert.equal(pageTheme(null), "dark");
   assert.equal(pageTheme("light"), "light");
   assert.equal(pageTheme("dark"), "dark");
   assert.equal(pageTheme("system"), "dark");
-});
-
-test("the switch flips between the two themes", () => {
-  assert.equal(nextTheme("dark"), "light");
-  assert.equal(nextTheme("light"), "dark");
 });
 
 test("a theme lands on <html> as the kit's class and the frame's data-theme", () => {
@@ -59,4 +54,8 @@ test("the head script reads the site's consent and theme keys, and never writes"
   assert.match(themeInitScript, /localStorage\.getItem\("cryptos-site:consent"\)/);
   assert.match(themeInitScript, /localStorage\.getItem\("cryptos-site:pref:theme"\)/);
   assert.doesNotMatch(themeInitScript, /setItem|removeItem|cookie/);
+});
+
+test("the head script follows the system setting when there's no stored choice", () => {
+  assert.match(themeInitScript, /prefers-color-scheme: light/);
 });

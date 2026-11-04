@@ -170,3 +170,17 @@ test("the browser store falls back to memory when storage access throws", async 
   consent.accept();
   assert.equal(consent.get("theme"), "light");
 });
+
+test("a switch can ask for an answer without setting anything", () => {
+  const storage = memoryStorage();
+  const consent = createConsent({ storage });
+  let calls = 0;
+  consent.subscribe(() => calls++);
+  consent.ask();
+  assert.equal(consent.asking(), true);
+  assert.equal(storage.data.size, 0);
+  assert.equal(calls, 1);
+  consent.accept();
+  consent.ask();
+  assert.equal(consent.asking(), false);
+});

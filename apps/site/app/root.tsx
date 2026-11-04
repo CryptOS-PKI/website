@@ -31,10 +31,10 @@ const frameFonts = ["inter-latin.woff2", "jetbrains-mono-700-latin.woff2"];
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
-    // Dark is the default. The head script switches <html> to a remembered
-    // light choice (only kept after the visitor accepts the cookie choice)
-    // before React hydrates, so it differs from the prerendered markup on
-    // purpose.
+    // Prerendered dark. Before React hydrates, the head script switches
+    // <html> to the system setting, or to the visitor's own choice once they
+    // have accepted the cookie choice, so it differs from the prerendered
+    // markup on purpose.
     <html
       lang="en"
       className="dark"

@@ -51,3 +51,10 @@ test("inline scripts really run, so a reading script can act", async () => {
   assert.equal(dom.window.document.documentElement.getAttribute("data-ran"), "yes");
   dom.window.close();
 });
+
+test("the emulated system setting reaches the page's scripts", async () => {
+  const html =
+    '<script>document.documentElement.setAttribute("data-theme", matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")</script>';
+  assert.equal((await storageWritesIn(html, "page.html", "light")).theme, "light");
+  assert.equal((await storageWritesIn(html, "page.html", "dark")).theme, "dark");
+});

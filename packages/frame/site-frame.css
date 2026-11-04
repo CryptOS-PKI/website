@@ -91,7 +91,7 @@
   --frame-strip-bg: color-mix(in srgb, var(--frame-warning) 10%, var(--frame-surface));
 }
 
-/* Breakpoints, the same on both sites. Under 1168px the header folds its
+/* Breakpoints, the same on both sites. Under 1050px the header folds its
    links into the menu button (header-menu-config.ts; the rule is below), so
    it stays one row and never wraps or overlaps; at 720px and under, the
    footer drops to two columns under the brand. */
@@ -153,7 +153,7 @@ html {
   display: block;
 }
 
-/* The header menu (header-menu.tsx): under 1168px each site's header links
+/* The header menu (header-menu.tsx): under 1050px each site's header links
    (.frame-nav__link) hide and this button shows at the right end, after the
    theme switch, opening a panel of the same links under the header. The one
    media rule for both sites; !important because the docs' own navbar rules
@@ -165,13 +165,12 @@ html {
   height: var(--frame-nav-line);
 }
 
-@media (max-width: 1167px) {
+@media (max-width: 1049px) {
   .frame-nav__link {
     display: none !important;
   }
 
-  /* Closer to the switch than the links' gap; the gap itself stays, so the
-     version picker after the wordmark doesn't move. */
+  /* Closer to the switch than the links' gap. */
   .frame-menu {
     display: flex;
     margin-inline-start: calc(var(--frame-nav-gap-menu) - var(--frame-nav-gap));

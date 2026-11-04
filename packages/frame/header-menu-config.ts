@@ -14,12 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 // The width under which both headers fold their links into the menu button
-// (header-menu.tsx). Measured with every header link present: from 1168px up,
-// a doc page's header fits the version picker and all the links with the
-// same spacing it has at full width; any narrower and they crowd or overlap.
+// (header-menu.tsx). Measured with every header link present, on the site
+// home, the docs home and doc pages (the docs version picker lives in the
+// doc toolbar, not the header): from 1050px up the links keep their
+// full-width spacing and stay at least one nav gap (32px) clear of the
+// wordmark; they would touch it at about 1016px.
 // site-frame.css holds the one media rule at this width; frame.test.ts keeps
 // the two in step.
-export const HEADER_MENU_BREAKPOINT = 1168;
+export const HEADER_MENU_BREAKPOINT = 1050;
 export const HEADER_MENU_MAX_WIDTH = HEADER_MENU_BREAKPOINT - 1;
 
 // The class each site puts on its header links, which the media rule hides.

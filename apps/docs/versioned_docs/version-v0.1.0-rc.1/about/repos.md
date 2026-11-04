@@ -27,7 +27,7 @@ CryptOS is built in the open in the [CryptOS-PKI](https://github.com/CryptOS-PKI
 ```
 
 - Each service owns the API it serves. `cryptos-node` holds the node API (`cryptos.node.v1`), and `cryptos-manager` holds the Fleet Manager API (`cryptos.fleet.v1`), which imports the node API from `cryptos-node`.
-- `cryptos-node` is the PKI engine: the node API, PID 1, the management CLI and the bare-metal installer. `cryptos-appliance` pins `cryptos-node` at a version and builds the signed boot image around it (kernel, SquashFS, UKI assembly, Secure Boot signing).
+- `cryptos-node` is the PKI engine: the node API, PID 1, the management CLI and the disk installer. `cryptos-appliance` pins `cryptos-node` at a version and builds the signed boot image around it (kernel, SquashFS, UKI assembly, Secure Boot signing).
 - `cryptos-manager` and `cryptos-web` are the optional Fleet Manager: one application split into a backend and a frontend.
 
 A single CA node needs only the image `cryptos-appliance` builds. You manage it with `cryptosctl`. The Fleet Manager is for when you want a web UI or a view across many nodes.
@@ -45,7 +45,7 @@ What it holds:
 | `cmd/init` | PID 1. It becomes `/init` in the SquashFS image. |
 | `cmd/cryptosctl` | The operator CLI, and the only management tool for a node that is not linked to a Fleet Manager. |
 | `cmd/cryptos-console` | The dashboard on the node's local console. It reads status and identity over the on-box UNIX socket. |
-| `cmd/cryptos-install` | The bare-metal disk installer (GPT, ESP and UKI). |
+| `cmd/cryptos-install` | The standalone disk installer (GPT, ESP and UKI). Physical servers aren't supported in v0.1.0-rc.1; install through maintenance mode. |
 | `proto/cryptos/node/v1/` | The node API: `NodeService` and its messages (`node.proto`, `identity.proto`, `ceremony.proto`, `status.proto`, `config.proto`, `audit.proto` and the protocol files). |
 | `gen/go/cryptos/node/v1/` | The generated Go stubs (package `nodev1`), committed so you need no toolchain to use them. |
 | `internal/` | The node itself: TPM, CA templates, ceremony, LUKS and etcd storage, the gRPC server, audit log and machine config. |
@@ -72,7 +72,7 @@ Each `v*` tag attaches the unsigned release assets to the GitHub Release: the UK
 To write your own Go client for a node, use the stubs as a Go module:
 
 ```bash
-go get github.com/CryptOS-PKI/cryptos-node@main
+go get github.com/CryptOS-PKI/cryptos-node@v0.1.0-rc.1
 ```
 
 The surface is still changing while the alpha lands. The [gRPC API reference](../reference/grpc-api.md) walks through the RPCs.

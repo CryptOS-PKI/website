@@ -4,7 +4,7 @@ title: "🔌 gRPC API"
 
 # 🔌 gRPC API
 
-CryptOS exposes two gRPC services. The protobuf definitions are the source of truth: the node API in [`proto/cryptos/node/v1`](https://github.com/CryptOS-PKI/cryptos-node/tree/main/proto/cryptos/node/v1) in the cryptos-node repo, and the Fleet Manager API in [`proto/cryptos/fleet/v1`](https://github.com/CryptOS-PKI/cryptos-manager/tree/main/proto/cryptos/fleet/v1) in the cryptos-manager repo; this page explains the parts that need more than the field comments.
+CryptOS exposes two gRPC services. The protobuf definitions are the source of truth: the node API in [`proto/cryptos/node/v1`](https://github.com/CryptOS-PKI/cryptos-node/tree/v0.1.0-rc.1/proto/cryptos/node/v1) in the cryptos-node repo, and the Fleet Manager API in [`proto/cryptos/fleet/v1`](https://github.com/CryptOS-PKI/cryptos-manager/tree/v0.1.0-rc.1/proto/cryptos/fleet/v1) in the cryptos-manager repo; this page explains the parts that need more than the field comments.
 
 | Service | Package | Served by | What it covers |
 |---|---|---|---|

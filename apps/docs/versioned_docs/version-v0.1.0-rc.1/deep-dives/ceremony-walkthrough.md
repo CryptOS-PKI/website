@@ -148,7 +148,7 @@ Every `StartCeremony` call is recorded in the audit log as one entry when the st
 
 ## Where this lives in the code
 
-All paths are in [CryptOS-PKI/cryptos-node](https://github.com/CryptOS-PKI/cryptos-node) on `main`, the proto included.
+All paths are in [CryptOS-PKI/cryptos-node](https://github.com/CryptOS-PKI/cryptos-node/tree/v0.1.0-rc.1) at the `v0.1.0-rc.1` tag, the proto included.
 
 | Piece | Code |
 |---|---|

@@ -6,7 +6,7 @@ title: "🔄 Upgrade a node in place"
 
 A CryptOS node can take a new OS image without being re-provisioned. That matters because re-provisioning reformats the state partition and destroys the CA key with it -- on an established node that means re-issuing every certificate it ever signed.
 
-This page is the short version. The full guide, with the TPM PCR mechanics and every edge case, is [Upgrading a CryptOS node in place](https://github.com/CryptOS-PKI/cryptos-appliance/blob/main/docs/image-upgrade.md) in the `cryptos-appliance` repository.
+This page is the short version. The full guide, with the TPM PCR mechanics and every edge case, is [Upgrading a CryptOS node in place](https://github.com/CryptOS-PKI/cryptos-appliance/blob/v0.1.0-rc.1/docs/image-upgrade.md) in the `cryptos-appliance` repository.
 
 ## Why it works
 
@@ -50,7 +50,7 @@ cryptosctl --endpoint 192.0.2.10:443 --trust root.pem image stage \
 This is the long step -- the image is a few hundred megabytes -- and it is **not** disruptive. The node keeps serving throughout and verifies the signature before anything reaches the ESP, so a bad upload costs you only the transfer.
 
 :::caution[A TPM node running a pre-reseal image can't be upgraded in place]
-Staging reseals the state key for the incoming image. If the running image predates that reseal, the stage is refused; reinstall such a node instead. See [TPM-backed nodes](https://github.com/CryptOS-PKI/cryptos-appliance/blob/main/docs/image-upgrade.md#tpm-backed-nodes) in the full guide.
+Staging reseals the state key for the incoming image. If the running image predates that reseal, the stage is refused; reinstall such a node instead. See [TPM-backed nodes](https://github.com/CryptOS-PKI/cryptos-appliance/blob/v0.1.0-rc.1/docs/image-upgrade.md#tpm-backed-nodes) in the full guide.
 :::
 
 ## 3. Activate, in the maintenance window

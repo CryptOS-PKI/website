@@ -56,13 +56,13 @@ Consequences:
 If the TPM or its vTPM state is lost (the VM's vTPM is removed, the VM is re-created, or the motherboard is replaced), the CA key is gone. There is no export to restore from. Certificates it signed stay valid, but nothing can renew or revoke them. Protect the VM and its vTPM state, and keep your hierarchy able to replace a subordinate CA.
 :::
 
-:::caution[RSA CA keys are not supported in TPM mode]
-The TPM backend creates ECDSA P-384 keys only. A node whose `pki.root_key_alg` is `RSA-3072` or `RSA-4096` needs one of the software-backed modes below.
+:::caution[An RSA CA key in the TPM needs a TPM with that size]
+In `tpm` mode an RSA CA key is created and held inside the TPM like the ECDSA one, but only if the TPM implements that RSA size. Many implement only RSA-2048, and then key creation fails with `tpm: key algorithm not supported by this TPM`. The `nodeid` and `kms` modes keep the key in software instead. The modes below explain the difference.
 :::
 
 ## Software-backed modes
 
-For hosts that cannot give the VM a TPM, and for RSA CA keys, two other modes exist. In both, the CA key is generated in software and stored on the encrypted state partition. It is protected by the disk encryption, not by hardware, and it **can** be exported with `cryptosctl ca export-key` into a passphrase-protected backup.
+For hosts that cannot give the VM a TPM, or whose TPM lacks the RSA size you need, two other modes exist. In both, the CA key is generated in software and stored on the encrypted state partition. It is protected by the disk encryption, not by hardware, and it **can** be exported with `cryptosctl ca export-key` into a passphrase-protected backup.
 
 ### nodeid
 
@@ -86,7 +86,7 @@ The `kms` mode is in the code, but no reference deployment has run it, and the i
 
 | Mode | State key protected by | CA key held in | Exportable | Key algorithms |
 |---|---|---|---|---|
-| `tpm` (default) | TPM, sealed to PCR 7 and 11 | the TPM | no | ECDSA-P384 |
+| `tpm` (default) | TPM, sealed to PCR 7 and 11 | the TPM | no | ECDSA-P384, and RSA-3072 or RSA-4096 where the TPM implements the size |
 | `kms` | an external KMS | encrypted state partition | yes | ECDSA-P384, RSA-3072, RSA-4096 |
 | `nodeid` | the VM's UUID (not secret) | encrypted state partition | yes | ECDSA-P384, RSA-3072, RSA-4096 |
 
@@ -98,6 +98,5 @@ The node reads `state_key.mode` from the staged config on its first boot, when i
 
 ## What it doesn't do yet
 
-- **RSA keys inside the TPM.** An RSA CA needs a software-backed mode.
 - **Sharing a TPM key between nodes.** The key is created so it can't be duplicated to another TPM, so there is no second node that can sign with the same key.
 - **A hardware presence check** before a Root key is unsealed.

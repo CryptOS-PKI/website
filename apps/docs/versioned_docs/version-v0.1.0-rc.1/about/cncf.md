@@ -15,7 +15,7 @@ What works with the alpha today:
 - **Workload certificates by CSR.** Make the key and CSR, issue with `cryptosctl ca issue-leaf` or the Fleet Manager, and load the result into a Kubernetes TLS Secret yourself. Renewal is manual. See [Internal TLS and mTLS](../use-cases/internal-tls.md).
 - **cert-manager over ACME.** An intermediate or issuing node serves ACME (RFC 8555) with the `http-01` challenge once you add the `pki.acme` block to its machine config and reboot it. There is no `dns-01` and no wildcard names, and cert-manager's default RSA 2048 key is refused. See [Kubernetes workloads](../use-cases/kubernetes.md) for what to set.
 - **A CA for the cluster.** `cryptosctl ca sign-subordinate` can sign a CA certificate for cert-manager's own CA issuer, so its certificates chain to your CryptOS root. The signing step is the one proven with vCenter's VMCA; it has not been tested with cert-manager.
-- **The Fleet Manager in a cluster.** The Fleet Manager runs in Kubernetes from the chart in the `cryptos-manager` repo. No chart or container image is published, so you render the chart and build the image yourself. See [Deploy with Helm](/docs/fleet/helm).
+- **The Fleet Manager in a cluster.** The Fleet Manager runs in Kubernetes from the chart in the `cryptos-manager` repo. Each release publishes the image, `ghcr.io/cryptos-pki/cryptos-manager` (linux/amd64 only in `v0.1.0-rc.1`), and the chart, `oci://ghcr.io/cryptos-pki/charts/fleet-manager`. You can also build the image yourself. See [Deploy with Helm](/docs/fleet/helm).
 
 CryptOS does not act as the external CA for the cluster's own PKI: the API server, etcd, kubelet and front-proxy certificates that Kubernetes creates for itself.
 

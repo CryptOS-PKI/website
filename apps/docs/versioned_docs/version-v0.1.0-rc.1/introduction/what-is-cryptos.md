@@ -5,7 +5,7 @@ slug: "/"
 
 # 🔐 What is CryptOS?
 
-The core described here is built and tested. Booting it end-to-end on real hardware is still in progress — see [Project status and roadmap](./status-roadmap.md).
+The core described here is built and tested, and runs end to end on VMware virtual machines. Physical servers aren't supported in v0.1.0-rc.1. See [Project status and roadmap](./status-roadmap.md).
 
 CryptOS is a computer with **one job**: to be a certificate authority (CA).
 

@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 
 Every image you run is signed by you. CryptOS ships **no signing key** and asks you to trust none: the project's images are always unsigned, and nothing it publishes is ready to boot with Secure Boot on until you sign it (or build and sign from source). You make your own Secure Boot key, build the image with it, and enroll its certificate in the firmware of the machines you run. The same certificate is stamped into the image as its **upgrade anchor**, so the key that makes an image bootable is also the only key that can replace it later.
 
-This page is the short version. The full guide, with every verification command, is [Secure Boot: build and sign with your own key](https://github.com/CryptOS-PKI/cryptos-appliance/blob/main/docs/secure-boot.md) in the `cryptos-appliance` repository.
+This page is the short version. The full guide, with every verification command, is [Secure Boot: build and sign with your own key](https://github.com/CryptOS-PKI/cryptos-appliance/blob/v0.1.0-rc.1/docs/secure-boot.md) in the `cryptos-appliance` repository.
 
 ## What the key does
 
@@ -187,11 +187,6 @@ While `uefi.allowAuthBypass` is set, anyone with the VM's console can change `db
 10. With the VM off, remove `uefi.allowAuthBypass` (with govc: `govc vm.change -vm cryptos-node -e uefi.allowAuthBypass=`), detach `sb-enrol.iso`, and check that **Secure Boot** is still on.
 
 Do this before the VM first boots the CryptOS ISO.
-
-### Bare metal
-
-- **Firmware setup:** copy `sb.der` to a FAT32 USB stick, put Secure Boot in Setup or Custom mode, choose the option to add or append a key to `db`, then set Secure Boot back to User mode.
-- **`sbctl` from a Linux live USB**, with the firmware in Setup Mode: `sbctl import-keys --db-cert ./sb.der`, then `sbctl enroll-keys --append`. `--append` keeps the existing keys.
 
 ## 4. Build with the key
 

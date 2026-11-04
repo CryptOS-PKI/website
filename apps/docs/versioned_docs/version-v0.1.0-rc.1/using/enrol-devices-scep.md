@@ -182,4 +182,4 @@ The switch only learns that the request failed and a short reason code. The node
 - **The key is too small.** The profile's `min_rsa_key_bits` is above the device's key size.
 - **The request carries an IP address.** Set `ip-address none` on the trustpoint.
 
-More detail, including the RA certificate and its rotation, is in [`docs/scep.md`](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/scep.md) in the `cryptos-node` repository.
+More detail, including the RA certificate and its rotation, is in [`docs/scep.md`](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/docs/scep.md) in the `cryptos-node` repository.

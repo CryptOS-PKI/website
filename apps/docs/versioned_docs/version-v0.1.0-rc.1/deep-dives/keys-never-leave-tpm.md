@@ -121,7 +121,7 @@ So an attacker who copies the disk gets an encrypted volume and a sealed blob th
 
 ## Where this lives in the code
 
-All paths are in [CryptOS-PKI/cryptos-node](https://github.com/CryptOS-PKI/cryptos-node) on `main`.
+All paths are in [CryptOS-PKI/cryptos-node](https://github.com/CryptOS-PKI/cryptos-node/tree/v0.1.0-rc.1) at the `v0.1.0-rc.1` tag.
 
 | Piece | Code |
 |---|---|

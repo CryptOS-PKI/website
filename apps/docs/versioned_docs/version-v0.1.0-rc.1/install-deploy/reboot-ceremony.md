@@ -29,7 +29,7 @@ Until the node has its CA, it cannot present a certificate from that CA on this 
 
 ### Read the fingerprint off the console
 
-Once the node is up, its console (the physical screen or the hypervisor console) shows that it is waiting for its ceremony, what to do next, and the SHA-256 of this boot's management certificate:
+Once the node is up, its console (the VM console in your hypervisor) shows that it is waiting for its ceremony, what to do next, and the SHA-256 of this boot's management certificate:
 
 ```text
 Awaiting ceremony
@@ -58,7 +58,7 @@ The fingerprint is on all three screens, so you check the pin the same way on a 
 ### Fetch the certificate
 
 :::danger[Verify the fingerprint before the first ceremony]
-The ceremony runs over this pin, and the Root certificate it returns is the one you publish. If you skip the check, whatever answered the fetch could hand you a Root that isn't your node's. Always pass the console's value to `--expect-sha256`, and never run `ceremony start` over a pin you haven't checked. The [management trust guide](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/management-trust.md) in the `cryptos-node` repository goes through what the pin does and does not prove.
+The ceremony runs over this pin, and the Root certificate it returns is the one you publish. If you skip the check, whatever answered the fetch could hand you a Root that isn't your node's. Always pass the console's value to `--expect-sha256`, and never run `ceremony start` over a pin you haven't checked. The [management trust guide](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/docs/management-trust.md) in the `cryptos-node` repository goes through what the pin does and does not prove.
 :::
 
 ```bash

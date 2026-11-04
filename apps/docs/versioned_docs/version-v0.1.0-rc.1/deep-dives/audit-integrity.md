@@ -8,8 +8,8 @@ Why a changed or missing entry cannot hide.
 
 Every gRPC call a serving node receives is appended to a signed, hash-chained log on the encrypted state volume, and the code can verify the whole chain.
 
-:::info[The log stays on the node]
-Reading the log through the API, publishing its verifying key, and shipping it off the node are not available. The log stays on the node, and there is no supported way for you to fetch it or run the verifier. See [Where it falls short](#where-it-falls-short).
+:::info[Verification runs on the node]
+`cryptosctl audit list` (`ListAuditEvents`) reads the log and `cryptosctl audit verify` (`VerifyAuditChain`) checks the chain on the node. Neither returns the entry signatures or the audit public key, and the log isn't shipped off the node, so you can't verify it independently off the node. See [Where it falls short](#where-it-falls-short).
 :::
 
 This page explains what the log records, how each entry is bound to the one before it, what a verifier checks, and which kinds of tampering that catches and which it can't. The code is `internal/audit/audit.go` and the audit interceptors in `internal/grpc/server.go`. The entry fields are in the [audit log reference](../reference/audit-log.md).
@@ -93,18 +93,18 @@ What keeps the seed and the files out of reach is the state volume. On a `tpm` n
 
 | Design goal | What the alpha does |
 |---|---|
-| Operators fetch the log and verify it offline. | No RPC returns the log, and no RPC or command publishes the audit public key. `VerifyChain` is a library function with no `cryptosctl` command around it. The `Audit.StreamEvents` RPC in the design is not in the API. |
+| Operators fetch the log and verify it offline. | `ListAuditEvents` and `VerifyAuditChain` (`cryptosctl audit list`, `audit verify`) read and check the log on the node, but no RPC or command returns the entry signatures or the audit public key, so nothing can be verified off the node. The `Audit.StreamEvents` RPC in the design is not in the API. |
 | The log is shipped to the Fleet Manager and to a SIEM. | Not built. The log exists only on the node. |
 | Truncation and whole-log deletion are detectable. | Not detectable (table above); it needs an external anchor off the node, which the alpha doesn't have. |
 | A node that can't write its audit log says so. | `Append` errors are ignored so a failed write doesn't change the RPC's result, and the code comment says `GetStatus` reports audit health instead, but `NodeStatus` has no audit field. A failing log is not visible to you today. |
 | Every action on the node is audited. | Only gRPC calls on a serving node (see the caution above). |
-| Timestamps are trustworthy. | `ts` comes from the node's clock, and the alpha has no time sync client. Use `seq` for ordering, not `ts`. |
+| Timestamps are trustworthy. | `ts` comes from the node's clock. The node keeps that clock in sync over unauthenticated SNTP when it has a time source ([Keep the clock in sync](../using/time-sync.md)); with none, it runs on the hardware clock. Use `seq` for ordering, not `ts`. |
 
 The `AuditEvent` comment in `audit.proto` describes the files as newline-delimited protobuf. The files are protojson lines with a detached signature, as described on this page and in `internal/audit`.
 
 ## Where this lives in the code
 
-All paths are in [CryptOS-PKI/cryptos-node](https://github.com/CryptOS-PKI/cryptos-node) on `main`, the proto included.
+All paths are in [CryptOS-PKI/cryptos-node](https://github.com/CryptOS-PKI/cryptos-node) at the `v0.1.0-rc.1` tag, the proto included.
 
 | Piece | Code |
 |---|---|

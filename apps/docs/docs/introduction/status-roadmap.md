@@ -2,15 +2,11 @@
 title: "🗺️ Project status and roadmap"
 ---
 
-import Pre10Notice from '@site/docs/_partials/pre-1-0-notice.mdx';
-
 # 🗺️ Project status and roadmap
 
 CryptOS is pre-1.0, and its first release candidates are just starting to come out. Here is an honest picture of what is finished and what is still coming.
 
-<Pre10Notice />
-
-## ✅ Works today
+## ✅ In this release
 
 The core of a certificate authority is built, tested, and running on VMware virtual machines:
 
@@ -23,7 +19,7 @@ The core of a certificate authority is built, tested, and running on VMware virt
 - Signing subordinate CAs and issuing end-entity certificates from a CSR, and enrolling devices over **SCEP** (RFC 8894). See [Enrol devices with SCEP](../using/enrol-devices-scep.md).
 - Building the OS image and turning it into a bootable **ISO** for a platform such as VMware.
 - Installing a node from start to finish: **maintenance mode** on the very first boot, **install to disk**, then the reboot into the ceremony. See [Install & Deploy](../install-deploy/build-bootable-image.md).
-- The **Fleet Manager** web app, for watching and managing several nodes from one place. See [Fleet Manager overview](/docs/fleet/next).
+- The **Fleet Manager** web app, for watching and managing several nodes from one place. See [Fleet Manager overview](/docs/fleet/vnext).
 
 ## 📦 What each release ships
 
@@ -50,6 +46,6 @@ Both VMware and Proxmox VE are in `v0.1.0`. Node images are amd64 only in every 
 Every CryptOS release before `1.0.0` is a `0.x` release: `v0.1.0` is the first, and each one is preceded by release candidates (`v0.1.0-rc.1`, `rc.2` and so on) that are tested the same way. `1.0.0` will be the first GA release, once the whole system lands. It isn't out yet.
 :::
 
-## One thing to know today
+## One thing to know
 
 A node does more than sign its own Root: it can sign subordinate CAs and issue end-entity certificates from a CSR. The `ca` commands in the [cryptosctl command reference](../reference/cryptosctl.md#certificate-authority) list what it can sign today.

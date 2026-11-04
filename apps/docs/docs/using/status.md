@@ -4,10 +4,6 @@ title: "📊 Check status"
 
 # 📊 Check status
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Read a node's role, identity state, and health.
 
 `cryptosctl status` is the first command to run against any node: after an install, after a reboot, before a ceremony, and whenever something looks wrong. It changes nothing on the node.

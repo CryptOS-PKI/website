@@ -4,9 +4,7 @@ title: "🧰 Maintenance mode and the install lifecycle"
 
 # 🧰 Maintenance mode and the install lifecycle
 
-:::tip[Works today]
 The whole path, from booting the ISO to a serving CA, runs on VMware in the alpha. The limits that still apply are listed under [Known limits](#known-limits).
-:::
 
 The Talos-style path: boot, configure, install to disk, then reboot into service. This page explains what happens at each stage and why. The [Install & Deploy](../install-deploy/build-bootable-image.md) pages are the step-by-step version.
 

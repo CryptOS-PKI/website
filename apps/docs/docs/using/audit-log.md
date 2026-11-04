@@ -4,10 +4,6 @@ title: "🧾 Check the audit log"
 
 # 🧾 Check the audit log
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 See who did what on a node, and check that nobody changed the record.
 
 A node records every call to its API in a signed, hash-chained audit log: the ceremony, every issuance and revocation, each config apply, key exports and reboots. `cryptosctl audit list` reads it and `cryptosctl audit verify` checks the chain. Neither changes anything, and both calls are themselves recorded.

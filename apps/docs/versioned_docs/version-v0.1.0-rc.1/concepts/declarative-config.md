@@ -4,10 +4,6 @@ title: "📝 Declarative config (machine.yaml)"
 
 # 📝 Declarative config (machine.yaml)
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 How you describe a node in one file instead of clicking around.
 
 ## One file describes the whole node

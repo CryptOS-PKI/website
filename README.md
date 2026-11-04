@@ -9,7 +9,7 @@ Two static sites and the pieces they share, as npm workspaces:
   (no Node server at request time), styled with Tailwind CSS and the `@cryptos-pki/ui` design
   kit.
 - 📚 **`apps/docs`:** the docs. Docusaurus 3, versioned: each product release gets its own docs
-  version, and Next is unreleased `main`.
+  version, and vNext is unreleased `main`.
 - 🔤 **`packages/frame`:** the frame both sites share, so they read as one site: the strip,
   header and footer (`site-frame.css`, `strip.ts`, `content.ts`), the hero both homes open with
   (`hero.tsx`, `hero-content.ts`, `hero.css`), the header's menu button (`header-menu.tsx`), the
@@ -26,7 +26,7 @@ Before you start: Node 20 or newer (CI uses the version in `.nvmrc`).
 ```bash
 npm ci --ignore-scripts
 npm run dev:site              # the product site with HMR
-npm run dev:docs              # the docs with hot reload, Next included
+npm run dev:docs              # the docs with hot reload, vNext included
 npm run lint                  # eslint (and prettier, outside apps/docs)
 npm test                      # the shared packages' and the scripts' tests
 npm run typecheck             # both apps
@@ -42,7 +42,7 @@ npm run check:links           # internal links in the prerendered site
 The docs site holds two docs, each with its own sidebar, versions and version picker: CryptOS at
 `/docs/cryptos` and FleetOS Manager at `/docs/fleet`. Each follows its own product's release in
 `packages/frame/release.ts` (`release` and `fleetRelease`). v0.1.0-rc.1 is the first version of
-both and the default. Next (`main`) is served at `/docs/cryptos/next/` and `/docs/fleet/next/` in
+both and the default. vNext (`main`) is served at `/docs/cryptos/vnext/` and `/docs/fleet/vnext/` in
 dev and preview builds, under a banner pointing at the current version; the published docs leave
 it out. A release bumps `release.ts` and runs `npm run docs:version` in its own PR, which cuts
 both, and the deploy refuses to run until both are cut. The old `/docs/<page>` paths redirect to

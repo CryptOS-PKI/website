@@ -7,10 +7,6 @@ import TabItem from '@theme/TabItem';
 
 # 🔧 Boot and maintenance mode
 
-:::tip[✅ Works today]
-This describes CryptOS as it works right now.
-:::
-
 The first time a machine boots the CryptOS ISO, nothing is installed yet. The node notices this and starts in **maintenance mode**: a small, temporary service that waits for you to send it a machine config. There is no installer menu and no login prompt. Everything happens over the network with `cryptosctl`.
 
 ## Prepare the machine

@@ -11,7 +11,7 @@
     "serve": "docusaurus serve",
     "clear": "docusaurus clear",
     "typecheck": "tsc",
-    "test": "node --experimental-strip-types --test redirects.test.ts tabs-storage.test.ts"
+    "test": "node --experimental-strip-types --test redirects.test.ts tabs-storage.test.ts vnext-banner.test.ts"
   },
   "dependencies": {
     "@cryptos-pki/brand": "*",

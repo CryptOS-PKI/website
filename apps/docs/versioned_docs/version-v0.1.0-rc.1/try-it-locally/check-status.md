@@ -4,10 +4,6 @@ title: "✅ Check identity and status"
 
 # ✅ Check identity and status
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Confirm the node has an identity and is healthy.
 
 After the ceremony the node is a working Root CA. This page proves it: the node reports its identity, the Root certificate checks out, and everything survives a restart.

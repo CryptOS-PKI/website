@@ -2,13 +2,7 @@
 title: "🏭 Platform profiles and the image factory"
 ---
 
-import Pre10Notice from '@site/docs/_partials/pre-1-0-notice.mdx';
-
 # 🏭 Platform profiles and the image factory
-
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
 
 How a bootable image is built for a target such as VMware. The step-by-step build is in [Build a bootable image](../install-deploy/build-bootable-image.md).
 
@@ -101,8 +95,6 @@ An unsigned image boots only with Secure Boot off, and carries no upgrade anchor
 
 ## Upgrading in place
 
-<Pre10Notice />
-
 Because the image and the state partition are separate, a node can change images without losing its CA:
 
 1. `cryptosctl image stage --image cryptos-amd64.uki` uploads the new signed image. The node checks the detached signature against its anchor before writing anything, keeps the current image for rollback, and does not reboot.
@@ -111,7 +103,7 @@ Because the image and the state partition are separate, a node can change images
 
 `cryptosctl image status` shows the running and staged images. The state partition (CA key, issued history, identity) is never opened by an upgrade. In the reference deployment an upgrade cost about 8 to 11 seconds of downtime per node. `cryptosctl` runs on Linux and macOS.
 
-## What is not available today
+## What it doesn't do yet
 
 - There is no hosted image factory or download. You build the image yourself.
 - `vmware` is the only platform profile.

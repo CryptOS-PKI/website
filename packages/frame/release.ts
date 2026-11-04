@@ -16,9 +16,11 @@ limitations under the License.
 // The current CryptOS release, the one version both sites show: the site's
 // release strip and download links read it, and it is the docs version a
 // release deploys, so apps/docs/versions.json must list it before a release
-// can go out.
+// can go out. `upcoming` is the release being built, named on every vNext
+// docs page.
 export const release = {
   version: "v0.1.0-rc.1",
+  upcoming: "v0.1.0-rc.2",
   kind: "prerelease" as const,
   publishedOn: "2026-10-24",
 };
@@ -29,4 +31,5 @@ export const release = {
 // but each docs instance follows its own product.
 export const fleetRelease = {
   version: "v0.1.0-rc.1",
+  upcoming: "v0.1.0-rc.2",
 };

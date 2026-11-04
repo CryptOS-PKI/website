@@ -2,15 +2,7 @@
 title: "🔄 Upgrade a node in place"
 ---
 
-import Pre10Notice from '@site/docs/_partials/pre-1-0-notice.mdx';
-
 # 🔄 Upgrade a node in place
-
-:::tip[✅ Works today]
-This describes CryptOS as it works right now.
-:::
-
-<Pre10Notice />
 
 A CryptOS node can take a new OS image without being re-provisioned. That matters because re-provisioning reformats the state partition and destroys the CA key with it -- on an established node that means re-issuing every certificate it ever signed.
 

@@ -4,10 +4,6 @@ title: "📤 Apply config"
 
 # 📤 Apply config
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Push a machine config to a node.
 
 Everything a CryptOS node does comes from one YAML file, its **machine config**. There is no setting you change by hand on the node. To change something, you fetch the node's current config, edit the file, and send the whole file back. The node checks it, saves it, and tells you whether the change needs a reboot.

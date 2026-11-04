@@ -15,7 +15,7 @@ Two static sites in one repo, as npm workspaces:
   in `app/content/release.ts`; the components they feed (`app/components/`) take their content
   as props. No emoji on the site.
 - `apps/docs` (`@cryptos-pki/docs`): the docs site (docs.cryptos-pki.com), Docusaurus 3, with two
-  versioned docs instances: CryptOS at `/docs/cryptos` (`docs/` is Next, `versioned_docs/` the
+  versioned docs instances: CryptOS at `/docs/cryptos` (`docs/` is vNext, `versioned_docs/` the
   snapshots, `sidebars.ts`) and FleetOS Manager at `/docs/fleet` (`fleet/`,
   `fleet_versioned_docs/`, `sidebars-fleet.ts`). `redirects.ts` keeps the old `/docs/<page>`
   paths working. Sidebars and the table of contents show page titles without their emoji.
@@ -87,16 +87,17 @@ Run from the repo root.
 
 - Two docs instances, each versioned on its own: CryptOS (`apps/docs/versions.json`, default at
   `/docs/cryptos`) follows `release` in `packages/frame/release.ts`; FleetOS Manager
-  (`apps/docs/fleet_versions.json`, default at `/docs/fleet`) follows `fleetRelease`. Next sits
-  at `/docs/cryptos/next/` and `/docs/fleet/next/` with the unreleased banner, in every build
+  (`apps/docs/fleet_versions.json`, default at `/docs/fleet`) follows `fleetRelease`. vNext sits
+  at `/docs/cryptos/vnext/` and `/docs/fleet/vnext/` with the unreleased banner, in every build
   except the deploy (`DOCS_INCLUDE_NEXT=false`).
 - A release bumps `packages/frame/release.ts` and runs `npm run docs:version` in its own PR; it
   cuts whichever instance is missing its version. The deploy fails closed unless both are cut
   and newest.
-- Never edit a snapshot under `versioned_docs/` or `fleet_versioned_docs/`. Fix the page in
-  `docs/` or `fleet/` (Next) instead.
+- A snapshot under `versioned_docs/` or `fleet_versioned_docs/` changes only to match what its
+  release ships (checked against that release's tag and assets). Everything else goes in
+  `docs/` or `fleet/` (vNext).
 - A link from one docs instance to the other is an absolute path (`/docs/fleet/<page>`, or
-  `/docs/fleet/next/<page>` from a Next page), since relative `.md` links only resolve inside
+  `/docs/fleet/vnext/<page>` from a vNext page), since relative `.md` links only resolve inside
   one instance.
 
 ## Logging
@@ -122,7 +123,9 @@ Follow the logging rules in `CLAUDE.md`. In short:
   accepts the cookie choice, on either site. Remembered settings go through the consent store in
   `packages/frame` (see its README); a library that stores things on its own is kept out of
   storage or wrapped. The storage checks above enforce it in CI.
-- Docs pages: every page states its status (Works today, In flight, or Roadmap); docs describe
-  CryptOS as shipped on `main`; MDX 3, so no explicit `{#id}` heading anchors.
+- Docs pages: a released version holds only what that release ships, and vNext (unreleased
+  `main`) holds the rest under a banner naming the upcoming release, so pages carry no status
+  labels (no "Works today" or "In flight") and no per-page pre-1.0 notice (the strip carries
+  it). vNext describes `main`. MDX 3, so no explicit `{#id}` heading anchors.
 - `golic` does not descend into `vendor/`; its headers are verified by inspection against the
   cryptos-web commit they were copied from, not by CI.

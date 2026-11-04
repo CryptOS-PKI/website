@@ -16,10 +16,11 @@ limitations under the License.
 // Before the split, every page lived in one docs tree at /docs/<page>
 // (released) and /docs/next/<page> (Next). Now CryptOS answers at
 // /docs/cryptos and FleetOS Manager at /docs/fleet, each with its own
-// versions. Given a page's new path, this returns the old paths that should
-// still reach it, so links already out there (the console's help links among
-// them) keep working. Used as @docusaurus/plugin-client-redirects'
-// createRedirects.
+// versions, and the unreleased version is vNext at .../vnext/ (it was Next
+// at .../next/ for a while after the split). Given a page's new path, this
+// returns the old paths that should still reach it, so links already out
+// there (the console's help links among them) keep working. Used as
+// @docusaurus/plugin-client-redirects' createRedirects.
 
 // Pages that came into the FleetOS Manager docs from other sections keep
 // their path below the version; everything else came from fleet-manager/.
@@ -30,19 +31,26 @@ const instancePath = (path: string, base: string): string | null => {
   return path.startsWith(`${base}/`) ? path.slice(base.length) : null;
 };
 
-const splitVersion = (rest: string): {version: string; page: string} =>
-  rest === "/next" || rest.startsWith("/next/")
-    ? {version: "/next", page: rest.slice("/next".length)}
-    : {version: "", page: rest};
+// The page part below the version, and whether the page is in vNext.
+const splitVersion = (rest: string): {vnext: boolean; page: string} =>
+  rest === "/vnext" || rest.startsWith("/vnext/")
+    ? {vnext: true, page: rest.slice("/vnext".length)}
+    : {vnext: false, page: rest};
 
 export function oldDocsPaths(path: string): string[] {
   const cryptos = instancePath(path, "/docs/cryptos");
-  if (cryptos !== null) return [`/docs${cryptos}`];
+  if (cryptos !== null) {
+    const {vnext, page} = splitVersion(cryptos);
+    return vnext ? [`/docs/next${page}`, `/docs/cryptos/next${page}`] : [`/docs${page}`];
+  }
 
   const fleet = instancePath(path, "/docs/fleet");
   if (fleet === null) return [];
-  const {version, page} = splitVersion(fleet);
-  if (page === "" || page === "/") return [`/docs${version}/fleet-manager/overview`];
-  if (fleetPagesFromElsewhere.some((prefix) => page.startsWith(prefix))) return [`/docs${version}${page}`];
-  return [`/docs${version}/fleet-manager${page}`];
+  const {vnext, page} = splitVersion(fleet);
+  const version = vnext ? "/next" : "";
+  let beforeSplit: string;
+  if (page === "" || page === "/") beforeSplit = `/docs${version}/fleet-manager/overview`;
+  else if (fleetPagesFromElsewhere.some((prefix) => page.startsWith(prefix))) beforeSplit = `/docs${version}${page}`;
+  else beforeSplit = `/docs${version}/fleet-manager${page}`;
+  return vnext ? [beforeSplit, `/docs/fleet/next${page}`] : [beforeSplit];
 }

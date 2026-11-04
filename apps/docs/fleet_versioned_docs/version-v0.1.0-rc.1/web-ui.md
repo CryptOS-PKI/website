@@ -7,9 +7,7 @@ import TabItem from '@theme/TabItem';
 
 # 🖥️ The web UI
 
-:::tip[Works today]
 The web UI is part of the alpha. It is built into the Fleet Manager and served on the same HTTPS port, so there is nothing separate to install. A few screens still read demo data in places; they are listed under [Known gaps in the alpha](#known-gaps-in-the-alpha).
-:::
 
 This page walks through logging in and finding your way around the Fleet Manager's web UI. What the Fleet Manager is, and how nodes join it, is in the [Fleet Manager overview](./overview.md). Each area of the UI then has its own page, linked under [Where to go next](#where-to-go-next).
 

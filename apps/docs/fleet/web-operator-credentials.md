@@ -4,9 +4,7 @@ title: "🪪 Adding operators"
 
 # 🪪 Adding operators
 
-:::info[In flight]
 These screens are new in the web UI and need a Fleet Manager that serves operator credential requests. An older manager refuses them.
-:::
 
 This page covers one task: giving someone an operator certificate, and taking it away, from the web UI's **Operators** page. The Fleet Manager never signs operator certificates. Your external operator CA does (see [The operator CA and revocation](./operator-ca.md)). The web UI files a **credential request**, you get the request signed at the CA, and the web UI records the signed certificate.
 

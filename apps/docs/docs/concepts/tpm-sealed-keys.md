@@ -96,7 +96,7 @@ The `kms` mode is in the code, but no reference deployment has run it, and the i
 The node reads `state_key.mode` from the staged config on its first boot, when it formats the state partition. After that it reads the mode from the partition's LUKS2 header on every boot, so the mode chosen at install stays, whatever `STATEKEY` a later image was built with. A `config apply` that names a different `state_key.mode` is refused with `FailedPrecondition` and nothing is stored. To change the mode, reinstall the node.
 :::
 
-## What is not available today
+## What it doesn't do yet
 
 - **RSA keys inside the TPM.** An RSA CA needs a software-backed mode.
 - **Sharing a TPM key between nodes.** The key is created so it can't be duplicated to another TPM, so there is no second node that can sign with the same key.

@@ -2,13 +2,7 @@
 title: "⌨️ cryptosctl command reference"
 ---
 
-import Pre10Notice from '@site/docs/_partials/pre-1-0-notice.mdx';
-
 # ⌨️ cryptosctl command reference
-
-:::tip[✅ Works today]
-This describes CryptOS as it works right now.
-:::
 
 Every command and flag, in one place. `cryptosctl` is the only management tool for a standalone node, and it speaks the same API the Fleet Manager uses. `cryptosctl <command> --help` prints the same information on your machine.
 
@@ -178,8 +172,6 @@ Checks every entry's signature, that the sequence numbers run from 1 with no gap
 
 ## Image upgrades
 
-<Pre10Notice />
-
 These replace the node's CryptOS image without reinstalling it. The encrypted state (CA key, issued history, identity) is never touched. The node must have been built with an upgrade anchor; see [Secure Boot enrollment](../install-deploy/secure-boot.md).
 
 | Command | Flags | What it does |
@@ -189,7 +181,7 @@ These replace the node's CryptOS image without reinstalling it. The encrypted st
 | `image activate` | `--confirm` (the CA common name) | reboot into the staged image |
 | `image rollback` | | put the retained previous image back on the boot path; run `image activate` to boot it |
 
-The full procedure is the [in-place upgrade guide](https://github.com/CryptOS-PKI/cryptos-appliance/blob/main/docs/image-upgrade.md). The Fleet Manager's web console covers the same ground for a managed node: see [OS image lifecycle](/docs/fleet/next/web-node-detail#os-image-lifecycle).
+The full procedure is the [in-place upgrade guide](https://github.com/CryptOS-PKI/cryptos-appliance/blob/main/docs/image-upgrade.md). The Fleet Manager's web console covers the same ground for a managed node: see [OS image lifecycle](/docs/fleet/vnext/web-node-detail#os-image-lifecycle).
 
 ## Power and reset
 

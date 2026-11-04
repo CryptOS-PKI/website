@@ -2,21 +2,13 @@
 title: "💿 Build a bootable image"
 ---
 
-import Pre10Notice from '@site/docs/_partials/pre-1-0-notice.mdx';
-
 # 💿 Build a bootable image
-
-:::tip[✅ Works today]
-This describes CryptOS as it works right now.
-:::
-
-<Pre10Notice />
 
 A CryptOS node boots from one file: a **Unified Kernel Image** (UKI). The UKI holds the kernel, a tiny start-up program, and the read-only system image, all in one signed file. To install a node you usually wrap that UKI in an **ISO** and boot the machine or virtual machine from it.
 
 This page shows how to build the ISO from the `cryptos-appliance` source code, which pins the `cryptos-node` engine at a version and builds `init`, `cryptosctl` and the console from it by import path.
 
-The CA runs only on the image you build here, in its own VM, never on Kubernetes: a CA there can't be TPM-sealed and would be a single point of failure. FleetOS Manager, the optional multi-node console, runs separately, on Kubernetes or standalone (a VM); see the [Fleet Manager overview](/docs/fleet/next).
+The CA runs only on the image you build here, in its own VM, never on Kubernetes: a CA there can't be TPM-sealed and would be a single point of failure. FleetOS Manager, the optional multi-node console, runs separately, on Kubernetes or standalone (a VM); see the [Fleet Manager overview](/docs/fleet/vnext).
 
 ## Two choices to make first
 

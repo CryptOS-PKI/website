@@ -2,15 +2,11 @@
 title: "☸️ Deploy with Helm"
 ---
 
-import Pre10Notice from '@site/docs/_partials/pre-1-0-notice.mdx';
-
 # ☸️ Deploy with Helm
 
 :::info[Published on a release tag]
-A release tag publishes both the image (`ghcr.io/cryptos-pki/cryptos-manager`) and the chart (`oci://ghcr.io/cryptos-pki/charts/fleet-manager`) to GHCR. Install straight from the OCI registry below, or render the chart from a checkout of the [`cryptos-manager`](https://github.com/CryptOS-PKI/cryptos-manager) repo for an unreleased commit or a local edit. Kubernetes is one of three ways to run the manager; see [What to use today](#what-to-use-today) for the other two.
+A release tag publishes both the image (`ghcr.io/cryptos-pki/cryptos-manager`) and the chart (`oci://ghcr.io/cryptos-pki/charts/fleet-manager`) to GHCR. Install straight from the OCI registry below, or render the chart from a checkout of the [`cryptos-manager`](https://github.com/CryptOS-PKI/cryptos-manager) repo for an unreleased commit or a local edit. Kubernetes is one of three ways to run the manager; see [Other ways to run it](#other-ways-to-run-it) for the other two.
 :::
-
-<Pre10Notice />
 
 The supported chart is `chart/fleet-manager` in the [`cryptos-manager`](https://github.com/CryptOS-PKI/cryptos-manager) repo. It ships from the same repo and the same release as the manager, so the chart and the config file it renders always match the manager they run. If you are new to the Fleet Manager, read the [Fleet Manager overview](./overview.md) first.
 
@@ -218,7 +214,7 @@ You can render the chart without a cluster and read what it would create. `git` 
    ```
    :::
 
-## What to use today
+## Other ways to run it
 
 FleetOS Manager deploys three ways:
 

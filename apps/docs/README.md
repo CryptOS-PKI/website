@@ -6,7 +6,7 @@ Docusaurus 3 and TypeScript, one app in this repo's npm workspaces. Run the comm
 the repo root; see the root [README](../../README.md) for the rest.
 
 ```bash
-npm run dev:docs                        # http://localhost:3000, Next included
+npm run dev:docs                        # http://localhost:3000, vNext included
 npm run build -w @cryptos-pki/docs      # the static site in apps/docs/build
 npm run typecheck -w @cryptos-pki/docs
 ```
@@ -15,14 +15,15 @@ npm run typecheck -w @cryptos-pki/docs
 
 - 📝 **Two docs, one site:** CryptOS at `/docs/cryptos` (`docs/`, sidebar in `sidebars.ts`) and
   FleetOS Manager at `/docs/fleet` (`fleet/`, sidebar in `sidebars-fleet.ts`), each with its own
-  sidebar, versions and version picker. `docs/` and `fleet/` are Next, the pages for unreleased
+  sidebar, versions and version picker. `docs/` and `fleet/` are vNext, the pages for unreleased
   `main`. A link to the other docs is an absolute path, such as `/docs/fleet/helm`.
 - 🗂️ **Snapshots:** `versioned_docs/`, `versioned_sidebars/` and `versions.json` for CryptOS;
   `fleet_versioned_docs/`, `fleet_versioned_sidebars/` and `fleet_versions.json` for FleetOS
   Manager. One snapshot per released version, cut by `npm run docs:version` from the root. A
-  snapshot is never edited by hand.
+  snapshot changes only to match what its release ships.
 - ↪️ **`redirects.ts`:** every page also answers at its path from before the split
-  (`/docs/<page>`, `/docs/next/<page>`), through `@docusaurus/plugin-client-redirects`.
+  (`/docs/<page>`, `/docs/next/<page>`), and vNext pages at their old `.../next/` paths, through
+  `@docusaurus/plugin-client-redirects`.
 - 🏠 **`src/pages/index.tsx`:** the docs home.
 - 🎨 **`src/css/theme.css`:** the page theme, taken from the Fleet Manager web UI
   ([`cryptos-web`](https://github.com/CryptOS-PKI/cryptos-web), `apps/console/src/index.css`):
@@ -52,10 +53,14 @@ npm run typecheck -w @cryptos-pki/docs
 
 ## 🧭 Conventions
 
-- ✅ **Every page states its status:** Works today, In flight, or Roadmap.
-- 📖 **Docs describe CryptOS as shipped on `main`**, not design intent. Where a design note and the
-  code disagree, the code wins.
+- ✅ **A version holds what it ships:** a released version describes only what that release
+  ships; anything else lives in vNext, whose banner names the upcoming release
+  (`src/theme/DocVersionBanner`, from `packages/frame/release.ts`). No status labels on pages,
+  and no per-page pre-1.0 notice: the strip above the header carries it.
+- 📖 **Docs describe shipped code**, not design intent: a released version describes that
+  release's code at its tag, and vNext describes `main`. Where a design note and the code
+  disagree, the code wins.
 - ♿ **Contrast:** body text, links, callouts, tabs, tables, code tokens and the sidebar meet WCAG
   AA in both modes. Check any new colour against its real background before adding it.
-- 🔗 **Links:** a broken internal link fails the build, in Next and in every released version.
+- 🔗 **Links:** a broken internal link fails the build, in vNext and in every released version.
 - 🏷️ **MDX 3:** no explicit `{#id}` heading anchors; rely on the generated slugs.

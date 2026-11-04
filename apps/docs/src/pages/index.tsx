@@ -142,19 +142,6 @@ export default function Home(): ReactNode {
           </section>
         ))}
 
-        <section className={styles.notice}>
-          <div className={styles.noticeCard}>
-            <p className={styles.noticeTitle}>Pre-1.0: any release can change fundamentally</p>
-            <p className={styles.noticeBody}>
-              CryptOS is pre-1.0. Until v1.0.0, a release may change configuration, APIs, on-disk
-              and state formats, trust setup, and upgrade paths, sometimes with no migration path.
-              Running it in production today means accepting that risk.{' '}
-              <Link to="/docs/cryptos/introduction/status-roadmap">Read the project status and roadmap</Link>{' '}
-              before you decide.
-            </p>
-          </div>
-        </section>
-
         <section className={styles.productLink}>
           <p>
             Looking for the product overview rather than the documentation?{' '}

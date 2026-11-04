@@ -6,9 +6,7 @@ title: "🕵️ How the audit log proves integrity"
 
 Why a changed or missing entry cannot hide.
 
-:::tip[Works today]
 Every gRPC call a serving node receives is appended to a signed, hash-chained log on the encrypted state volume, and the code can verify the whole chain.
-:::
 
 :::info[The log stays on the node]
 Reading the log through the API, publishing its verifying key, and shipping it off the node are not available. The log stays on the node, and there is no supported way for you to fetch it or run the verifier. See [Where it falls short](#where-it-falls-short).

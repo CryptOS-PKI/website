@@ -6,9 +6,7 @@ title: "🔬 The ceremony, step by step"
 
 A close reading of each event the first-boot ceremony emits.
 
-:::tip[Works today]
 The first-boot Root ceremony runs end to end in the alpha: it creates the Root key, self-signs the Root certificate, writes a signed ceremony manifest and commits everything in one transaction. It is a 1-of-1 ceremony; the gaps are listed at the end.
-:::
 
 This page reads the ceremony as a reviewer would: what the node checks, what it does between events, what each event carries, and what is stored at the end. The code is `Engine.Start` in `internal/ceremony/ceremony.go`. To run the ceremony as an operator, see [Run the first-boot ceremony](../using/ceremony-start.md).
 

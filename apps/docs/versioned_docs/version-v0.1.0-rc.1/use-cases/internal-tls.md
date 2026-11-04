@@ -8,9 +8,7 @@ Your own servers and services need certificates too: the internal web apps, the 
 
 With CryptOS, each service gets a certificate from your own issuing CA. Clients trust **one root**, and everything that chains to it is trusted. The same CA can also issue **client** certificates, so two services can prove who they are to each other (mutual TLS, or mTLS).
 
-:::tip[Works today]
 An intermediate or issuing node issues server and client certificates from a CSR, under a profile you define. You send the CSR with `cryptosctl ca issue-leaf` or through the Fleet Manager. The node records every certificate, revokes on request, and serves a CRL and OCSP.
-:::
 
 :::info[Automatic enrolment is off until you switch it on]
 An issuing node can serve ACME (`http-01`) and EST, so clients enrol and renew on their own. Both are off by default; switching one on is a config change that takes effect at the next reboot. See the [overview](./overview.md#enrolment-protocols). This page covers requesting and renewing by hand.

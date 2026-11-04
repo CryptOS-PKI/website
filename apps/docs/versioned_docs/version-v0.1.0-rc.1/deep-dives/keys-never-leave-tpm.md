@@ -6,9 +6,7 @@ title: "🗝️ How keys never leave the TPM"
 
 Following the private key from creation to signing without it ever touching disk.
 
-:::tip[Works today]
 On a node built with the default `tpm` state-key mode, the CA key is created inside the TPM, is marked non-exportable by the TPM itself, and signs only inside the TPM. The rest of this page shows where that holds and where it doesn't.
-:::
 
 ## First, which key and which mode
 

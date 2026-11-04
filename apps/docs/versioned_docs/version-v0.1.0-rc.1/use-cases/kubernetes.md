@@ -20,9 +20,7 @@ There are two separate jobs here, and it helps to keep them apart:
 - **No `dns-01` and no wildcard names**, which cert-manager usually relies on for internal names.
 :::
 
-:::tip[Works today]
 You can issue certificates for cluster workloads by CSR, the same way as for any server: make the key and CSR, issue with `cryptosctl ca issue-leaf` or the Fleet Manager, and load the result into a Kubernetes TLS Secret yourself. See [Internal TLS and mTLS](./internal-tls.md). Renewal is manual.
-:::
 
 ## How the ACME server behaves
 

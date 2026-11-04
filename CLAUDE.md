@@ -55,11 +55,11 @@ request time.
 │   │   ├── react-router.config.ts, vite.config.ts, tailwind.config.js, postcss.config.js
 │   │   └── build/               build output (gitignored): client/ is the deployable site
 │   └── docs/                    @cryptos-pki/docs: docs.cryptos-pki.com
-│       ├── docs/                CryptOS docs (/docs/cryptos), Next: the pages for unreleased main
-│       ├── versioned_docs/      one CryptOS snapshot per release (never edited by hand)
+│       ├── docs/                CryptOS docs (/docs/cryptos), vNext: the pages for unreleased main
+│       ├── versioned_docs/      one CryptOS snapshot per release (only what it ships)
 │       ├── versioned_sidebars/, versions.json, sidebars.ts
-│       ├── fleet/               FleetOS Manager docs (/docs/fleet), Next
-│       ├── fleet_versioned_docs/  one FleetOS Manager snapshot per release (never edited by hand)
+│       ├── fleet/               FleetOS Manager docs (/docs/fleet), vNext
+│       ├── fleet_versioned_docs/  one FleetOS Manager snapshot per release (only what it ships)
 │       ├── fleet_versioned_sidebars/, fleet_versions.json, sidebars-fleet.ts
 │       ├── redirects.ts         the old /docs/<page> paths, kept working
 │       ├── docusaurus.config.ts
@@ -85,7 +85,7 @@ request time.
   The components and the page stay product-agnostic.
 - `apps/site/app/components/`: presentational pieces, each one taking its content as props. No
   data fetching, no product-specific copy.
-- `apps/docs/docs/` (CryptOS) and `apps/docs/fleet/` (FleetOS Manager): docs pages for Next. A
+- `apps/docs/docs/` (CryptOS) and `apps/docs/fleet/` (FleetOS Manager): docs pages for vNext. A
   released version's pages change only by cutting a new version (`npm run docs:version`).
 - `packages/frame`: anything both sites must render the same: the fonts, the frame tokens and
   colours, the strip, the header links, the footer, the hero both homes open with and the theme

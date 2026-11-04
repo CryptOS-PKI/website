@@ -17,7 +17,7 @@ When a release is published, the workflow checks out that release's tag and then
    `apps/docs/fleet_versions.json`, each as the newest version there. If either isn't, the run
    stops before anything builds or deploys.
 2. Runs `npm ci --ignore-scripts`, then builds the site and the docs. The docs build sets
-   `DOCS_INCLUDE_NEXT=false`, so the published docs carry the released versions only, not Next
+   `DOCS_INCLUDE_NEXT=false`, so the published docs carry the released versions only, not vNext
    (unreleased `main`). Both builds finish before either deploy starts, so a failed build never
    leaves one site on the new release and the other on the old one.
 3. Uploads `apps/site/build/client/` to the Pages project `cryptos-pki-www` and `apps/docs/build/`
@@ -27,8 +27,8 @@ When a release is published, the workflow checks out that release's tag and then
 ## Cutting the docs version for a release
 
 The docs site has two docs, each versioned on its own: CryptOS at `/docs/cryptos` and FleetOS
-Manager at `/docs/fleet`. In each, the newest cut version is the default; Next (`main`) is served
-at `/docs/cryptos/next/` and `/docs/fleet/next/` in dev and preview builds, under a banner that
+Manager at `/docs/fleet`. In each, the newest cut version is the default; vNext (`main`) is served
+at `/docs/cryptos/vnext/` and `/docs/fleet/vnext/` in dev and preview builds, under a banner that
 points at the current version.
 
 A release that changes a product version gets its own PR first:

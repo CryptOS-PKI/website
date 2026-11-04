@@ -4,9 +4,7 @@ title: "🔗 A node's lifecycle in the fleet"
 
 # 🔗 A node's lifecycle in the fleet
 
-:::tip[✅ Works today]
 The Fleet Manager and its web UI are part of the alpha.
-:::
 
 How a node gets into the fleet, how it is kept trusted and configured once it is in, and how it comes back out. See [Fleet Manager overview](./overview.md) for what the manager is and holds.
 
@@ -24,7 +22,7 @@ With Postgres, the manager copies the `nodes:` list into the database on its fir
 
 ### Adopting a new node
 
-Adoption takes a node that has just booted into [maintenance mode](/docs/cryptos/next/concepts/maintenance-mode) and turns it into a working CA, from the web UI. It needs `admin`.
+Adoption takes a node that has just booted into [maintenance mode](/docs/cryptos/vnext/concepts/maintenance-mode) and turns it into a working CA, from the web UI. It needs `admin`.
 
 1. **You give the node's address.** The manager connects without trusting anything yet, reads the certificate the node presents, and shows you its SHA-256 fingerprint and subject.
 

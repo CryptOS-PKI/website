@@ -4,10 +4,6 @@ title: "🎉 Run the first-boot ceremony"
 
 # 🎉 Run the first-boot ceremony
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Create the Root CA for the first time and watch each step.
 
 The **first-boot ceremony** is the moment a Root CA is born. The node creates its Root key inside the TPM, signs its own Root certificate with it, and writes a signed record of what it did. It runs once per node.

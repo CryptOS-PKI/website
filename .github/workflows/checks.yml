@@ -85,12 +85,27 @@ jobs:
       # onBrokenLinks and the markdown link hook are set to throw, so a broken
       # internal link fails this step. This build includes Next, so it checks
       # the released versions and main's pages.
+      # Built under a base path, as the hand-off previews are, so a link or an
+      # image that skips the base path (a bare '/img/...') fails here rather
+      # than only in a preview. The checks below read the same build.
       - name: Docs - build
         if: steps.changes.outputs.docs_changed == 'true'
+        env:
+          PREVIEW_BASE_PATH: /docs-ci/
         run: npm run build -w @cryptos-pki/docs
+
+      # Every image every page uses, in both docs and every version, must be
+      # in the build (scripts/check-images.mjs).
+      - name: Docs - no missing images
+        if: steps.changes.outputs.docs_changed == 'true'
+        env:
+          PREVIEW_BASE_PATH: /docs-ci/
+        run: npm run check:images:docs
 
       # Loads every page, then hydrates a few and uses the theme, full-width
       # and tab switches: nothing may be stored before consent.
       - name: Docs - nothing stored before consent
         if: steps.changes.outputs.docs_changed == 'true'
+        env:
+          PREVIEW_BASE_PATH: /docs-ci/
         run: npm run check:storage:docs

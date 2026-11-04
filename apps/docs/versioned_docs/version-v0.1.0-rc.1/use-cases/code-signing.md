@@ -8,9 +8,7 @@ Signing your own software proves two things to whoever runs it: who built it, an
 
 CryptOS keeps to one rule here: **it never sees your software.** It doesn't take files or hashes to sign. It issues a certificate with the Code Signing usage, the private key stays with your build machine or developer, and your usual signing tool (`signtool`, `codesign`, `cosign`, `jarsigner` and so on) does the signing. The CA only vouches for who holds the key.
 
-:::tip[Works today]
 An intermediate or issuing node issues a code-signing certificate from a CSR, under a profile whose extended key usage is Code Signing (`1.3.6.1.5.5.7.3.3`). You send the CSR with `cryptosctl ca issue-leaf` or through the Fleet Manager, and revoke with `cryptosctl ca revoke` if the key leaks.
-:::
 
 ## What you set up once
 

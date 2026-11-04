@@ -4,10 +4,6 @@ title: "🆔 Make your admin identity"
 
 # 🆔 Make your admin identity
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Create the admin key and certificate you use to run the ceremony.
 
 A CryptOS node has no user accounts and no passwords. It trusts exactly one client certificate: the **bootstrap admin** named in its machine config. You make that identity on your own workstation with `cryptosctl bootstrap`, put the certificate in the config, and keep the key. The same identity runs the ceremony and every command after it.

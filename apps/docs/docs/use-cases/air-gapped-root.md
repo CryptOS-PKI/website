@@ -8,13 +8,11 @@ The Root CA is the one key everything else depends on. If it leaks, every certif
 
 CryptOS is built for this. A Root node only signs CAs unless you tell it otherwise, and a two-tier hierarchy (an offline-style Root with an Intermediate below it) has been run on VMware with vTPMs, including a vCenter VMCA chained underneath.
 
-:::tip[Works today]
 - A node in the **root** role runs the first-boot ceremony, creates its key and self-signs its certificate.
 - A node in the **intermediate** or **issuing** role gets its CA certificate from the Root by CSR: `ca get-subordinate-csr` on the child, `ca sign-subordinate` on the Root, `ca submit-subordinate-cert` back on the child.
 - A Root refuses to issue leaf certificates unless its config sets `root_leaf_issuance: acknowledged-irreversible`.
 - A subordinate can be re-certified on the same key later (`ca get-renewal-csr`, `ca sign-subordinate`, `ca submit-renewed-cert`), so nothing below it has to re-pin.
 - Between signings the Root can be shut down cleanly with `cryptosctl reboot --confirm "<Root CA CN>" --power-off`.
-:::
 
 :::info[Offline means powered off]
 CryptOS has no locked-down mode for a Root. While it runs, a Root serves its management API like any other node, there is no hardware presence check before its key unseals, and one admin certificate authorizes every operation. "Offline" means the Root node is powered off, or cut off from the network, between signings.

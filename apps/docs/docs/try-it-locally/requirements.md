@@ -4,10 +4,6 @@ title: "🧾 What you need"
 
 # 🧾 What you need
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 The tools to run CryptOS on your own machine: Linux, QEMU, swtpm, OVMF, and Go.
 
 This section walks you from an empty machine to a running CryptOS Root CA inside a virtual machine. You build the image from source, boot it in QEMU with a software TPM, and run the first-boot ceremony with `cryptosctl`. Nothing here touches real hardware or your network, and you can throw the whole thing away when you are done.

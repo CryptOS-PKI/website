@@ -4,9 +4,7 @@ title: "🛰️ Enrol devices with SCEP"
 
 # 🛰️ Enrol devices with SCEP
 
-:::tip[Works today]
 SCEP is built and tested.
-:::
 
 Get a certificate onto a network device that cannot run ACME, such as a Cisco IOS or IOS-XE switch, over SCEP (RFC 8894).
 

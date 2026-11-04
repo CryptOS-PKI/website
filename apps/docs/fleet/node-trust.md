@@ -7,9 +7,7 @@ import TabItem from '@theme/TabItem';
 
 # 🔐 Verifying a node's certificate
 
-:::tip[Works today]
 The Fleet Manager verifies every node's server certificate and refuses a node it can't verify. Before a node has its CA you pin its certificate; once the node signs its management certificate with its CA, the manager verifies it against the CA chain it recorded.
-:::
 
 This page covers one task: making sure the Fleet Manager can verify each node it manages, before an upgrade and as nodes reboot and get their CA. What the Fleet Manager is, and how nodes join it, is in the [Fleet Manager overview](./overview.md).
 

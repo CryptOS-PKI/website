@@ -4,10 +4,6 @@ title: "📄 Machine config: pki"
 
 # 📄 Machine config: pki
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 The `pki` section of the [machine config](./machine-config.md): the CA's key, name and lifetime, the parent it trusts, where it publishes revocation data, and the certificate profiles it issues from. ACME and EST have [their own page](./machine-config-enrollment.md).
 
 ## 🔑 The CA key, subject and lifetime

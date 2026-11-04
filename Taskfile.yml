@@ -39,6 +39,7 @@ tasks:
       - npm run check:links
       - npm run check:storage:site
       - npm run check:storage:docs
+      - npm run check:images:docs
   license:
     desc: Verify every source file carries the Apache 2.0 license header and LICENSE is the verbatim Apache 2.0 text (CI; never writes).
     cmds:

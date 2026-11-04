@@ -7,10 +7,6 @@ import TabItem from '@theme/TabItem';
 
 # 🔁 Reboot into the ceremony
 
-:::tip[✅ Works today]
-This describes CryptOS as it works right now.
-:::
-
 After the install the node reboots from its own disk. This first real boot sets up the encrypted disk and brings the node onto its permanent address. From there, a Root is ready for its **first-boot ceremony**, where it creates its CA key inside the TPM and signs its own Root certificate. This page gets you to that point, with a trusted connection to the node; [Run the first-boot ceremony](./run-the-ceremony.md) covers the ceremony itself.
 
 ## The first boot from disk

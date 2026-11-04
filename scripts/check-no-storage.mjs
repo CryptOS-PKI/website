@@ -35,7 +35,9 @@ limitations under the License.
 //   site's switch goes through the same consent and theme code, tested in
 //   packages/frame.)
 //
-//   node scripts/check-no-storage.mjs --app=<site|docs> <build dir>
+//   node scripts/check-no-storage.mjs --app=<site|docs> <build dir> [--base=/sub/path/]
+//
+// --base is the base path the build was made with (PREVIEW_BASE_PATH).
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { setTimeout as sleep } from "node:timers/promises";
 import path from "node:path";
@@ -45,15 +47,17 @@ import { JSDOM, ResourceLoader, VirtualConsole } from "jsdom";
 const ORIGIN = "https://example.test";
 
 class BuildLoader extends ResourceLoader {
-  constructor(root) {
+  constructor(root, base) {
     super();
     this.root = root;
+    this.base = base;
   }
 
   fetch(url) {
     const target = new URL(url);
-    const file = path.join(this.root, decodeURIComponent(target.pathname));
-    if (target.origin !== ORIGIN || !existsSync(file) || statSync(file).isDirectory()) return null;
+    if (target.origin !== ORIGIN || !target.pathname.startsWith(this.base)) return null;
+    const file = path.join(this.root, decodeURIComponent(target.pathname.slice(this.base.length)));
+    if (!existsSync(file) || statSync(file).isDirectory()) return null;
     return Promise.resolve(readFileSync(file));
   }
 }
@@ -103,7 +107,7 @@ function watchStorage(window, writes, scheme) {
 // and the app hydrates; without, only its inline scripts run.
 export async function loadPage(
   html,
-  { file = "page.html", root, settleMs = 0, scheme = "dark" } = {},
+  { file = "page.html", root, base = "/", settleMs = 0, scheme = "dark" } = {},
 ) {
   const writes = [];
   const errors = [];
@@ -112,9 +116,9 @@ export async function loadPage(
     if (!/Could not parse CSS stylesheet/.test(error.message)) errors.push(error.message);
   });
   const dom = new JSDOM(html, {
-    url: `${ORIGIN}/${file.replace(/index\.html$/, "")}`,
+    url: `${ORIGIN}${base}${file.replace(/index\.html$/, "")}`,
     runScripts: "dangerously",
-    resources: root ? new BuildLoader(root) : undefined,
+    resources: root ? new BuildLoader(root, base) : undefined,
     pretendToBeVisual: true,
     virtualConsole,
     beforeParse: (window) => watchStorage(window, writes, scheme),
@@ -152,11 +156,11 @@ const button = (document, label) =>
 
 // Uses a hydrated docs page the way a first-time visitor would, then again
 // for a visitor who declines and one who accepts.
-async function useDocsPage(root, file) {
+async function useDocsPage(root, file, base) {
   const problems = [];
   const fail = (message) => problems.push(`${file}: ${message}`);
   const html = readFileSync(path.join(root, file), "utf8");
-  const open = (scheme) => loadPage(html, { file, root, settleMs: 1500, scheme });
+  const open = (scheme) => loadPage(html, { file, root, base, settleMs: 1500, scheme });
 
   // First visit, light system setting: nothing asked, nothing stored.
   const first = await open("light");
@@ -217,6 +221,9 @@ const DOCS_PAGES_TO_USE = [
 if (import.meta.url === `file://${process.argv[1]}`) {
   const app = process.argv.find((arg) => arg.startsWith("--app="))?.slice("--app=".length);
   const root = process.argv.slice(2).find((arg) => !arg.startsWith("--"));
+  const baseArg =
+    process.argv.find((arg) => arg.startsWith("--base="))?.slice("--base=".length) ?? "/";
+  const base = baseArg.endsWith("/") ? baseArg : `${baseArg}/`;
   if (!root || !["site", "docs"].includes(app)) {
     console.error("usage: node scripts/check-no-storage.mjs --app=<site|docs> <build dir>");
     process.exit(2);
@@ -242,7 +249,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         problems.push(`${file}: missing from the build`);
         continue;
       }
-      problems.push(...(await useDocsPage(root, file)));
+      problems.push(...(await useDocsPage(root, file, base)));
     }
     console.log(`docs: used ${DOCS_PAGES_TO_USE.length} hydrated page(s)`);
   }

@@ -4,9 +4,7 @@ title: "🔑 Operators, agent keys and audit"
 
 # 🔑 Operators, agent keys and audit
 
-:::tip[Works today]
 The web UI is part of the alpha. A few screens still read demo data in places; see [Known gaps in the alpha](./web-ui.md#known-gaps-in-the-alpha).
-:::
 
 Who can reach the Fleet Manager, how an AI agent signs in, and the read-only record of what happened. Operator CAs are their own task: see [Managing operator CAs in the web UI](./web-operator-cas.md).
 

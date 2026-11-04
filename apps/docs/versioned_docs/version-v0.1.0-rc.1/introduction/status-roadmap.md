@@ -2,15 +2,11 @@
 title: "🗺️ Project status and roadmap"
 ---
 
-import Pre10Notice from '@site/docs/_partials/pre-1-0-notice.mdx';
-
 # 🗺️ Project status and roadmap
 
 CryptOS is pre-1.0, and its first release candidates are just starting to come out. Here is an honest picture of what is finished and what is still coming.
 
-<Pre10Notice />
-
-## ✅ Works today
+## ✅ In this release
 
 The core of a certificate authority is built, tested, and running on real hardware:
 
@@ -35,6 +31,6 @@ The core of a certificate authority is built, tested, and running on real hardwa
 Every CryptOS release before `1.0.0` is a `0.x` release: `v0.1.0` is the first, and each one is preceded by release candidates (`v0.1.0-rc.1`, `rc.2` and so on) that are tested the same way. `1.0.0` will be the first GA release, once the whole system lands. It isn't out yet.
 :::
 
-## One thing to know today
+## One thing to know
 
 A node does more than sign its own Root: it can sign subordinate CAs and issue end-entity certificates from a CSR. The `ca` commands in the [cryptosctl command reference](../reference/cryptosctl.md#certificate-authority) list what it can sign today.

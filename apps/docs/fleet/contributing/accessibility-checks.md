@@ -4,10 +4,6 @@ title: "♿ Accessibility checks"
 
 # ♿ Accessibility checks
 
-:::tip[Works today]
-This describes `cryptos-web` as it works right now.
-:::
-
 The Fleet Manager console (`cryptos-web`) targets WCAG 2.2 AA. This page covers how that's checked: what runs automatically, what's left to a manual pass, and why.
 
 ## Automated: axe on every kit component

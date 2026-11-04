@@ -4,13 +4,8 @@ title: "🛡️ Secure Boot enrollment"
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import Pre10Notice from '@site/docs/_partials/pre-1-0-notice.mdx';
 
 # 🛡️ Secure Boot enrollment
-
-:::tip[✅ Works today]
-This describes CryptOS as it works right now.
-:::
 
 Every image you run is signed by you. CryptOS ships **no signing key** and asks you to trust none: the project's images are always unsigned, and nothing it publishes is ready to boot with Secure Boot on until you sign it (or build and sign from source). You make your own Secure Boot key, build the image with it, and enroll its certificate in the firmware of the machines you run. The same certificate is stamped into the image as its **upgrade anchor**, so the key that makes an image bootable is also the only key that can replace it later.
 
@@ -213,8 +208,6 @@ sbverify --cert "$SB_CERT" build/out/cryptos-amd64.uki
 ```
 
 ## 5. Upgrade with the same key
-
-<Pre10Notice />
 
 A node accepts a new image only if the image's `.sig` verifies against the anchor in the image it is **running**. Build every later version with the same key, then stage it:
 

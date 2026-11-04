@@ -6,18 +6,16 @@ title: "🎯 What you can do with CryptOS"
 
 CryptOS is a certificate authority, so every use case comes down to the same thing: a machine, a person or a build job needs a certificate, and something has to hand it over. What changes from one use case to the next is **how** the request reaches the CA. Some requests are carried by hand, and some arrive over a standard enrolment protocol that a client already speaks.
 
-These pages are honest about where the alpha stands. Each one says what works today and what doesn't.
+Each page says what this release does and what it doesn't.
 
-## How a certificate gets out of CryptOS today
+## How a certificate gets out of CryptOS
 
-:::tip[Works today]
 A node in the **intermediate** or **issuing** role issues end-entity certificates. You pick a named **certificate profile** from the machine config, hand the node a CSR, and get the certificate back. There are two ways to do that:
 
 - `cryptosctl ca issue-leaf --csr <file> --profile <name>` from your workstation, over mTLS.
 - The **Fleet Manager** web UI, which issues a leaf from a CSR on a node it manages.
 
 Every certificate a node issues is recorded. `cryptosctl ca list-issued` lists them, `ca revoke` revokes one, and when `pki.revocation_base_url` is set the node serves its CRL at `/crl`, OCSP at `/ocsp` and its own CA certificate at `/ca.cer`.
-:::
 
 The profile decides everything about the certificate except the subject and the public key, which come from the CSR. SANs and EKUs asked for in the CSR are ignored. That is deliberate: a request can never widen what the CA hands out. See [certificate profiles](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/certificate-profiles.md) for every field.
 
@@ -29,8 +27,8 @@ Carrying CSRs by hand works, but it does not scale to hundreds of servers or a r
 
 | Protocol | What speaks it | State in the alpha |
 |---|---|---|
-| gRPC `IssueLeaf` | `cryptosctl`, the Fleet Manager | Works today |
-| CRL and OCSP | Every TLS client that checks revocation | Works today |
+| gRPC `IssueLeaf` | `cryptosctl`, the Fleet Manager | Available |
+| CRL and OCSP | Every TLS client that checks revocation | Available |
 | ACME (RFC 8555, `http-01`) | certbot, lego, acme.sh, win-acme, cert-manager | Off until you switch it on in the machine config |
 | EST (RFC 7030) | Network gear and devices with an EST client | Off until you switch it on in the machine config |
 
@@ -56,7 +54,7 @@ A node certifies only two kinds of subject key: **ECDSA P-384**, and **RSA of 30
 
 | Page | The job | Where it stands |
 |---|---|---|
-| [Internal TLS and mTLS](./internal-tls.md) | Certificates for your own servers and services | Works today, by CSR |
+| [Internal TLS and mTLS](./internal-tls.md) | Certificates for your own servers and services | Available, by CSR |
 | [Kubernetes workloads](./kubernetes.md) | Certificates for pods, ingress and controllers | By CSR today |
 | [Devices and IoT](./devices-iot.md) | Routers, switches and small devices | By CSR today |
 | [Code signing](./code-signing.md) | Certificates your build tools sign with | By CSR today |

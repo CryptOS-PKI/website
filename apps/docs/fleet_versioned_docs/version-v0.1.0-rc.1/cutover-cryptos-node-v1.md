@@ -4,9 +4,7 @@ title: "🔀 Cutting a fleet over to cryptos.node.v1"
 
 # 🔀 Cutting a fleet over to cryptos.node.v1
 
-:::tip[Works today]
 The manager and `cryptosctl` both speak `cryptos.node.v1` once you are on a release built after the rename below. This page is for a fleet still running from before it.
-:::
 
 `cryptos-node#342` renamed the node gRPC package from `cryptos.v1` to `cryptos.node.v1`, with no compatibility service: a node built from that change onward serves `cryptos.node.v1.NodeService` only. A Fleet Manager built before the rename still dials `cryptos.v1.NodeService`, which no longer exists, so it loses every node the moment that node is upgraded. There is no order that avoids a window where the manager and some nodes disagree; this page is about keeping that window short, watched, and recoverable.
 

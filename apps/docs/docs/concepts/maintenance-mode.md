@@ -4,9 +4,7 @@ title: "🧰 Maintenance mode and the install lifecycle"
 
 # 🧰 Maintenance mode and the install lifecycle
 
-:::tip[Works today]
 The whole path, from booting the ISO to a serving CA, runs on VMware in the alpha. The limits that still apply are listed under [Known limits](#known-limits).
-:::
 
 The Talos-style path: boot, configure, install to disk, then reboot into service. This page explains what happens at each stage and why. The [Install & Deploy](../install-deploy/build-bootable-image.md) pages are the step-by-step version.
 
@@ -106,7 +104,7 @@ Once the identity is committed, the node is serving: it signs, publishes revocat
 
 ## Using the Fleet Manager instead
 
-A [Fleet Manager](/docs/fleet/next) can do stages 2 to 4 for you. It adopts a node from its maintenance endpoint: it makes a bootstrap credential for the node, sends the install config, and runs the ceremony. Adoption is safe to retry if it stops partway.
+A [Fleet Manager](/docs/fleet/vnext) can do stages 2 to 4 for you. It adopts a node from its maintenance endpoint: it makes a bootstrap credential for the node, sends the install config, and runs the ceremony. Adoption is safe to retry if it stops partway.
 
 ## Re-provisioning after a reset
 

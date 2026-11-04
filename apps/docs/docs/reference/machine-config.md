@@ -4,10 +4,6 @@ title: "📄 Machine config schema"
 
 # 📄 Machine config schema
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Every field in `machine.yaml` and what it means.
 
 A CryptOS node is described by one YAML document, the **machine config**. It sets the node's role, its network, the administrator it trusts on first boot, and every certificate setting. The node has no other settings and no way to change them by hand. See [Declarative config](../concepts/declarative-config.md) for the idea behind it.

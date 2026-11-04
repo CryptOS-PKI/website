@@ -4,12 +4,11 @@ slug: "/"
 ---
 
 import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
-# <ThemedImage sources={{light: '/img/brand/fleetos-mark-light.svg', dark: '/img/brand/fleetos-mark-dark.svg'}} alt="FleetOS" className="integration-logo" /> Fleet Manager overview
+# <ThemedImage sources={{light: useBaseUrl('/img/brand/fleetos-mark-light.svg'), dark: useBaseUrl('/img/brand/fleetos-mark-dark.svg')}} alt="FleetOS" className="integration-logo" /> Fleet Manager overview
 
-:::tip[Works today]
 The Fleet Manager and its web UI are part of the alpha. They have run a two-tier hierarchy (a Root and an Intermediate) on VMware, with both nodes reported as established and healthy. A release tag publishes the container image and chart; see [Deploy with Helm](./helm.md) for where each install path stands.
-:::
 
 A single CryptOS node is managed with `cryptosctl`, one node at a time. Once you have several nodes, a Root and the CAs under it, you want one place to see all of them. That place is the **Fleet Manager**, also called FleetOS Manager.
 
@@ -63,7 +62,7 @@ There are three levels. Each includes the one before it.
 
 The manager's [Operator PKI guide](https://github.com/CryptOS-PKI/cryptos-manager/blob/main/docs/operator-pki.md) shows how to mint the first operator certificate.
 
-## What is not available today
+## What it doesn't do yet
 
 - A node can't start its own enrollment. The manager starts every link, adoption and enrollment, and the challenge in a `LINK` is signed by the node's CA identity key, not the TPM endorsement key.
 
@@ -75,5 +74,5 @@ The manager's [Operator PKI guide](https://github.com/CryptOS-PKI/cryptos-manage
 - [A node's lifecycle in the fleet](./node-lifecycle.md): how a node joins, switches protocols and leaves.
 - [The web UI](./web-ui.md): logging in, finding your way around, and where each page lives.
 - [Deploy with Helm](./helm.md): the supported chart, and what to use today.
-- [Machine config](/docs/cryptos/next/reference/machine-config): the node config the adopt wizard fills in.
-- [cryptosctl](/docs/cryptos/next/reference/cryptosctl): managing a node without the Fleet Manager.
+- [Machine config](/docs/cryptos/vnext/reference/machine-config): the node config the adopt wizard fills in.
+- [cryptosctl](/docs/cryptos/vnext/reference/cryptosctl): managing a node without the Fleet Manager.

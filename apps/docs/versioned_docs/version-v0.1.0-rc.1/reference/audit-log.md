@@ -4,9 +4,7 @@ title: "📚 Audit log format"
 
 # 📚 Audit log format
 
-:::tip[Works today]
-The node writes and chains its audit log today, and `cryptosctl audit list` and `audit verify` read and check it (see [Check the audit log](../using/audit-log.md)). Exporting the raw files for verification off the node is not available; see [What you can't do today](#-what-you-cant-do-today).
-:::
+The node writes and chains its audit log, and `cryptosctl audit list` and `audit verify` read and check it (see [Check the audit log](../using/audit-log.md)). Exporting the raw files for verification off the node is not available; see [What you can't do yet](#-what-you-cant-do-yet).
 
 How the tamper-evident log is structured and verified.
 
@@ -110,7 +108,7 @@ Protobuf JSON output isn't byte-stable: the spacing and order can differ between
 
 The audit key is an Ed25519 key derived, not stored. The node generates a 32-byte master seed at first boot and keeps it at `/var/lib/cryptos/seed` on the encrypted state partition. The audit key is HKDF-SHA256 over that seed, with no salt and the info string `cryptos.dev/audit-signer/v1`. The key is separate from the CA key, so audit signing never touches the key that issues certificates. The [ceremony manifest](../deep-dives/ceremony-walkthrough.md) is signed by a second key from the same seed, with the info string `cryptos.dev/ceremony-signer/v1`.
 
-## 🚧 What you can't do today
+## 🚧 What you can't do yet
 
 :::info[Verification runs on the node]
 `ListAuditEvents` returns each entry and its SHA-256, and `VerifyAuditChain` checks the chain on the node. Neither returns the entry signatures or the audit public key, and the node doesn't ship entries to a SIEM, so you can't verify the log independently off the node in this alpha.

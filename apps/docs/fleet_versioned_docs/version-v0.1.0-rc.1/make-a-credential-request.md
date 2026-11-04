@@ -4,9 +4,7 @@ title: "🙋 Make a credential request"
 
 # 🙋 Make a credential request
 
-:::info[In flight]
 This page is new in the web UI. Your admin needs a Fleet Manager that serves operator credential requests to file the CSR you make here.
-:::
 
 This page covers one task: making your own Fleet Manager operator key and certificate signing request (CSR), then building your `.p12` file once your admin sends back the signed certificate. It is for someone who doesn't have an operator certificate yet.
 

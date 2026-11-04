@@ -4,9 +4,7 @@ title: "🏛️ CA roles: Root, Intermediate, Issuing"
 
 # 🏛️ CA roles: Root, Intermediate, Issuing
 
-:::tip[Works today]
 Root, Intermediate and Issuing are all in the alpha. A two-tier hierarchy (a Root plus an Intermediate, both RSA-4096 on VMware) runs today, with leaf issuance from the Intermediate and a VMware VMCA signed by that Intermediate as a subordinate CA.
-:::
 
 The three kinds of CA node and how they stack. If the terms are new, read [The Root CA and the chain of trust](./chain-of-trust.md) first.
 
@@ -128,7 +126,7 @@ ACME and EST run on an intermediate or issuing node only. A Root's config with `
 The TPM backend creates ECDSA P-384 keys only. An RSA CA key needs a software state-key mode, where the key is kept on the encrypted state partition instead of inside the TPM. [The TPM and sealed keys](./tpm-sealed-keys.md) explains the difference.
 :::
 
-## What is not available today
+## What it doesn't do yet
 
 - A Root has no hardware presence check before its key unseals.
 - One admin certificate authorizes every operation, Root operations included. There is no multi-person quorum.

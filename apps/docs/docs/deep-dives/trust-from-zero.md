@@ -6,9 +6,7 @@ title: "🌱 Trust from zero"
 
 Start with nothing: how the Root signs itself, and how your laptop earns the right to talk to the API.
 
-:::tip[Works today]
 Everything on this page up to "Where it falls short" is built and runs in the alpha. The gaps at the end are stated as they are in the code today.
-:::
 
 A freshly built CryptOS image knows nobody. It carries no administrator account, no password, no pre-shared key and no CA key. Three trust relationships have to be built from that blank state, and this page follows each one to the code that enforces it:
 

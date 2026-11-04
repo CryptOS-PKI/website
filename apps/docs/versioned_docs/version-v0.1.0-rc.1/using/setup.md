@@ -7,10 +7,6 @@ import TabItem from '@theme/TabItem';
 
 # ⚙️ Setup
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Point cryptosctl at a node: endpoint, identity, trust, and the local socket.
 
 Every `cryptosctl` command that talks to a node needs to know three things: **where** the node is, **who you are**, and **which certificate the node must show**. This page sets up all three once, so later commands stay short.

@@ -4,9 +4,7 @@ title: "🖥️ A node's page"
 
 # 🖥️ A node's page
 
-:::tip[Works today]
 The web UI is part of the alpha. A few screens still read demo data in places; see [Known gaps in the alpha](./web-ui.md#known-gaps-in-the-alpha).
-:::
 
 Everything you can do to one node once it is in the fleet: issue and revoke, edit its config, re-key it, back up and restore its CA key, decommission it, reboot it, and read its audit log. Find a node from [the fleet view](./web-fleet-and-nodes.md); adopting a new one is its own task there too.
 

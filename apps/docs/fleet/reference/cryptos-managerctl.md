@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 # 🖥️ cryptos-managerctl command reference
 
-`cryptos-managerctl` scripts a FleetOS Manager from a workstation, the way [`cryptosctl`](/docs/cryptos/next/reference/cryptosctl) scripts a node. It covers the everyday work of the web console: nodes and their status, issuing and revoking certificates, and approvals.
+`cryptos-managerctl` scripts a FleetOS Manager from a workstation, the way [`cryptosctl`](/docs/cryptos/vnext/reference/cryptosctl) scripts a node. It covers the everyday work of the web console: nodes and their status, issuing and revoking certificates, and approvals.
 
 It signs in with your operator certificate, the same one the web console uses, and your access level applies the same way.
 

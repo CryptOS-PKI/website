@@ -4,13 +4,8 @@ title: "🐞 Reporting a UI problem"
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import Pre10Notice from '@site/docs/_partials/pre-1-0-notice.mdx';
 
 # 🐞 Reporting a UI problem
-
-:::tip[Works today]
-This describes `cryptos-web` as it works right now.
-:::
 
 This page is for anyone building the Fleet Manager console (`cryptos-web`) from source who hits a UI bug and wants to file a useful bug report. It covers the development-only **Copy for UI issue** button: what turns it on, what it collects, and the guarantee that it never ships.
 
@@ -96,4 +91,3 @@ Route parameters are filtered the same way: a value is kept only when it matches
 2. Select the copy button. It writes the bundle to your clipboard and shows "Copied".
 3. Paste the bundle into the issue or chat message describing the problem. It's meant for a machine or a reviewer to read, not for prose, so it's fine to paste as-is alongside your own description of what you expected.
 
-<Pre10Notice />

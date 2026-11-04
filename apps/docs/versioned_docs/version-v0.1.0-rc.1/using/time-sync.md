@@ -4,10 +4,6 @@ title: "🕰️ Keep the clock in sync"
 
 # 🕰️ Keep the clock in sync
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Point a node at its time servers and read how its clock is doing.
 
 A CA's clock sets the `notBefore` and `notAfter` of every certificate it signs, the `thisUpdate` and `nextUpdate` of its CRL, its OCSP response times and its audit times. A node keeps its clock in sync with a small SNTPv4 client (RFC 4330, and RFC 5905 section 14) built into the OS. It only asks for time; it never serves it. For what the node does to protect a CA from a wrong or hostile clock, see [How the clock protects signing](../deep-dives/clock-safety.md).

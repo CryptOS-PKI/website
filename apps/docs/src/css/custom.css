@@ -22,7 +22,400 @@
   background: url('/img/integrations/vmware.svg') center / contain no-repeat;
 }
 
-/* Text on the amber announcement bar: dark ink reads on both warning shades. */
+/* The strip, header and footer: the site's (apps/site/app/components
+   strip.tsx, nav.tsx and footer.tsx), rebuilt on Docusaurus's classes from the
+   same packages/frame/site-frame.css tokens, so the two sites sit on top of
+   each other pixel for pixel. Every size, face, line height and colour is set
+   here rather than left to Infima, whose defaults differ from the site's. */
+
 :root {
-  --cryptos-warning-foreground: #0e1526;
+  --ifm-navbar-height: var(--frame-header-height);
+  --docusaurus-announcement-bar-height: auto;
+}
+
+/* The strip: Docusaurus's announcement bar holds the same markup the site
+   renders (packages/frame/strip.ts); this is the band behind it, as the site's
+   .strip. */
+.theme-announcement-bar {
+  display: block;
+  height: auto;
+  border-bottom: 1px solid var(--frame-border);
+  background: var(--frame-strip-bg) !important;
+  color: var(--frame-ink) !important;
+}
+
+.theme-announcement-bar > div {
+  padding: 0;
+  font-size: 100%;
+  text-align: start;
+}
+
+/* The page column: the site's .container, so the header, the doc pages and
+   the footer sit inside the same left and right edges as the site's. */
+.container {
+  padding-inline: var(--frame-gutter);
+}
+
+.footer > .container {
+  max-width: var(--frame-max);
+  margin-inline: auto;
+}
+
+[class*='docRoot_'] {
+  max-width: var(--frame-max);
+  margin-inline: auto;
+  padding-inline: var(--frame-gutter);
+}
+
+[class*='docMainContainer_'] > .container {
+  padding-inline: 0;
+}
+
+[class*='docSidebarContainer_'] .menu {
+  padding-left: 0;
+}
+
+/* Docusaurus runs the sidebar up behind the header; its right-hand rule
+   would show through the header's tint, which the site doesn't have.
+   Clipping that strip (only padding there) keeps the header the same. */
+[class*='docSidebarContainer_'] {
+  clip-path: inset(var(--ifm-navbar-height) 0 0 0);
+}
+
+@media (min-width: 997px) {
+  [class*='docMainContainer_'] > .container {
+    padding-left: var(--frame-gutter);
+  }
+}
+
+/* Header. The blur sits on a layer behind the bar, not on the bar itself: a
+   backdrop-filter would make the bar the containing block for its fixed
+   children, trapping the phone menu and the sidebar button inside it. */
+.navbar {
+  height: auto;
+  padding: 0;
+  box-shadow: none;
+  border-bottom: 1px solid var(--frame-border);
+  background: transparent;
+  font-family: var(--frame-font-sans);
+  line-height: normal;
+}
+
+.navbar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--frame-header-bg);
+  backdrop-filter: var(--frame-header-blur);
+}
+
+.navbar__inner {
+  box-sizing: border-box;
+  max-width: var(--frame-max);
+  margin-inline: auto;
+  padding: var(--frame-header-pad) var(--frame-gutter);
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.navbar__brand {
+  flex-shrink: 0;
+  gap: var(--frame-brand-gap);
+  margin-right: 0;
+  color: var(--frame-ink);
+}
+
+.navbar__brand:hover {
+  color: var(--frame-ink);
+  text-decoration: none;
+}
+
+.navbar__logo {
+  height: var(--frame-logo);
+  margin-right: 0;
+}
+
+.navbar__logo img {
+  width: var(--frame-logo);
+  height: var(--frame-logo);
+}
+
+.navbar__title {
+  overflow: visible;
+  font-family: var(--frame-font-mono);
+  font-size: var(--frame-wordmark-size);
+  line-height: var(--frame-wordmark-line);
+  font-weight: var(--frame-wordmark-weight);
+  letter-spacing: var(--frame-wordmark-spacing);
+  color: var(--frame-ink);
+}
+
+/* The wordmark shows "OS" in the primary colour. The navbar title is plain
+   text, so the config sets it to "Crypt" and the accent is added here; this
+   avoids ejecting the Logo component for one coloured word. */
+.navbar__title::after {
+  content: 'OS';
+  color: var(--frame-primary);
+}
+
+.navbar__items--right {
+  gap: var(--frame-nav-gap);
+  font-size: var(--frame-nav-size);
+  line-height: var(--frame-nav-line);
+}
+
+.navbar__items--right > .navbar__item {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  white-space: nowrap;
+  height: var(--frame-nav-line);
+  padding: 0;
+}
+
+.navbar__items--right .navbar__link {
+  display: block;
+  font-weight: 400;
+  line-height: var(--frame-nav-line);
+  color: var(--frame-muted);
+}
+
+/* No current-page colour on Docs: the site has none, so the bar stays the
+   same when moving between the two. aria-current still marks it. */
+.navbar__items--right .navbar__link--active {
+  color: var(--frame-muted);
+}
+
+.navbar__items--right .navbar__link:hover,
+.navbar__items--right .navbar__link:focus-visible {
+  color: var(--frame-ink);
+  text-decoration: none;
+}
+
+/* The docs version picker: right after the wordmark, where the site's header
+   has empty space, so nothing else in the bar moves. It takes the nav links'
+   size and line, so the bar keeps the frame's height, in the mono face the
+   wordmark uses. Doc pages only. Below 997px there's no room beside the
+   wordmark, so it stays hidden there, as Infima hides every bar item, and
+   shows in the menu. */
+@media (min-width: 997px) {
+  .navbar__items:not(.navbar__items--right) > .dropdown {
+    display: flex;
+    align-items: center;
+    height: var(--frame-nav-line);
+    margin-left: var(--frame-nav-gap);
+    padding: 0;
+    font-size: var(--frame-nav-size);
+    line-height: var(--frame-nav-line);
+    white-space: nowrap;
+  }
+}
+
+.navbar__version.navbar__link {
+  display: block;
+  padding: 0;
+  font-family: var(--frame-font-mono);
+  font-weight: 400;
+  line-height: var(--frame-nav-line);
+  color: var(--frame-muted);
+}
+
+.navbar__version.navbar__link:hover,
+.navbar__version.navbar__link:focus-visible,
+.dropdown--show > .navbar__version.navbar__link {
+  color: var(--frame-ink);
+  text-decoration: none;
+}
+
+.navbar__items:not(.navbar__items--right) > .dropdown > .dropdown__menu {
+  min-width: 10rem;
+  border: 1px solid var(--frame-border);
+  background: var(--frame-surface);
+  font-family: var(--frame-font-mono);
+  font-size: var(--frame-nav-size);
+}
+
+/* The docs sidebar only reaches phones and tablets through the menu button.
+   It floats at the bottom left of doc pages, off the header, so the header
+   stays the site's exactly; other pages don't need it. */
+.navbar__toggle {
+  position: fixed;
+  left: var(--frame-gutter);
+  bottom: calc(1.25rem + env(safe-area-inset-bottom));
+  width: 3rem;
+  height: 3rem;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--frame-border);
+  border-radius: 50%;
+  background: var(--frame-surface);
+  box-shadow: 0 8px 24px -12px rgb(0 0 0 / 0.45);
+  color: var(--frame-ink);
+}
+
+.navbar__toggle svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: block;
+}
+
+html:not(.plugin-docs) .navbar__toggle {
+  display: none;
+}
+
+@media (max-width: 996px) {
+  html.plugin-docs .footer {
+    padding-bottom: calc(3rem + 2.5rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* At 640px and under the header stacks, as the site's does: the brand on one
+   line and the links under it, wrapping as they need. */
+@media (max-width: 640px) {
+  .navbar__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--frame-header-stack-gap);
+  }
+
+  .navbar__items--right {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+}
+
+/* Footer, on Docusaurus's footer classes: the brand and tagline, three link
+   groups, then the legal line, in the page column. */
+.footer {
+  border-top: 1px solid var(--frame-border);
+  padding: var(--frame-footer-pad-top) 0 var(--frame-footer-pad-bottom);
+  background: var(--frame-bg);
+  font-family: var(--frame-font-sans);
+  line-height: normal;
+}
+
+.footer__links {
+  display: grid;
+  grid-template-columns: var(--frame-footer-cols);
+  gap: var(--frame-footer-gap);
+  margin: 0 0 var(--frame-footer-gap);
+}
+
+.footer__links > .footer__col {
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer__title {
+  margin: 0 0 var(--frame-footer-heading-gap);
+  font-family: var(--frame-font-mono);
+  font-size: var(--frame-footer-heading-size);
+  line-height: var(--frame-footer-heading-line);
+  font-weight: 700;
+  letter-spacing: var(--frame-footer-heading-spacing);
+  text-transform: uppercase;
+  color: var(--frame-muted);
+}
+
+/* The brand column has no title; Docusaurus still renders its empty box. */
+.footer__title:empty {
+  display: none;
+}
+
+.footer__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--frame-footer-link-gap);
+  margin: 0;
+  font-size: var(--frame-footer-size);
+  line-height: var(--frame-footer-line);
+}
+
+.footer__item {
+  margin: 0;
+}
+
+.footer__link-item {
+  display: inline;
+  line-height: inherit;
+  color: var(--frame-ink);
+  text-decoration: none;
+}
+
+.footer__link-item:hover,
+.footer__link-item:focus-visible {
+  color: var(--frame-primary);
+  text-decoration: none;
+}
+
+.footer__link-item svg {
+  display: none;
+}
+
+/* A block-level flex box, so no line box (whose strut differs between the
+   two sites) sets its height. */
+.footer__name {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: var(--frame-brand-gap);
+  color: var(--frame-ink);
+  text-decoration: none;
+}
+
+.footer__name:hover {
+  color: var(--frame-ink);
+  text-decoration: none;
+}
+
+.footer__mark {
+  width: var(--frame-footer-mark);
+  height: var(--frame-footer-mark);
+}
+
+.footer__wordmark {
+  font-family: var(--frame-font-mono);
+  font-size: var(--frame-footer-wordmark-size);
+  line-height: var(--frame-wordmark-line);
+  font-weight: var(--frame-wordmark-weight);
+  letter-spacing: var(--frame-wordmark-spacing);
+}
+
+.footer__wordmark-accent {
+  color: var(--frame-primary);
+}
+
+.footer__tagline {
+  margin: var(--frame-footer-tagline-gap) 0 0;
+  font-size: var(--frame-footer-size);
+  line-height: var(--frame-footer-line);
+  color: var(--frame-muted);
+  max-width: var(--frame-footer-tagline-max);
+}
+
+.footer__bottom {
+  border-top: 1px solid var(--frame-border);
+  padding-top: var(--frame-legal-pad);
+  text-align: start;
+}
+
+.footer__copyright {
+  margin: 0;
+  font-size: var(--frame-legal-size);
+  line-height: var(--frame-legal-line);
+  color: var(--frame-muted);
+}
+
+@media (max-width: 720px) {
+  .footer__links {
+    grid-template-columns: var(--frame-footer-cols-narrow);
+  }
+
+  .footer__links > .footer__col:first-child {
+    grid-column: 1 / -1;
+  }
 }

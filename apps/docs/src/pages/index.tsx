@@ -27,9 +27,26 @@ type EntryPoint = {
   to: string;
 };
 
+// The docs sections, which the header carried as tabs before it took the
+// site's links; they're also the top level of the sidebar.
 const entryPoints: EntryPoint[] = [
   {
     label: 'Get started',
+    description: 'What CryptOS is, why it exists, and where the project stands today.',
+    to: '/docs',
+  },
+  {
+    label: 'Concepts',
+    description: 'Certificates, chains of trust, TPM-sealed keys and the CA roles, explained.',
+    to: '/docs/concepts/certificates-101',
+  },
+  {
+    label: 'Use cases',
+    description: 'Internal TLS, Kubernetes, devices, code signing and an air-gapped root.',
+    to: '/docs/use-cases/overview',
+  },
+  {
+    label: 'Try it locally',
     description: 'Build an image, boot it, and run the first-boot ceremony.',
     to: '/docs/try-it-locally/requirements',
   },
@@ -112,7 +129,7 @@ export default function Home(): ReactNode {
         <section className={styles.productLink}>
           <p>
             Looking for the product overview rather than the documentation?{' '}
-            <Link href="https://www.cryptos-pki.com">Visit cryptos-pki.com</Link>.
+            <Link href={siteConfig.customFields?.siteUrl as string}>Visit cryptos-pki.com</Link>.
           </p>
         </section>
       </main>

@@ -17,13 +17,18 @@ npm run typecheck -w @cryptos-pki/docs
 - 🗂️ **`versioned_docs/`, `versioned_sidebars/`, `versions.json`:** one snapshot per released
   version, cut by `npm run docs:version` from the root. A snapshot is never edited by hand.
 - 🏠 **`src/pages/index.tsx`:** the docs home.
-- 🎨 **`src/css/theme.css`:** the theme, taken from the Fleet Manager web UI
+- 🎨 **`src/css/theme.css`:** the page theme, taken from the Fleet Manager web UI
   ([`cryptos-web`](https://github.com/CryptOS-PKI/cryptos-web), `apps/console/src/index.css`):
   the web UI's palette as `--cryptos-*` custom properties mapped onto Docusaurus's Infima
   variables. Change a colour in the web UI first, then mirror it here. Page-level tweaks go in
   `src/css/custom.css`.
-- 🔤 **Fonts and marks:** Inter and JetBrains Mono come from `packages/frame`, the marks from
-  `packages/brand`, both through `staticDirectories`.
+- 🧭 **Header, strip and footer:** the product site's, from `packages/frame`: the links, footer
+  and strip markup in `content.ts` and `strip.ts`, the measurements and colours in
+  `site-frame.css`, mapped onto Docusaurus's classes in `src/css/custom.css`. The theme switch is
+  the shared one (`src/components/theme-toggle-navbar-item.tsx`), and the version picker shows on
+  doc pages only (`src/components/docs-version-navbar-item.tsx`).
+- 🔤 **Fonts and marks:** Inter and JetBrains Mono come from `packages/frame`, the marks and the
+  favicon from `packages/brand`, both through `staticDirectories`.
 
 ## 🧭 Conventions
 

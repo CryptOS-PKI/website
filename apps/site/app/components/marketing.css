@@ -276,10 +276,6 @@
   text-transform: uppercase;
 }
 
-.downloads-table a {
-  color: hsl(var(--primary));
-}
-
 .downloads-table code,
 .downloads .prose code {
   font-family: var(--font-mono);
@@ -295,11 +291,6 @@
 
 .downloads-table__size {
   white-space: nowrap;
-}
-
-.downloads .prose a {
-  color: hsl(var(--primary));
-  text-decoration: underline;
 }
 
 .verify-block {

@@ -15,7 +15,8 @@ Two static sites and the pieces they share, as npm workspaces:
   (`hero.tsx`, `hero-content.ts`, `hero.css`), the header's menu button (`header-menu.tsx`), the
   light and dark switch, the self-hosted fonts and `release.ts`, the current product release both
   sites show.
-- 🎨 **`packages/brand`:** the CryptOS and FleetOS marks, the favicon and the touch icon.
+- 🎨 **`packages/brand`:** the CryptOS and FleetOS marks, the favicon, the touch icon and the
+  link-preview card (`og-card.png`, made from `og-card.html`).
 - 🧩 **`vendor/cryptos-ui`:** a vendored, read-only copy of cryptos-web's `packages/ui` kit
   (see `vendor/cryptos-ui/NOTICE`).
 

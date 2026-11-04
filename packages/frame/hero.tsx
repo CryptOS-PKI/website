@@ -33,7 +33,7 @@ export interface HeroCta {
 export interface HeroProps {
   primaryCta: HeroCta;
   secondaryCta: HeroCta;
-  /** A line after the lede; the docs home says who the docs are for. */
+  /** A line under the calls to action; the docs home says who the docs are for. */
   note?: string;
 }
 
@@ -94,7 +94,6 @@ export const Hero = ({ primaryCta, secondaryCta, note }: HeroProps) => (
           <span className="frame-hero__accent">{hero.headlineAccent}</span>
         </h1>
         <Lede segments={hero.lede} />
-        {note ? <p className="frame-hero__note">{note}</p> : null}
         <div className="frame-hero__actions">
           <a className="frame-hero__cta frame-hero__cta--primary" href={primaryCta.href}>
             {primaryCta.label}
@@ -103,6 +102,7 @@ export const Hero = ({ primaryCta, secondaryCta, note }: HeroProps) => (
             {secondaryCta.label}
           </a>
         </div>
+        {note ? <p className="frame-hero__note">{note}</p> : null}
       </div>
       <div className="frame-hero__aside">
         <Terminal />

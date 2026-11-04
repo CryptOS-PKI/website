@@ -122,7 +122,7 @@ export default function Home(): ReactNode {
         secondaryCta={{label: 'What is CryptOS?', href: useBaseUrl('/docs/cryptos')}}
       />
 
-      <main>
+      <main className="frame-prose">
         {docsGroups.map((group) => (
           <section key={group.id} className={styles.entryPoints} aria-labelledby={group.id}>
             <div className={styles.entryGroupHead}>

@@ -86,6 +86,9 @@
   --frame-muted: #556077;
   --frame-border: #e3e7ef;
   --frame-primary: #2e74c0;
+  /* Body-text links: a shade darker than the primary for AA on the page and
+     card backgrounds (5.9:1 and 6.0:1). */
+  --frame-link: #2563b0;
   --frame-warning: #d97706;
   --frame-header-bg: color-mix(in srgb, var(--frame-bg) 92%, transparent);
   --frame-strip-bg: color-mix(in srgb, var(--frame-warning) 10%, var(--frame-surface));
@@ -106,6 +109,8 @@
     --frame-muted: #8b94a6;
     --frame-border: #232b3d;
     --frame-primary: #5391d8;
+    /* 7.3:1 on the page, 6.7:1 on cards. */
+    --frame-link: #6aa3e2;
     --frame-warning: #f5a623;
   }
 }
@@ -145,6 +150,31 @@ html {
   font-size: 0.7em;
   vertical-align: super;
   line-height: 0;
+}
+
+/* Links in body text, on both sites: the site marks its page content with
+   .frame-prose, the docs' pages are Docusaurus's .markdown. Only links with
+   no class of their own, so buttons, cards, the hero's calls to action,
+   heading anchors and the header and footer keep their own look. The colour
+   alone sits too close to the muted body text, so prose links are always
+   underlined. */
+.frame-prose a:not([class]),
+.markdown a:not([class]) {
+  color: var(--frame-link);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in srgb, var(--frame-link) 60%, transparent);
+  text-underline-offset: 0.2em;
+}
+
+.frame-prose a:not([class]):hover,
+.markdown a:not([class]):hover,
+.frame-prose a:not([class]):focus-visible,
+.markdown a:not([class]):focus-visible {
+  color: var(--frame-link);
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 2px;
 }
 
 /* The footer's legal text (content.ts legalHtml): the trademarks, then the

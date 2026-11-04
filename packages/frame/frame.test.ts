@@ -92,3 +92,47 @@ test("neither site sets a header breakpoint of its own", () => {
     }
   }
 });
+
+// Body-text links (R2): a colour of their own that meets WCAG AA on the page
+// and card backgrounds in both themes, and an underline, so they read as
+// links next to the muted body text.
+const hexToken = (block: string, name: string) => {
+  const match = block.match(new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{6})`));
+  assert.ok(match, `--${name} is not a hex colour in this block`);
+  return match[1];
+};
+
+const luminance = (hex: string) => {
+  const [r, g, b] = [1, 3, 5].map((index) => {
+    const channel = parseInt(hex.slice(index, index + 2), 16) / 255;
+    return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+
+const contrast = (a: string, b: string) => {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+};
+
+test("body-text links meet WCAG AA on the page and card in light and dark", () => {
+  const light = frame.slice(frame.indexOf(":root {"), frame.indexOf("}", frame.indexOf(":root {")));
+  const darkStart = frame.indexOf(':root[data-theme="dark"] {');
+  const dark = frame.slice(darkStart, frame.indexOf("}", darkStart));
+  for (const block of [light, dark]) {
+    const link = hexToken(block, "frame-link");
+    for (const background of ["frame-bg", "frame-surface"]) {
+      const ratio = contrast(link, hexToken(block, background));
+      assert.ok(ratio >= 4.5, `--frame-link on --${background} is ${ratio.toFixed(2)}:1`);
+    }
+  }
+});
+
+test("body-text links are underlined on both sites, and only unclassed links in prose", () => {
+  const rule = frame.match(
+    /\.frame-prose a:not\(\[class\]\),\s*\.markdown a:not\(\[class\]\)\s*\{([^}]*)\}/,
+  );
+  assert.ok(rule, "no shared body-text link rule");
+  assert.match(rule[1], /color: var\(--frame-link\);/);
+  assert.match(rule[1], /text-decoration-line: underline;/);
+});

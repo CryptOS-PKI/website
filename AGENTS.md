@@ -67,6 +67,14 @@ Run from the repo root.
   adds the line saying who the docs are for.
 - The downloads live on the site's Releases page (`/releases`), which the header and the strip
   link; the footer carries no download or release links.
+- Links in body text look the same on both sites: `site-frame.css` styles unclassed links inside
+  `.frame-prose` (the site's `<main>` and the docs home's) and the docs' `.markdown` with
+  `--frame-link` (AA on the page and card, light and dark) and an underline. Give every new
+  page's `<main>` the `frame-prose` class.
+- Every site route builds its `meta` with `pageMeta` (`apps/site/app/content/meta.ts`): titles as
+  "Page · CryptOS" (the home page "CryptOS — tagline"), Open Graph and a large Twitter card with
+  absolute URLs, and the link-preview card `packages/brand/public/img/brand/og-card.png`, made
+  from `packages/brand/og-card.html`. A test fails if a route doesn't.
 - The theme follows the system setting on both until the visitor picks one, and the switch only
   works once they've answered the cookie choice (`packages/frame/theme-pref.ts`; the choice is
   stored only after Accept). The site puts it on `<html>` as the kit's `dark` class and

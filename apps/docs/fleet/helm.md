@@ -8,14 +8,14 @@ title: "☸️ Deploy with Helm"
 A release tag publishes both the image (`ghcr.io/cryptos-pki/cryptos-manager`, multi-arch for `linux/amd64` and `linux/arm64` from `v0.1.0-rc.2`; `v0.1.0-rc.1` is `linux/amd64` only) and the chart (`oci://ghcr.io/cryptos-pki/charts/fleet-manager`) to GHCR. Install straight from the OCI registry below, or render the chart from a checkout of the [`cryptos-manager`](https://github.com/CryptOS-PKI/cryptos-manager) repo for an unreleased commit or a local edit. Kubernetes is one of three ways to run the manager; see [Other ways to run it](#other-ways-to-run-it) for the other two.
 :::
 
-The supported chart is `chart/fleet-manager` in the [`cryptos-manager`](https://github.com/CryptOS-PKI/cryptos-manager) repo. It ships from the same repo and the same release as the manager, so the chart and the config file it renders always match the manager they run. If you are new to the Fleet Manager, read the [Fleet Manager overview](./overview.md) first.
+The supported chart is `chart/fleet-manager` in the [`cryptos-manager`](https://github.com/CryptOS-PKI/cryptos-manager) repo. It ships from the same repo and the same release as the manager, so the chart and the config file it renders always match the manager they run. If you are new to the FleetOS Manager, read the [FleetOS Manager overview](./overview.md) first.
 
 ## What the chart deploys
 
 Chart version `0.1.0`, app version `0.1.0`. The release sets both to the tag it publishes.
 
-:::info[Alpha: 0.x]
-Every CryptOS release before `1.0.0` is a `0.x` alpha. `1.0.0` will be the first GA release, once the whole system lands. It isn't out yet.
+:::info[Pre-1.0: 0.x]
+Every CryptOS release before `1.0.0` is a `0.x` pre-release. `1.0.0` will be the first GA release, once the whole system lands. It isn't out yet.
 :::
 
 The chart renders four objects:
@@ -229,5 +229,5 @@ Every deployment needs an operator certificate before anyone can log in. The man
 
 ## Where to go next
 
-- [Fleet Manager overview](./overview.md): what the Fleet Manager holds and how nodes join it.
+- [FleetOS Manager overview](./overview.md): what the FleetOS Manager holds and how nodes join it.
 - [The web UI](./web-ui.md): logging in and finding your way around.

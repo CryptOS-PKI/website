@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 # 🐞 Reporting a UI problem
 
-This page is for anyone building the Fleet Manager console (`cryptos-web`) from source who hits a UI bug and wants to file a useful bug report. It covers the development-only **Copy for UI issue** button: what turns it on, what it collects, and the guarantee that it never ships.
+This page is for anyone building the FleetOS Manager console (`cryptos-web`) from source who hits a UI bug and wants to file a useful bug report. It covers the development-only **Copy for UI issue** button: what turns it on, what it collects, and the guarantee that it never ships.
 
 ## Turn it on
 

@@ -4,7 +4,7 @@ title: "🪪 The operator CA and revocation"
 
 # 🪪 The operator CA and revocation
 
-Operators log in to the Fleet Manager with a client certificate. The CA that signs those certificates, the **operator CA**, is always **external**: an offline OpenSSL CA, or an enterprise or offline CA that can issue the operator profile. It is **never a CryptOS node**. The manager learns only the CA's certificate, the trust anchor. It never holds the CA's key and never signs an operator credential.
+Operators log in to the FleetOS Manager with a client certificate. The CA that signs those certificates, the **operator CA**, is always **external**: an offline OpenSSL CA, or an enterprise or offline CA that can issue the operator profile. It is **never a CryptOS node**. The manager learns only the CA's certificate, the trust anchor. It never holds the CA's key and never signs an operator credential.
 
 This page covers where the manager gets the anchor, how revocation works, and the config keys. Moving a manager off `operator_ca_node` is on its own page: [Migrating from operator_ca_node](./migrating-from-operator-ca-node.md). So is adding operators once the manager is running: [Operator credentials after day zero](./operator-credentials.md). Replacing a registered CA with a new one is in [Rotating the operator CA](./rotating-the-operator-ca.md).
 
@@ -38,12 +38,12 @@ The manager checks the certificate again on every request, not only when the bro
 
 A certificate is refused if any source lists it. Serial numbers are unique per CA only, so each source is keyed by the CA as well as the serial.
 
-- **The denylist** is the Fleet Manager's own list, kept in Postgres and always on. Revoking an operator in the manager adds to it. The manager instance that takes the request refuses the certificate at once, and the other instances within about 5 seconds. Without `database_url` there is no denylist, and revoking fails with error 1603 (`DATABASE_REQUIRED`).
+- **The denylist** is the FleetOS Manager's own list, kept in Postgres and always on. Revoking an operator in the manager adds to it. The manager instance that takes the request refuses the certificate at once, and the other instances within about 5 seconds. Without `database_url` there is no denylist, and revoking fails with error 1603 (`DATABASE_REQUIRED`).
 - **The CRL** is your CA's own revocation list, optional for each CA. The manager downloads it (or reads the file), checks it against the CA, and refuses a CRL older than the one it holds. It refreshes the CRL every 15 minutes and at the CRL's next update time, and after a failure tries again after a minute, then less often, up to every 15 minutes.
 - **OCSP** is your CA's live answer about one certificate, optional for each CA. It can only add a refusal: `revoked` refuses the certificate with error 1610 (`REVOKED_OCSP`), and `unknown` counts as revoked (1610, `OCSP_UNKNOWN`, recorded as `operator-ocsp-unknown` in the audit log). A `good` answer never overrides the denylist or the CRL.
 
 :::warning[The denylist doesn't revoke at your CA]
-The denylist stops a certificate at the Fleet Manager only. Anything else that trusts the same CA still accepts it. Revoke the certificate at your CA as well, and publish a new CRL.
+The denylist stops a certificate at the FleetOS Manager only. Anything else that trusts the same CA still accepts it. Revoke the certificate at your CA as well, and publish a new CRL.
 :::
 
 The CRL must be a complete CRL for end-entity certificates, signed by the operator CA itself, with a next update time. The manager refuses delta CRLs, indirect CRLs, CRLs limited to CA certificates or to some revocation reasons, and CRLs with an unknown critical extension. A certificate on hold counts as revoked while it is listed.

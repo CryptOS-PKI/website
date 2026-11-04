@@ -4,7 +4,7 @@ title: "♿ Accessibility checks"
 
 # ♿ Accessibility checks
 
-The Fleet Manager console (`cryptos-web`) targets WCAG 2.2 AA. This page covers how that's checked: what runs automatically, what's left to a manual pass, and why.
+The FleetOS Manager console (`cryptos-web`) targets WCAG 2.2 AA. This page covers how that's checked: what runs automatically, what's left to a manual pass, and why.
 
 ## Automated: axe on every kit component
 

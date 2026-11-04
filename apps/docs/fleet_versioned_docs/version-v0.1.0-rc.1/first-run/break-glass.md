@@ -26,7 +26,7 @@ It then writes a `bootstrap-reset` row to the audit log (actor kind `host`, via 
 The reset retires every registered operator CA, not only the one whose admins were lost. Until someone completes first run again, no one can use the web UI or the API, and MCP keys bound to the old certificates stop working. Only run it when no admin can sign in.
 :::
 
-There is no option to revoke issued credentials. The Fleet Manager never held your operator CA's key and can't revoke at it; that is done at the CA.
+There is no option to revoke issued credentials. The FleetOS Manager never held your operator CA's key and can't revoke at it; that is done at the CA.
 
 ## 1. Stop every replica
 

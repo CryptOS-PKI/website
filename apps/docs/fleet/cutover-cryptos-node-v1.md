@@ -6,7 +6,7 @@ title: "🔀 Cutting a fleet over to cryptos.node.v1"
 
 The manager and `cryptosctl` both speak `cryptos.node.v1` once you are on a release built after the rename below. This page is for a fleet still running from before it.
 
-`cryptos-node#342` renamed the node gRPC package from `cryptos.v1` to `cryptos.node.v1`, with no compatibility service: a node built from that change onward serves `cryptos.node.v1.NodeService` only. A Fleet Manager built before the rename still dials `cryptos.v1.NodeService`, which no longer exists, so it loses every node the moment that node is upgraded. There is no order that avoids a window where the manager and some nodes disagree; this page is about keeping that window short, watched, and recoverable.
+`cryptos-node#342` renamed the node gRPC package from `cryptos.v1` to `cryptos.node.v1`, with no compatibility service: a node built from that change onward serves `cryptos.node.v1.NodeService` only. A FleetOS Manager built before the rename still dials `cryptos.v1.NodeService`, which no longer exists, so it loses every node the moment that node is upgraded. There is no order that avoids a window where the manager and some nodes disagree; this page is about keeping that window short, watched, and recoverable.
 
 The nodes themselves are never affected by this. A node's own API, issuance and the protocols it serves keep working throughout -- `cryptos.node.v1` only changes how the **manager** talks to it. If the manager is unreachable or not yet linked, [`cryptosctl`](/docs/cryptos/vnext/reference/cryptosctl) still manages a node directly over mTLS.
 
@@ -20,7 +20,7 @@ The nodes themselves are never affected by this. A node's own API, issuance and 
 
 ## The cutover order
 
-1. Upgrade the Fleet Manager itself to the release that speaks `cryptos.node.v1` -- `helm upgrade` with the new chart version or image tag, or pull and restart the container for a standalone `docker compose` deployment (see [Deploy with Helm](./helm.md)).
+1. Upgrade the FleetOS Manager itself to the release that speaks `cryptos.node.v1` -- `helm upgrade` with the new chart version or image tag, or pull and restart the container for a standalone `docker compose` deployment (see [Deploy with Helm](./helm.md)).
 
    :::warning[Every node shows down right after this step]
    The new manager dials `cryptos.node.v1.NodeService`, which none of your not-yet-upgraded nodes serve yet, so the fleet view marks all of them down. This is expected and does not affect the nodes themselves; it clears node by node as you work through the rest of this list.
@@ -60,4 +60,4 @@ To back the manager out, redeploy it at its previous chart version or image tag 
 
 ## What proves the node side
 
-The `cryptos-appliance` CI job **Upgrade from the bridge build (a77ae5b) in QEMU** builds the production bridge image (the last `cryptos-node` commit before the rename) and this checkout's candidate, signs and anchors both with one throwaway key, and proves the in-place upgrade from the bridge to the candidate, a rollback, and a second upgrade. It proves that a node moves across the rename cleanly on its own; it does not run a Fleet Manager, so it does not exercise the cutover order above.
+The `cryptos-appliance` CI job **Upgrade from the bridge build (a77ae5b) in QEMU** builds the production bridge image (the last `cryptos-node` commit before the rename) and this checkout's candidate, signs and anchors both with one throwaway key, and proves the in-place upgrade from the bridge to the candidate, a rollback, and a second upgrade. It proves that a node moves across the rename cleanly on its own; it does not run a FleetOS Manager, so it does not exercise the cutover order above.

@@ -13,7 +13,7 @@ Each page says what this release does and what it doesn't.
 A node in the **intermediate** or **issuing** role issues end-entity certificates. You pick a named **certificate profile** from the machine config, hand the node a CSR, and get the certificate back. There are two ways to do that:
 
 - `cryptosctl ca issue-leaf --csr <file> --profile <name>` from your workstation, over mTLS.
-- The **Fleet Manager** web UI, which issues a leaf from a CSR on a node it manages.
+- The **FleetOS Manager** web UI, which issues a leaf from a CSR on a node it manages.
 
 Every certificate a node issues is recorded. `cryptosctl ca list-issued` lists them, `ca revoke` revokes one, and when `pki.revocation_base_url` is set the node serves its CRL at `/crl`, OCSP at `/ocsp` and its own CA certificate at `/ca.cer`.
 
@@ -23,11 +23,11 @@ A **Root** node refuses to issue leaf certificates unless its config sets `root_
 
 ## Enrolment protocols
 
-Carrying CSRs by hand works, but it does not scale to hundreds of servers or a rack of switches. The enrolment protocols let clients ask for, and renew, certificates on their own. Here is what works in the alpha.
+Carrying CSRs by hand works, but it does not scale to hundreds of servers or a rack of switches. The enrolment protocols let clients ask for, and renew, certificates on their own. Here is what works in this release.
 
-| Protocol | What speaks it | State in the alpha |
+| Protocol | What speaks it | State in this release |
 |---|---|---|
-| gRPC `IssueLeaf` | `cryptosctl`, the Fleet Manager | Available |
+| gRPC `IssueLeaf` | `cryptosctl`, the FleetOS Manager | Available |
 | CRL and OCSP | Every TLS client that checks revocation | Available |
 | ACME (RFC 8555, `http-01`) | certbot, lego, acme.sh, win-acme, cert-manager | Off until you switch it on in the machine config |
 | EST (RFC 7030) | Network gear and devices with an EST client | Off until you switch it on in the machine config |
@@ -42,7 +42,7 @@ The listeners start only at boot. `config apply` stores the switch, on or off, a
 A config that sets `pki.acme` or `pki.est` on a Root is refused, and nothing is stored. Serve them from an issuing node under the Root.
 :::
 
-The Fleet Manager lists each enrolment protocol adapter with an **Enabled** switch. As the page itself says, enabling records intent: it does not start the protocol on a node.
+The FleetOS Manager lists each enrolment protocol adapter with an **Enabled** switch. As the page itself says, enabling records intent: it does not start the protocol on a node.
 
 The node does not serve ACME `dns-01`. SCEP and RFC 3161 timestamps arrive with their own pages: [Enrol devices with SCEP](../using/enrol-devices-scep.md) and [Serve RFC 3161 timestamps](../using/serve-timestamps-tsa.md).
 

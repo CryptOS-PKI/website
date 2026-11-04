@@ -32,7 +32,7 @@ The rest is split into sections:
 | `pki` | The CA itself: key algorithm, subject, validity, the parent pin on a subordinate, certificate profiles, revocation endpoints, and the ACME and EST endpoints. |
 | `install` | `disk`, the block device to install to. Used only by the [maintenance-mode](./maintenance-mode.md) install. |
 | `state_key` | How the encrypted state partition is unlocked. Empty means the image's build-time default. See [The TPM and sealed keys](./tpm-sealed-keys.md). |
-| `management` | Set when the node is linked to a [Fleet Manager](/docs/fleet/vnext). Absent on a standalone node. |
+| `management` | Set when the node is linked to a [FleetOS Manager](/docs/fleet/vnext). Absent on a standalone node. |
 
 A small Root looks like this:
 
@@ -147,9 +147,9 @@ With `pki.allow_unverified_revocation_url: true`, the node issues certificates w
 Adding a protocol's block switches it on and removing it switches it off, but only at the next boot. Plan the reboot for a maintenance window: the node stops issuing while it restarts.
 :::
 
-## The Fleet Manager uses the same file
+## The FleetOS Manager uses the same file
 
-A node linked to a [Fleet Manager](/docs/fleet/vnext) is configured the same way. The Fleet Manager sends the same machine config over the same API call, so the rules on this page apply there too.
+A node linked to a [FleetOS Manager](/docs/fleet/vnext) is configured the same way. The FleetOS Manager sends the same machine config over the same API call, so the rules on this page apply there too.
 
 ## Next
 

@@ -4,7 +4,7 @@ title: "🌳 The fleet, and adopting a node"
 
 # 🌳 The fleet, and adopting a node
 
-The web UI is part of the alpha. A few screens still read demo data in places; see [Known gaps in the alpha](./web-ui.md#known-gaps-in-the-alpha).
+A few screens still read demo data in places; see [Known gaps](./web-ui.md#known-gaps).
 
 Once you are [logged in](./web-ui.md#logging-in), this is where you see the fleet as a whole and bring a new node into it. A single node's own page is its own task: see [A node's page](./web-node-detail.md).
 

@@ -10,7 +10,7 @@ CryptOS is built in the open in the [CryptOS-PKI](https://github.com/CryptOS-PKI
 
 ```text
      cryptos-appliance            cryptos-manager   <----   cryptos-web
-     (the signed boot image,      (Fleet Manager,          (its web UI,
+     (the signed boot image,      (FleetOS Manager,        (its web UI,
       pins + builds cryptos-node)  fleet API proto)          embedded in the manager)
           ^                            |
           |                            |
@@ -26,11 +26,11 @@ CryptOS is built in the open in the [CryptOS-PKI](https://github.com/CryptOS-PKI
   (the operator CLI, built in cryptos-node)
 ```
 
-- Each service owns the API it serves. `cryptos-node` holds the node API (`cryptos.node.v1`), and `cryptos-manager` holds the Fleet Manager API (`cryptos.fleet.v1`), which imports the node API from `cryptos-node`.
+- Each service owns the API it serves. `cryptos-node` holds the node API (`cryptos.node.v1`), and `cryptos-manager` holds the FleetOS Manager API (`cryptos.fleet.v1`), which imports the node API from `cryptos-node`.
 - `cryptos-node` is the PKI engine: the node API, PID 1, the management CLI and the disk installer. `cryptos-appliance` pins `cryptos-node` at a version and builds the signed boot image around it (kernel, SquashFS, UKI assembly, Secure Boot signing).
-- `cryptos-manager` and `cryptos-web` are the optional Fleet Manager: one application split into a backend and a frontend.
+- `cryptos-manager` and `cryptos-web` are the optional FleetOS Manager: one application split into a backend and a frontend.
 
-A single CA node needs only the image `cryptos-appliance` builds. You manage it with `cryptosctl`. The Fleet Manager is for when you want a web UI or a view across many nodes.
+A single CA node needs only the image `cryptos-appliance` builds. You manage it with `cryptosctl`. The FleetOS Manager is for when you want a web UI or a view across many nodes.
 
 ## 🧠 cryptos-node
 
@@ -43,7 +43,7 @@ What it holds:
 | Path | What it is |
 |---|---|
 | `cmd/init` | PID 1. It becomes `/init` in the SquashFS image. |
-| `cmd/cryptosctl` | The operator CLI, and the only management tool for a node that is not linked to a Fleet Manager. |
+| `cmd/cryptosctl` | The operator CLI, and the only management tool for a node that is not linked to a FleetOS Manager. |
 | `cmd/cryptos-console` | The dashboard on the node's local console. It reads status and identity over the on-box UNIX socket. |
 | `cmd/cryptos-install` | The standalone disk installer (GPT, ESP and UKI). Physical servers aren't supported in v0.1.0-rc.1; install through maintenance mode. |
 | `proto/cryptos/node/v1/` | The node API: `NodeService` and its messages (`node.proto`, `identity.proto`, `ceremony.proto`, `status.proto`, `config.proto`, `audit.proto` and the protocol files). |
@@ -75,7 +75,7 @@ To write your own Go client for a node, use the stubs as a Go module:
 go get github.com/CryptOS-PKI/cryptos-node@v0.1.0-rc.1
 ```
 
-The surface is still changing while the alpha lands. The [gRPC API reference](../reference/grpc-api.md) walks through the RPCs.
+The surface is still changing before 1.0. The [gRPC API reference](../reference/grpc-api.md) walks through the RPCs.
 
 Start with [Build a bootable image](../install-deploy/build-bootable-image.md), or try it in a VM with [Try It Locally](../try-it-locally/requirements.md).
 
@@ -83,14 +83,14 @@ Start with [Build a bootable image](../install-deploy/build-bootable-image.md), 
 
 [github.com/CryptOS-PKI/cryptos-manager](https://github.com/CryptOS-PKI/cryptos-manager)
 
-The Fleet Manager backend, written in Go. It talks to CA nodes over mTLS gRPC, keeps a cross-node inventory in Postgres, and serves the `cryptos-web` bundle and its own API on one TLS listener. Operators sign in with a client certificate; no usernames or passwords are stored.
+The FleetOS Manager backend, written in Go. It talks to CA nodes over mTLS gRPC, keeps a cross-node inventory in Postgres, and serves the `cryptos-web` bundle and its own API on one TLS listener. Operators sign in with a client certificate; no usernames or passwords are stored.
 
-The Fleet Manager is never an issuing authority. Its certificate lacks `keyCertSign` and `cRLSign`, so it cannot sign certificates even if it is compromised.
+The FleetOS Manager is never an issuing authority. Its certificate lacks `keyCertSign` and `cRLSign`, so it cannot sign certificates even if it is compromised.
 
 | Path | What it is |
 |---|---|
 | `cmd/manager` | The server: it dials the configured nodes and serves `cryptos.fleet.v1.FleetService` to the web UI. |
-| `proto/cryptos/fleet/v1/` | The Fleet Manager API: `FleetService` and `BootstrapService` (`fleet.proto`, `bootstrap.proto`, `operator_ca.proto`, `errors.proto`). |
+| `proto/cryptos/fleet/v1/` | The FleetOS Manager API: `FleetService` and `BootstrapService` (`fleet.proto`, `bootstrap.proto`, `operator_ca.proto`, `errors.proto`). |
 | `gen/go/cryptos/fleet/v1/` | The generated Go and connect-go stubs. |
 | `internal/` | The backend itself. |
 | `chart/fleet-manager/` | A Helm chart, published with the image on each release tag. |
@@ -100,13 +100,13 @@ The Fleet Manager is never an issuing authority. Its certificate lacks `keyCertS
 
 A release tag builds the container image `ghcr.io/cryptos-pki/cryptos-manager` and pushes the chart to `oci://ghcr.io/cryptos-pki/charts/fleet-manager`. Pull either directly, or build the image yourself from a folder that holds the `cryptos-manager` and `cryptos-web` checkouts side by side, as `manager` and `web`.
 
-See the [Fleet Manager overview](/docs/fleet).
+See the [FleetOS Manager overview](/docs/fleet).
 
 ## 🎨 cryptos-web
 
 [github.com/CryptOS-PKI/cryptos-web](https://github.com/CryptOS-PKI/cryptos-web)
 
-The Fleet Manager web UI, and the only web UI in the project. CA nodes ship no web frontend. It is React and TypeScript, built with Vite into a static bundle that the manager embeds and serves. It is a monorepo: the console app in `apps/console`, the UI kit in `packages/ui`, and the TypeScript stubs for both APIs in `packages/api-client`, generated from the `cryptos-node` and `cryptos-manager` protos. It talks to the manager over Connect, and runs under a strict content security policy with no third-party scripts and no CDN fetches, so it works air-gapped.
+The FleetOS Manager web UI, and the only web UI in the project. CA nodes ship no web frontend. It is React and TypeScript, built with Vite into a static bundle that the manager embeds and serves. It is a monorepo: the console app in `apps/console`, the UI kit in `packages/ui`, and the TypeScript stubs for both APIs in `packages/api-client`, generated from the `cryptos-node` and `cryptos-manager` protos. It talks to the manager over Connect, and runs under a strict content security policy with no third-party scripts and no CDN fetches, so it works air-gapped.
 
 `cryptos-manager` and `cryptos-web` are one application in two repos, so the frontend and backend can be built and tested on their own. You do not deploy `cryptos-web` on its own; it ships inside the manager image.
 
@@ -120,7 +120,7 @@ See [The web UI](/docs/fleet/web-ui).
 | 📚 [docs](https://github.com/CryptOS-PKI/docs) | This site. Docusaurus 3, with the pages under `docs/` and the sidebar in `sidebars.ts`. |
 | 🏠 [.github](https://github.com/CryptOS-PKI/.github) | The organization profile README shown on the CryptOS-PKI GitHub page. |
 
-The `api` repo, which held both protos before they moved to the services that serve them, is archived. `cryptos-release`, which carried an earlier, unsupported Fleet Manager chart, is retired; the supported chart is `chart/fleet-manager` in `cryptos-manager`.
+The `api` repo, which held both protos before they moved to the services that serve them, is archived. `cryptos-release`, which carried an earlier, unsupported FleetOS Manager chart, is retired; the supported chart is `chart/fleet-manager` in `cryptos-manager`.
 
 ## Which repo do I need?
 
@@ -129,10 +129,10 @@ The `api` repo, which held both protos before they moved to the services that se
 | Build and run a CA node | `cryptos-appliance` |
 | Manage a node from the command line | `cryptos-node` (`cryptosctl`) |
 | Write my own client for the node API | `cryptos-node` (`proto/`, `gen/`) |
-| Write my own client for the Fleet Manager API | `cryptos-manager` (`proto/`, `gen/`) |
-| Run the Fleet Manager with Docker | `cryptos-manager` |
-| Run the Fleet Manager on Kubernetes | `cryptos-manager` |
-| Change the Fleet Manager web UI | `cryptos-web` |
+| Write my own client for the FleetOS Manager API | `cryptos-manager` (`proto/`, `gen/`) |
+| Run the FleetOS Manager with Docker | `cryptos-manager` |
+| Run the FleetOS Manager on Kubernetes | `cryptos-manager` |
+| Change the FleetOS Manager web UI | `cryptos-web` |
 | See what a release pins | `cryptos-appliance` (`release/pins.yaml`) |
 | Test CryptOS on ESXi | `cryptos-lab` |
 | Fix or add to these docs | `docs` |

@@ -4,7 +4,7 @@ title: "⌨️ cryptosctl command reference"
 
 # ⌨️ cryptosctl command reference
 
-Every command and flag, in one place. `cryptosctl` is the only management tool for a standalone node, and it speaks the same API the Fleet Manager uses. `cryptosctl <command> --help` prints the same information on your machine.
+Every command and flag, in one place. `cryptosctl` is the only management tool for a standalone node, and it speaks the same API the FleetOS Manager uses. `cryptosctl <command> --help` prints the same information on your machine.
 
 `cryptosctl` runs on Linux and macOS.
 
@@ -200,7 +200,7 @@ These replace the node's CryptOS image without reinstalling it. The encrypted st
 | `image rollback` | | put the retained previous image back on the boot path; run `image activate` to boot it |
 | `image sign` | `--image` (unsigned UKI or ISO, required), `--key` (RSA PEM, required), `--cert` (required), `--out` | sign an unsigned image with your key and stamp your certificate as its upgrade anchor; runs locally |
 
-The full procedure is the [in-place upgrade guide](https://github.com/CryptOS-PKI/cryptos-appliance/blob/v0.1.0-rc.1/docs/image-upgrade.md). The Fleet Manager's web console covers the same ground for a managed node: see [OS image lifecycle](/docs/fleet/web-node-detail#os-image-lifecycle).
+The full procedure is the [in-place upgrade guide](https://github.com/CryptOS-PKI/cryptos-appliance/blob/v0.1.0-rc.1/docs/image-upgrade.md). The FleetOS Manager's web console covers the same ground for a managed node: see [OS image lifecycle](/docs/fleet/web-node-detail#os-image-lifecycle).
 
 ## Power and reset
 

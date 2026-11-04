@@ -8,7 +8,7 @@ title: "1. Create the operator CA"
 A machine for the CA, ideally offline, with OpenSSL 1.1.1 or later. The commands are the same on every OS; run them on the CA machine.
 :::
 
-The operator CA signs the certificates operators log in with. This stage makes an OpenSSL CA with the profile the Fleet Manager checks. An enterprise or offline CA (EJBCA, Vault PKI, AD CS, an HSM-backed CA) also works if it can issue the profile in [1.3](#13-what-an-operator-certificate-must-carry); skip to [stage 2](./start-first-run.md) with its CA certificate in hand.
+The operator CA signs the certificates operators log in with. This stage makes an OpenSSL CA with the profile the FleetOS Manager checks. An enterprise or offline CA (EJBCA, Vault PKI, AD CS, an HSM-backed CA) also works if it can issue the profile in [1.3](#13-what-an-operator-certificate-must-carry); skip to [stage 2](./start-first-run.md) with its CA certificate in hand.
 
 :::caution[Not a CryptOS node]
 The operator CA must never be a CryptOS node's CA, or share a key with one. The manager refuses such a CA at registration, and at start when it comes from `operatorCAPath`. A CA issued by a node's CA is accepted with a warning, because anything that trusts that node's CA for client authentication would also accept operator certificates.
@@ -17,7 +17,7 @@ The operator CA must never be a CryptOS node's CA, or share a key with one. The 
 ## 1.1 The CA
 
 :::danger[Keep the CA key offline]
-Whoever holds `operator-ca.key` can sign themselves an admin certificate for the Fleet Manager. Keep it on an offline or tightly controlled machine, never on the manager host. The manager never needs it.
+Whoever holds `operator-ca.key` can sign themselves an admin certificate for the FleetOS Manager. Keep it on an offline or tightly controlled machine, never on the manager host. The manager never needs it.
 :::
 
 ```sh

@@ -7,9 +7,9 @@ import TabItem from '@theme/TabItem';
 
 # 🔐 Verifying a node's certificate
 
-The Fleet Manager verifies every node's server certificate and refuses a node it can't verify. Before a node has its CA you pin its certificate; once the node signs its management certificate with its CA, the manager verifies it against the CA chain it recorded.
+The FleetOS Manager verifies every node's server certificate and refuses a node it can't verify. Before a node has its CA you pin its certificate; once the node signs its management certificate with its CA, the manager verifies it against the CA chain it recorded.
 
-This page covers one task: making sure the Fleet Manager can verify each node it manages, before an upgrade and as nodes reboot and get their CA. What the Fleet Manager is, and how nodes join it, is in the [Fleet Manager overview](./overview.md).
+This page covers one task: making sure the FleetOS Manager can verify each node it manages, before an upgrade and as nodes reboot and get their CA. What the FleetOS Manager is, and how nodes join it, is in the [FleetOS Manager overview](./overview.md).
 
 ## What each side checks
 
@@ -191,6 +191,6 @@ On approval the node joins the inventory. Its name comes from its CA's common na
 
 ## Where to go next
 
-- [Fleet Manager overview](./overview.md): what the manager holds and how nodes join it.
+- [FleetOS Manager overview](./overview.md): what the manager holds and how nodes join it.
 - [Deploy with Helm](./helm.md): where the node credentials folder lives in Kubernetes.
 - [Check node trust before you upgrade](./upgrade-node-trust.md): find and pin every node before a manager that pins at adoption replaces one that didn't.

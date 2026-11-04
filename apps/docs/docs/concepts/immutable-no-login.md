@@ -23,7 +23,7 @@ Every way into a computer is also a way in for an attacker. A CA's private key i
 A node has exactly two management surfaces, and both use the same API:
 
 - **`cryptosctl`**, the command-line tool you run on your own workstation. It talks to the node's API on port 443 over TLS 1.3 with **mutual TLS**: the node checks your client certificate on every connection and refuses one it does not trust.
-- **The [Fleet Manager](/docs/fleet/vnext)**, a separate web app that manages many nodes through that same API.
+- **The [FleetOS Manager](/docs/fleet/vnext)**, a separate web app that manages many nodes through that same API.
 
 Every call is checked against who you are, and every call but the status polls is written to the node's hash-chained audit log, so each entry depends on the one before it and a quiet edit would show.
 
@@ -31,7 +31,7 @@ The one exception is [maintenance mode](./maintenance-mode.md), before a node is
 
 ## The console
 
-The node's screen shows a status dashboard, not a prompt: the CA's name labelled by role, its issuer, the node's state, the Fleet Manager link, the TPM state, uptime, and the SHA-256 fingerprint of the node's management certificate. The dashboard reads its data from a local socket on the node (`/run/cryptos.sock`) that only processes on the node can reach.
+The node's screen shows a status dashboard, not a prompt: the CA's name labelled by role, its issuer, the node's state, the FleetOS Manager link, the TPM state, uptime, and the SHA-256 fingerprint of the node's management certificate. The dashboard reads its data from a local socket on the node (`/run/cryptos.sock`) that only processes on the node can reach.
 
 The keyboard does two things:
 

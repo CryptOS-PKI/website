@@ -71,7 +71,7 @@ These are the sizes CryptOS is tested with: the `cryptos-appliance` QEMU integra
 - **Room for the node on top**, if you run QEMU on the same machine: its 1 vCPU and 2 GiB of RAM, plus the 2 GiB disk image.
 - **Free disk space** for the kernel source, the Docker images that build the static disk tools, and the build output. No exact figure has been measured.
 
-The Fleet Manager isn't part of this walkthrough. No sizing has been measured for it, and its chart sets no resource requests or limits.
+The FleetOS Manager isn't part of this walkthrough. No sizing has been measured for it, and its chart sets no resource requests or limits.
 
 ## Build tools
 

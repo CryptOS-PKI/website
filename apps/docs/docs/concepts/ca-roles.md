@@ -4,7 +4,7 @@ title: "🏛️ CA roles: Root, Intermediate, Issuing"
 
 # 🏛️ CA roles: Root, Intermediate, Issuing
 
-Root, Intermediate and Issuing are all in the alpha. A two-tier hierarchy (a Root plus an Intermediate, both RSA-4096 on VMware) runs today, with leaf issuance from the Intermediate and a VMware VMCA signed by that Intermediate as a subordinate CA.
+Root, Intermediate and Issuing are all in this release. A two-tier hierarchy (a Root plus an Intermediate, both RSA-4096 on VMware) runs today, with leaf issuance from the Intermediate and a VMware VMCA signed by that Intermediate as a subordinate CA.
 
 The three kinds of CA node and how they stack. If the terms are new, read [The Root CA and the chain of trust](./chain-of-trust.md) first.
 

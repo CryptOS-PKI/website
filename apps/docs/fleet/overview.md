@@ -1,22 +1,22 @@
 ---
-title: "Fleet Manager overview"
+title: "FleetOS Manager overview"
 slug: "/"
 ---
 
 import ThemedImage from '@theme/ThemedImage';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-# <ThemedImage sources={{light: useBaseUrl('/img/brand/fleetos-mark-light.svg'), dark: useBaseUrl('/img/brand/fleetos-mark-dark.svg')}} alt="FleetOS" className="integration-logo" /> Fleet Manager overview
+# <ThemedImage sources={{light: useBaseUrl('/img/brand/fleetos-mark-light.svg'), dark: useBaseUrl('/img/brand/fleetos-mark-dark.svg')}} alt="FleetOS" className="integration-logo" /> FleetOS Manager overview
 
-The Fleet Manager and its web UI are part of the alpha. They have run a two-tier hierarchy (a Root and an Intermediate) on VMware, with both nodes reported as established and healthy. A release tag publishes the container image and chart; see [Deploy with Helm](./helm.md) for where each install path stands.
+They have run a two-tier hierarchy (a Root and an Intermediate) on VMware, with both nodes reported as established and healthy. A release tag publishes the container image and chart; see [Deploy with Helm](./helm.md) for where each install path stands.
 
-A single CryptOS node is managed with `cryptosctl`, one node at a time. Once you have several nodes, a Root and the CAs under it, you want one place to see all of them. That place is the **Fleet Manager**, also called FleetOS Manager.
+A single CryptOS node is managed with `cryptosctl`, one node at a time. Once you have several nodes, a Root and the CAs under it, you want one place to see all of them. That place is **FleetOS Manager**.
 
-The Fleet Manager is optional. A node never needs it to issue certificates, and a node that has never been linked to one is managed with `cryptosctl` only. It deploys three ways: Kubernetes, a container (Docker or a Docker-compatible runtime) with PostgreSQL alongside it on the same host, or standalone on a VM with systemd -- never the CA itself, which runs only on the CryptOS appliance. See [Deploy with Helm](./helm.md) for all three.
+The FleetOS Manager is optional. A node never needs it to issue certificates, and a node that has never been linked to one is managed with `cryptosctl` only. It deploys three ways: Kubernetes, a container (Docker or a Docker-compatible runtime) with PostgreSQL alongside it on the same host, or standalone on a VM with systemd -- never the CA itself, which runs only on the CryptOS appliance. See [Deploy with Helm](./helm.md) for all three.
 
 ## What it is
 
-The Fleet Manager is one Go program, [`cryptos-manager`](https://github.com/CryptOS-PKI/cryptos-manager). It does three things on one HTTPS port:
+The FleetOS Manager is one Go program, [`cryptos-manager`](https://github.com/CryptOS-PKI/cryptos-manager). It does three things on one HTTPS port:
 
 - **Serves the web UI.** The browser app from the [`cryptos-web`](https://github.com/CryptOS-PKI/cryptos-web) repo is built into the manager binary, so there is nothing else to install. See [The web UI](./web-ui.md).
 - **Answers the Fleet API.** The web UI calls it. The API is defined as `FleetService` in the [`cryptos-manager`](https://github.com/CryptOS-PKI/cryptos-manager/tree/main/proto/cryptos/fleet/v1) repo.
@@ -75,4 +75,4 @@ The manager's [Operator PKI guide](https://github.com/CryptOS-PKI/cryptos-manage
 - [The web UI](./web-ui.md): logging in, finding your way around, and where each page lives.
 - [Deploy with Helm](./helm.md): the supported chart, and what to use today.
 - [Machine config](/docs/cryptos/vnext/reference/machine-config): the node config the adopt wizard fills in.
-- [cryptosctl](/docs/cryptos/vnext/reference/cryptosctl): managing a node without the Fleet Manager.
+- [cryptosctl](/docs/cryptos/vnext/reference/cryptosctl): managing a node without the FleetOS Manager.

@@ -4,16 +4,16 @@ title: "🎫 Operator credentials after day zero"
 
 # 🎫 Operator credentials after day zero
 
-The Fleet Manager never signs an operator credential. Your external operator CA (see [The operator CA and revocation](./operator-ca.md)) signs every one of them, away from the manager. The manager prepares the request, checks what the CA signed, records it, and refuses it later if you deny it.
+The FleetOS Manager never signs an operator credential. Your external operator CA (see [The operator CA and revocation](./operator-ca.md)) signs every one of them, away from the manager. The manager prepares the request, checks what the CA signed, records it, and refuses it later if you deny it.
 
 Adding an operator takes four steps:
 
 | Step | Who | Where |
 |---|---|---|
-| 1. Request | An admin | The Fleet Manager |
+| 1. Request | An admin | The FleetOS Manager |
 | 2. Sign | Whoever runs the operator CA | The CA machine |
-| 3. Record | An admin | The Fleet Manager |
-| 4. Deny, when needed | An admin | The Fleet Manager **and** the CA |
+| 3. Record | An admin | The FleetOS Manager |
+| 4. Deny, when needed | An admin | The FleetOS Manager **and** the CA |
 
 :::info[Before you start]
 You need an admin certificate from the operator CA, and the manager needs `database_url`: requests and recorded credentials live in Postgres. Without it every step fails with error 1603 (`DATABASE_REQUIRED`). With no operator CA configured at all, requesting, listing and recording fail with error 1400.
@@ -126,8 +126,8 @@ An admin denies a credential with `RevokeOperatorCredential`. The manager adds i
 - The reason is an RFC 5280 revocation reason code, 0 to 10 except 7.
 - A note is kept with the entry.
 
-:::warning[Denying in the Fleet Manager doesn't revoke at your CA]
-The denylist stops the certificate at the Fleet Manager only. Anything else that trusts the same operator CA still accepts it. Revoke it at the CA as well and publish a new CRL:
+:::warning[Denying in the FleetOS Manager doesn't revoke at your CA]
+The denylist stops the certificate at the FleetOS Manager only. Anything else that trusts the same operator CA still accepts it. Revoke it at the CA as well and publish a new CRL:
 
 ```sh
 openssl ca -config operator-ca.cnf -revoke alice.crt -crl_reason keyCompromise
@@ -143,7 +143,7 @@ openssl ca -config operator-ca.cnf -gencrl -out fleetos-operator.crl.pem
 |---|---|
 | Kind | `first_admin`, `requested`, `recorded`, `observed`, or `legacy_node` (recorded before operator CAs became external; it can't log in) |
 | CA | The SHA-256 of the operator CA that signed it; empty for `legacy_node` |
-| Denylisted | On the Fleet Manager's denylist |
+| Denylisted | On the FleetOS Manager's denylist |
 | In the CRL | Listed in the operator CA's CRL |
 | Revoked | Refused for either reason |
 | First and last seen | When the manager first and last saw it log in |

@@ -139,7 +139,7 @@ openssl pkcs12 -export -inkey admin.key -in admin.crt -certfile operator-ca.crt 
   -name "FleetOS admin (admin@example.org)" -out admin.p12
 ```
 
-Reload the Fleet Manager and choose this certificate when the browser asks. The first API request made with an admin certificate from a trusted CA, that isn't revoked, **closes first run**. From a shell it looks like this:
+Reload the FleetOS Manager and choose this certificate when the browser asks. The first API request made with an admin certificate from a trusted CA, that isn't revoked, **closes first run**. From a shell it looks like this:
 
 <Tabs groupId="os" queryString>
 <TabItem value="unix" label="Linux / macOS" default>

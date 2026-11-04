@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 This page covers one task: stages 2 to 4 of [first run](./index.md) in the browser instead of with `curl`. The web UI's first-run wizard makes the same `BootstrapService` calls, and adds a key made in the browser with an encrypted key backup, so you never handle a private key file by hand unless you want to.
 
 :::caution[Before you start]
-You need everything in the [prerequisites](./index.md#prerequisites) except `curl`, and an operator CA from [stage 1](./create-operator-ca.md) or your own. You also need to read the Fleet Manager's log.
+You need everything in the [prerequisites](./index.md#prerequisites) except `curl`, and an operator CA from [stage 1](./create-operator-ca.md) or your own. You also need to read the FleetOS Manager's log.
 :::
 
 ## What the start page does first

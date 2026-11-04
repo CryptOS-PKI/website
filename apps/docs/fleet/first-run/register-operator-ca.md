@@ -24,7 +24,7 @@ Registering is two calls with the same fields. The first checks everything and r
 | None | `none: true` | No CRL. Needs the acknowledgement `OPERATOR_CA_ACKNOWLEDGEMENT_NO_CRL`, or fails with 1605 `NO_CRL_NOT_ACKNOWLEDGED`. |
 
 :::caution[Without a CRL]
-Revocations you make at the CA aren't seen by the Fleet Manager, so revoke operators in the Fleet Manager as well: its denylist always applies. A CA with no CRL also gets **no MCP keys**.
+Revocations you make at the CA aren't seen by the FleetOS Manager, so revoke operators in the FleetOS Manager as well: its denylist always applies. A CA with no CRL also gets **no MCP keys**.
 :::
 
 With a URL or an upload, the CA needs the `cRLSign` key usage, or it fails with 1605 `CRL_SIGN_MISSING`.

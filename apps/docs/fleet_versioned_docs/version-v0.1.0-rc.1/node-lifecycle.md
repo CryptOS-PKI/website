@@ -4,9 +4,7 @@ title: "🔗 A node's lifecycle in the fleet"
 
 # 🔗 A node's lifecycle in the fleet
 
-The Fleet Manager and its web UI are part of the alpha.
-
-How a node gets into the fleet, how it is kept trusted and configured once it is in, and how it comes back out. See [Fleet Manager overview](./overview.md) for what the manager is and holds.
+How a node gets into the fleet, how it is kept trusted and configured once it is in, and how it comes back out. See [FleetOS Manager overview](./overview.md) for what the manager is and holds.
 
 ## How a node joins the fleet
 

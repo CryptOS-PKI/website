@@ -6,9 +6,9 @@ title: "☸️ Kubernetes workloads"
 
 A Kubernetes cluster uses a lot of certificates, and they come and go fast: ingress certificates for every hostname, certificates for webhooks and controllers, and mTLS between services. Nobody carries CSRs by hand for that. In Kubernetes the job usually goes to **cert-manager**, which asks a CA for certificates and renews them before they expire.
 
-Kubernetes is a certificate **consumer** of CryptOS here, never a place CryptOS's CA runs: the CA runs only on its own appliance (a VMware VM in v0.1.0-rc.1), because a CA in a cluster can't be TPM-sealed and would be a single point of failure. FleetOS Manager, the optional multi-node console, is the part of CryptOS that does run on Kubernetes (or standalone); see the [Fleet Manager overview](/docs/fleet).
+Kubernetes is a certificate **consumer** of CryptOS here, never a place CryptOS's CA runs: the CA runs only on its own appliance (a VMware VM in v0.1.0-rc.1), because a CA in a cluster can't be TPM-sealed and would be a single point of failure. FleetOS Manager, the optional multi-node console, is the part of CryptOS that does run on Kubernetes (or standalone); see the [FleetOS Manager overview](/docs/fleet).
 
-This page says how far the alpha gets.
+This page says how far this release gets.
 
 There are two separate jobs here, and it helps to keep them apart:
 
@@ -20,7 +20,7 @@ There are two separate jobs here, and it helps to keep them apart:
 - **No `dns-01` and no wildcard names**, which cert-manager usually relies on for internal names.
 :::
 
-You can issue certificates for cluster workloads by CSR, the same way as for any server: make the key and CSR, issue with `cryptosctl ca issue-leaf` or the Fleet Manager, and load the result into a Kubernetes TLS Secret yourself. See [Internal TLS and mTLS](./internal-tls.md). Renewal is manual.
+You can issue certificates for cluster workloads by CSR, the same way as for any server: make the key and CSR, issue with `cryptosctl ca issue-leaf` or the FleetOS Manager, and load the result into a Kubernetes TLS Secret yourself. See [Internal TLS and mTLS](./internal-tls.md). Renewal is manual.
 
 ## How the ACME server behaves
 

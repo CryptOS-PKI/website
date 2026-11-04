@@ -41,7 +41,7 @@ Mgmt SHA-256   2D71 1642 B726 B044 0162 7CA9 FBAC 32F5
 Mgmt cert      self-signed, compare the fingerprint
 ```
 
-**check 2/2** is the second fingerprint check of a Fleet Manager adoption. Without a Fleet Manager, compare the fingerprint with `trust fetch --expect-sha256` as below.
+**check 2/2** is the second fingerprint check of a FleetOS Manager adoption. Without a FleetOS Manager, compare the fingerprint with `trust fetch --expect-sha256` as below.
 
 The fingerprint is shown in the same form after the ceremony, on the serving dashboard. It changes on every boot, like the certificate.
 

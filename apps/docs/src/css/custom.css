@@ -205,18 +205,84 @@
    breadcrumb line: the version picker for this page's docs and the
    full-width switch, in the mono face the wordmark uses at the nav size.
    It keeps them out of the header, so the header stays the site's at every
-   width. When the line runs out of room, the toolbar wraps under the
-   breadcrumbs, still at the right. */
+   width. */
+/* One line, one height, on every doc page: the breadcrumbs take the room
+   the toolbar leaves and cut a long trail with an ellipsis (the full trail
+   is the line's title), so the title below always starts at the same y.
+   --doc-toolbar-row-height is the breadcrumbs' own pill height. On phones the
+   toolbar always takes a line of its own under the breadcrumbs, on every
+   page alike. */
 .doc-toolbar-row {
+  --doc-toolbar-row-height: 2rem;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: 0.5rem var(--frame-nav-gap);
+  gap: var(--frame-nav-gap);
+  height: var(--doc-toolbar-row-height);
   margin-bottom: 0.8rem;
 }
 
-.doc-toolbar-row > .theme-doc-breadcrumbs {
+.doc-toolbar-row__crumbs {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.doc-toolbar-row__crumbs .theme-doc-breadcrumbs {
   margin-bottom: 0;
+}
+
+/* Each crumb shrinks and ends in an ellipsis rather than dropping out, so
+   a long trail still shows where it leads; the home icon and the
+   separators keep their size. */
+.doc-toolbar-row__crumbs .breadcrumbs {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  margin: 0;
+  overflow: hidden;
+}
+
+.doc-toolbar-row__crumbs .breadcrumbs__item {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: center;
+  min-width: 0;
+}
+
+/* The trail above the page gives way first; the current page keeps its
+   name longest. */
+.doc-toolbar-row__crumbs .breadcrumbs__item:not(:last-child) {
+  flex-shrink: 4;
+}
+
+.doc-toolbar-row__crumbs .breadcrumbs__item:first-child,
+.doc-toolbar-row__crumbs .breadcrumbs__item::after {
+  flex-shrink: 0;
+}
+
+.doc-toolbar-row__crumbs .breadcrumbs__link {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.doc-toolbar-row .doc-toolbar {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 996px) {
+  .doc-toolbar-row {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+    height: auto;
+  }
+
+  .doc-toolbar-row__crumbs {
+    flex-basis: 100%;
+    height: var(--doc-toolbar-row-height);
+  }
 }
 
 .doc-toolbar {

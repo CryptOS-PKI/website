@@ -208,6 +208,8 @@ const config: Config = {
     metadata: [
       {property: 'og:type', content: 'website'},
       {property: 'og:site_name', content: 'CryptOS docs'},
+      {property: 'og:image:width', content: '1200'},
+      {property: 'og:image:height', content: '630'},
       {property: 'og:image:alt', content: SHARE_IMAGE_ALT},
       {name: 'twitter:image:alt', content: SHARE_IMAGE_ALT},
     ],

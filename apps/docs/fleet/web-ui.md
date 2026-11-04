@@ -7,9 +7,9 @@ import TabItem from '@theme/TabItem';
 
 # 🖥️ The web UI
 
-The web UI is part of the alpha. It is built into the Fleet Manager and served on the same HTTPS port, so there is nothing separate to install. A few screens still read demo data in places; they are listed under [Known gaps in the alpha](#known-gaps-in-the-alpha).
+It is built into the FleetOS Manager and served on the same HTTPS port, so there is nothing separate to install. A few screens still read demo data in places; they are listed under [Known gaps](#known-gaps).
 
-This page walks through logging in and finding your way around the Fleet Manager's web UI. What the Fleet Manager is, and how nodes join it, is in the [Fleet Manager overview](./overview.md). Each area of the UI then has its own page, linked under [Where to go next](#where-to-go-next).
+This page walks through logging in and finding your way around the FleetOS Manager's web UI. What the FleetOS Manager is, and how nodes join it, is in the [FleetOS Manager overview](./overview.md). Each area of the UI then has its own page, linked under [Where to go next](#where-to-go-next).
 
 ## Logging in
 
@@ -46,7 +46,7 @@ You log in with an operator certificate, not a password. Your fleet admin gives 
 
    Firefox keeps its own store: Settings, Privacy & Security, View Certificates, Your Certificates, Import.
 
-2. Open the Fleet Manager's address. The start page loads without a certificate and says `Fleet Manager for CryptOS-PKI.`
+2. Open the FleetOS Manager's address. The start page loads without a certificate and says `Fleet Manager for CryptOS-PKI.`
 3. Select **Log in**, and pick your certificate when the browser asks.
 
 :::tip[Expected output]
@@ -76,7 +76,7 @@ Lists refresh every 10 seconds. Every table has filters and a search box.
 
 What you can do depends on the access level in your certificate: `viewer`, `operator` or `admin` (see [How operators log in](./overview.md#how-operators-log-in)). Where a page needs a higher level, it greys out the controls and says so, for example `Read-only — applying config requires admin level.` The manager checks the level again on every call.
 
-## Known gaps in the alpha
+## Known gaps
 
 Some screens still read the web app's built-in demo data instead of the manager:
 
@@ -89,7 +89,7 @@ Some screens still read the web app's built-in demo data instead of the manager:
 
 ## Where to go next
 
-- [Fleet Manager overview](./overview.md): what the manager holds and how nodes join.
+- [FleetOS Manager overview](./overview.md): what the manager holds and how nodes join.
 - [The fleet, and adopting a node](./web-fleet-and-nodes.md): Dashboard, Fleet, Root, Nodes and the Adopt wizard.
 - [A node's page](./web-node-detail.md): issuing, config, re-keying, backup, decommissioning, rebooting and the node's own audit log.
 - [Certificates, enrollment and protocols](./web-catalogs.md): the fleet-wide catalogs.

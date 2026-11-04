@@ -4,7 +4,7 @@ title: "📋 Certificates, enrollment and protocols"
 
 # 📋 Certificates, enrollment and protocols
 
-The web UI is part of the alpha. A few screens still read demo data in places; see [Known gaps in the alpha](./web-ui.md#known-gaps-in-the-alpha).
+A few screens still read demo data in places; see [Known gaps](./web-ui.md#known-gaps).
 
 The fleet-wide pages: every certificate, every join request, the profile catalog and what each node actually serves.
 

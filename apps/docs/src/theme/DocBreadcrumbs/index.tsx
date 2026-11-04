@@ -15,15 +15,26 @@ limitations under the License.
 */
 import type {ReactNode} from 'react';
 import DocBreadcrumbsOriginal from '@theme-original/DocBreadcrumbs';
+import {useSidebarBreadcrumbs} from '@docusaurus/plugin-content-docs/client';
+import {stripEmoji} from '@cryptos-pki/frame/emoji';
 
 import {DocToolbar} from '@site/src/components/doc-toolbar';
 
-// The breadcrumb line carries the doc toolbar at its right end. On a page
-// with no breadcrumbs the toolbar still takes this spot, above the title.
+// The breadcrumb line carries the doc toolbar at its right end. The two
+// share one line of a fixed height on every doc page: a long trail is cut
+// with an ellipsis (src/css/custom.css), and the full trail is the line's
+// title, so the toolbar never wraps and the page title sits at the same
+// height everywhere. On a page with no breadcrumbs the toolbar still takes
+// this spot. On phones the toolbar always has a line of its own under the
+// breadcrumbs.
 export default function DocBreadcrumbs(): ReactNode {
+  const breadcrumbs = useSidebarBreadcrumbs();
+  const trail = breadcrumbs?.map((item) => stripEmoji(item.label)).join(' › ');
   return (
     <div className="doc-toolbar-row">
-      <DocBreadcrumbsOriginal />
+      <div className="doc-toolbar-row__crumbs" title={trail || undefined}>
+        <DocBreadcrumbsOriginal />
+      </div>
       <DocToolbar />
     </div>
   );

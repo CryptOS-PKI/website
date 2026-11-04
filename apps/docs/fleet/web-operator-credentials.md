@@ -4,9 +4,9 @@ title: "🪪 Adding operators"
 
 # 🪪 Adding operators
 
-These screens are new in the web UI and need a Fleet Manager that serves operator credential requests. An older manager refuses them.
+These screens are new in the web UI and need a FleetOS Manager that serves operator credential requests. An older manager refuses them.
 
-This page covers one task: giving someone an operator certificate, and taking it away, from the web UI's **Operators** page. The Fleet Manager never signs operator certificates. Your external operator CA does (see [The operator CA and revocation](./operator-ca.md)). The web UI files a **credential request**, you get the request signed at the CA, and the web UI records the signed certificate.
+This page covers one task: giving someone an operator certificate, and taking it away, from the web UI's **Operators** page. The FleetOS Manager never signs operator certificates. Your external operator CA does (see [The operator CA and revocation](./operator-ca.md)). The web UI files a **credential request**, you get the request signed at the CA, and the web UI records the signed certificate.
 
 If the person who needs the certificate can make their own key, have them use [Make a credential request](./make-a-credential-request.md) and send you the CSR. Their key then never leaves their machine.
 
@@ -91,7 +91,7 @@ To record a certificate made entirely at the CA, with no request, select **Recor
 1. On **Credentials**, select **Deny…** on the credential. Credentials already denylisted, and `legacy_node` ones, have no **Deny…**.
 2. Choose the **Reason**: an RFC 5280 reason code from 0 to 10 (there is no 7).
 3. Optionally add a **Note**. The manager keeps it with the denylist entry.
-4. Select **Deny at the Fleet Manager**.
+4. Select **Deny at the FleetOS Manager**.
 
 :::warning[Denying here doesn't revoke at your CA]
 The manager refuses the certificate from its next request, on every manager instance within about 5 seconds. Anything else that trusts the operator CA still accepts it. Revoke it at your CA as well and publish a new CRL. The dialog repeats this, with any warning the manager returns.

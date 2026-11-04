@@ -4,7 +4,7 @@ title: "🔄 Rotating the operator CA"
 
 # 🔄 Rotating the operator CA
 
-This page covers one task: replacing the external operator CA a running Fleet Manager trusts with a new one, without locking anyone out and without a restart. It also covers changing a registered CA's CRL source, uploading its CRLs and setting its OCSP mode. What the operator CA is, and how revocation works, are in [The operator CA and revocation](./operator-ca.md). The same steps in the web UI are in [Managing operator CAs in the web UI](./web-operator-cas.md).
+This page covers one task: replacing the external operator CA a running FleetOS Manager trusts with a new one, without locking anyone out and without a restart. It also covers changing a registered CA's CRL source, uploading its CRLs and setting its OCSP mode. What the operator CA is, and how revocation works, are in [The operator CA and revocation](./operator-ca.md). The same steps in the web UI are in [Managing operator CAs in the web UI](./web-operator-cas.md).
 
 :::caution[Before you start]
 You need an `admin` operator certificate, and the manager must take its operator CA from Postgres (a CA registered at first run). When `operatorCAPath` is set, every change on this page is refused with error 1607 (`OPERATOR_CA_MANAGED_BY_CONFIG`): edit the file instead, and restart.

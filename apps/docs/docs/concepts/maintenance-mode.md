@@ -4,7 +4,7 @@ title: "🧰 Maintenance mode and the install lifecycle"
 
 # 🧰 Maintenance mode and the install lifecycle
 
-The whole path, from booting the ISO to a serving CA, runs on VMware in the alpha. The limits that still apply are listed under [Known limits](#known-limits).
+The whole path, from booting the ISO to a serving CA, runs on VMware in this release. The limits that still apply are listed under [Known limits](#known-limits).
 
 The Talos-style path: boot, configure, install to disk, then reboot into service. This page explains what happens at each stage and why. The [Install & Deploy](../install-deploy/build-bootable-image.md) pages are the step-by-step version.
 
@@ -69,7 +69,7 @@ cryptosctl --insecure --endpoint 192.0.2.50:443 --server-name localhost config a
 The node validates the config first. A config that fails validation, or one with no `install.disk`, is refused and nothing is touched.
 
 :::warning[install.disk is wiped]
-The install erases the whole disk named in `install.disk` (for example `/dev/sda` or `/dev/nvme0n1`) without asking. Check the device name before you send the config. `cryptosctl` has no command to list the node's disks; the Fleet Manager's adopt flow does list them.
+The install erases the whole disk named in `install.disk` (for example `/dev/sda` or `/dev/nvme0n1`) without asking. Check the device name before you send the config. `cryptosctl` has no command to list the node's disks; the FleetOS Manager's adopt flow does list them.
 :::
 
 Then the node:
@@ -102,9 +102,9 @@ The node now needs its CA identity. What happens depends on its [role](./ca-role
 
 Once the identity is committed, the node is serving: it signs, publishes revocation data if configured, and answers the API.
 
-## Using the Fleet Manager instead
+## Using the FleetOS Manager instead
 
-A [Fleet Manager](/docs/fleet/vnext) can do stages 2 to 4 for you. It adopts a node from its maintenance endpoint: it makes a bootstrap credential for the node, sends the install config, and runs the ceremony. Adoption is safe to retry if it stops partway.
+A [FleetOS Manager](/docs/fleet/vnext) can do stages 2 to 4 for you. It adopts a node from its maintenance endpoint: it makes a bootstrap credential for the node, sends the install config, and runs the ceremony. Adoption is safe to retry if it stops partway.
 
 ## Re-provisioning after a reset
 

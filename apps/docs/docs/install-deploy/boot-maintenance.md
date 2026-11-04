@@ -43,7 +43,7 @@ Maintenance mode accepts connections **without any authentication**. Whoever rea
                   check 1/2: compare with the web console
    ```
 
-   The address and the fingerprint appear once the node has an address and the management API is up. A node with more than one address lists each one on its own line. With no DHCP server, the **Address** line shows the node's 169.254.x.x address instead; it only appears when the node has no other address. **check 1/2** marks the first of the two fingerprint checks in a Fleet Manager adoption; the second is on the installed node's console after it reboots.
+   The address and the fingerprint appear once the node has an address and the management API is up. A node with more than one address lists each one on its own line. With no DHCP server, the **Address** line shows the node's 169.254.x.x address instead; it only appears when the node has no other address. **check 1/2** marks the first of the two fingerprint checks in a FleetOS Manager adoption; the second is on the installed node's console after it reboots.
 
 There is no TPM, no encrypted disk, no database and no CA key yet. The only useful things the node can do in this state are report its status and accept a config.
 
@@ -67,7 +67,7 @@ Use the same address for `config apply` in the next step. A 169.254.x.x address 
 
 ## Check the node's certificate
 
-The certificate is new at every boot, so its fingerprint is only on the console. Before you send the node a config, or adopt it with the Fleet Manager, compare the fingerprint you see over the network with the console's **Mgmt SHA-256** line:
+The certificate is new at every boot, so its fingerprint is only on the console. Before you send the node a config, or adopt it with the FleetOS Manager, compare the fingerprint you see over the network with the console's **Mgmt SHA-256** line:
 
 <Tabs groupId="os" queryString>
 <TabItem value="unix" label="Linux / macOS" default>
@@ -89,7 +89,7 @@ openssl s_client -connect 192.0.2.50:443 </dev/null 2>/dev/null | openssl x509 -
 openssl prints the value with colons; ignore them, and case, when you compare.
 
 :::caution[A different fingerprint means a different machine]
-If the value doesn't match the console, something other than your node answered on that address. Don't send it a config; find out what answered first. The Fleet Manager's adoption preview shows the same fingerprint, so check it there the same way.
+If the value doesn't match the console, something other than your node answered on that address. Don't send it a config; find out what answered first. The FleetOS Manager's adoption preview shows the same fingerprint, so check it there the same way.
 :::
 
 ## Talk to a maintenance node

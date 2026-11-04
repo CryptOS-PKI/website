@@ -8,7 +8,7 @@ Routers, switches, firewalls, VPN concentrators, printers and small embedded dev
 
 The goal is a device that enrols once and then renews itself for years, with no one carrying CSRs around.
 
-Any device that can produce a CSR, or accept a certificate and key you load onto it, can get a certificate from an intermediate or issuing node. You issue it with `cryptosctl ca issue-leaf` or the Fleet Manager, the same way as for a server. See [Internal TLS and mTLS](./internal-tls.md) for the steps. Renewal is manual.
+Any device that can produce a CSR, or accept a certificate and key you load onto it, can get a certificate from an intermediate or issuing node. You issue it with `cryptosctl ca issue-leaf` or the FleetOS Manager, the same way as for a server. See [Internal TLS and mTLS](./internal-tls.md) for the steps. Renewal is manual.
 
 :::tip[SCEP and EST devices enrol on their own]
 An intermediate or issuing node can serve SCEP (RFC 8894) from `pki.scep`, so a Cisco IOS or IOS-XE trustpoint, and most other network platforms, can enrol with a one-time challenge and then renew on their own. See [Enrol devices with SCEP](../using/enrol-devices-scep.md).

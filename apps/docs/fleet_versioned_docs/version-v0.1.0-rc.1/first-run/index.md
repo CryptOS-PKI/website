@@ -4,7 +4,7 @@ title: "🚀 First run"
 
 # 🚀 First run
 
-A Fleet Manager can start with no operator CA at all. It serves a self-signed certificate and prints a single-use **bootstrap token** in its log. Whoever holds the token registers your external operator CA's certificate and checks the first admin certificate that CA signed. First run then closes for good, the first time that admin certificate signs in.
+A FleetOS Manager can start with no operator CA at all. It serves a self-signed certificate and prints a single-use **bootstrap token** in its log. Whoever holds the token registers your external operator CA's certificate and checks the first admin certificate that CA signed. First run then closes for good, the first time that admin certificate signs in.
 
 The manager signs nothing during first run. Your operator CA signs the admin certificate, out of band, and the manager only learns which CA to trust. How the manager uses that CA afterwards is in [The operator CA and revocation](../operator-ca.md).
 
@@ -20,7 +20,7 @@ First run is open only when all of these hold:
 
 ## Prerequisites
 
-1. **A Fleet Manager** configured as above, reachable over HTTPS, and access to its log.
+1. **A FleetOS Manager** configured as above, reachable over HTTPS, and access to its log.
 2. **An external operator CA.** An OpenSSL CA on an offline machine is the simplest; [stage 1](./create-operator-ca.md) creates one. An enterprise or offline CA also works if it can issue the operator certificate profile. A CryptOS node can't be the operator CA.
 3. **The CA certificate file**, and a way to get a certificate signed by the CA.
 4. **`openssl`** and **`curl`** (Linux or macOS) or **PowerShell 7** (Windows) on the machine you work from. Every step here calls the manager's `BootstrapService` API, so it can be scripted. The [web UI's wizard](./web-wizard.md) makes the same calls and needs only a browser.

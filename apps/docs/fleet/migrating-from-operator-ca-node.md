@@ -17,7 +17,7 @@ You need a machine to run the new operator CA on, ideally offline, with OpenSSL.
 1. **Create the operator CA.** Make an OpenSSL CA with the operator certificate profile, as in the manager's [standalone deployment guide, section 3](https://github.com/CryptOS-PKI/cryptos-manager/blob/main/docs/deploying-standalone.md#3-the-operator-ca-is-an-external-ca). Give it `keyCertSign` and `cRLSign`, so the manager can check its CRL.
 
    :::danger[Keep the CA key offline]
-   Whoever holds the operator CA key can sign themselves an admin certificate for the Fleet Manager. Keep it on an offline or tightly controlled machine, never on the manager host.
+   Whoever holds the operator CA key can sign themselves an admin certificate for the FleetOS Manager. Keep it on an offline or tightly controlled machine, never on the manager host.
    :::
 
 2. **Issue new operator certificates** from it, one per operator, with the level extension non-critical. Install your own in your browser.
@@ -44,7 +44,7 @@ You need a machine to run the new operator CA on, ideally offline, with OpenSSL.
 
 ## What changes after the move
 
-- **Revoking an operator** in the Fleet Manager puts the certificate on the manager's own denylist. It no longer revokes at a node, and it can't revoke at your CA. Revoke there too and publish a new CRL.
-- **Issuing an operator certificate** in the Fleet Manager is gone: your CA signs them.
+- **Revoking an operator** in the FleetOS Manager puts the certificate on the manager's own denylist. It no longer revokes at a node, and it can't revoke at your CA. Revoke there too and publish a new CRL.
+- **Issuing an operator certificate** in the FleetOS Manager is gone: your CA signs them.
 - **Operator records** the manager kept from before stay listed, marked `legacy_node`. They can't log in.
 - **MCP keys** need the operator CA to have a CRL that isn't out of date. See [MCP needs a current CRL](./operator-ca.md#mcp-needs-a-current-crl).

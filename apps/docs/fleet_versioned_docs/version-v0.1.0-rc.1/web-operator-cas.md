@@ -4,7 +4,7 @@ title: "🏛️ Managing operator CAs in the web UI"
 
 # 🏛️ Managing operator CAs in the web UI
 
-This page covers one task: looking after the external operator CAs the Fleet Manager trusts, from the web UI's **Operator CAs** page. You can register a new CA, retire an old one, and change how the manager learns about each CA's revocations. What an operator CA is, and the config keys, are in [The operator CA and revocation](./operator-ca.md).
+This page covers one task: looking after the external operator CAs the FleetOS Manager trusts, from the web UI's **Operator CAs** page. You can register a new CA, retire an old one, and change how the manager learns about each CA's revocations. What an operator CA is, and the config keys, are in [The operator CA and revocation](./operator-ca.md).
 
 :::caution[Before you start]
 You need an `admin` operator certificate and a working login (see [Logging in](./web-ui.md#logging-in)). When the manager takes its operator CA from the config file (`operatorCAPath`), the page is read-only: it says so, offers no actions, and the manager refuses changes with error 1607. Change the config instead.
@@ -27,7 +27,7 @@ Banners above the table name what needs your attention, for the active and retir
 
 | Banner | What it means and what to do |
 |---|---|
-| `CA revocations not observed` | The CA has no CRL and no OCSP. Revocations made at the CA aren't seen, so deny credentials in the Fleet Manager as well, or set a CRL source. MCP is refused under it. |
+| `CA revocations not observed` | The CA has no CRL and no OCSP. Revocations made at the CA aren't seen, so deny credentials in the FleetOS Manager as well, or set a CRL source. MCP is refused under it. |
 | `CA revocations seen through OCSP only` | No CRL, but OCSP is on: revocations are seen only while the responder answers. MCP is refused under it. |
 | `CRL expiring` | The CRL is in the last 20% of its validity. Publish a new one at the CA, or upload it for an upload-source CA, before the time shown. |
 | `CRL expired` | The CRL is past its next update. MCP is refused under the CA until a new CRL is loaded; the web UI follows `operatorRevocationPolicy`. |

@@ -4,11 +4,11 @@ title: "🖥️ A node's page"
 
 # 🖥️ A node's page
 
-The web UI is part of the alpha. A few screens still read demo data in places; see [Known gaps in the alpha](./web-ui.md#known-gaps-in-the-alpha).
+A few screens still read demo data in places; see [Known gaps](./web-ui.md#known-gaps).
 
 Everything you can do to one node once it is in the fleet: issue and revoke, edit its config, re-key it, back up and restore its CA key, decommission it, reboot it, and read its audit log. Find a node from [the fleet view](./web-fleet-and-nodes.md); adopting a new one is its own task there too.
 
-A node's page shows its identity, issuer, TPM, Fleet Manager link, boot count, uptime and its CRL and OCSP addresses, the trust chain up to its Root, the certificates it has issued, its own audit log, its TSA certificates (once its time-stamp authority is on) and a form to validate a certificate chain against its CA. The buttons:
+A node's page shows its identity, issuer, TPM, FleetOS Manager link, boot count, uptime and its CRL and OCSP addresses, the trust chain up to its Root, the certificates it has issued, its own audit log, its TSA certificates (once its time-stamp authority is on) and a form to validate a certificate chain against its CA. The buttons:
 
 | Button | Level | What it does |
 |---|---|---|
@@ -25,7 +25,7 @@ A node's page shows its identity, issuer, TPM, Fleet Manager link, boot count, u
 
 ## Issuing and revoking certificates
 
-The issue form takes either **Generate a key here** or **Paste a CSR**. With **Generate a key here** the browser makes the key and the request, so only the request goes to the node. You pick a profile, then select **Issue**. Live issuing takes the validity and usages from the profile (see [Known gaps in the alpha](./web-ui.md#known-gaps-in-the-alpha)).
+The issue form takes either **Generate a key here** or **Paste a CSR**. With **Generate a key here** the browser makes the key and the request, so only the request goes to the node. You pick a profile, then select **Issue**. Live issuing takes the validity and usages from the profile (see [Known gaps](./web-ui.md#known-gaps)).
 
 If the browser made the key, you can then download it with **Export private key**. The download is always encrypted and needs a passphrase of at least 18 characters.
 
@@ -79,7 +79,7 @@ To confirm, type the node's Root CA common name exactly and tick `I understand t
 
 ## Rebooting a node
 
-A config change **Config** reports as needing a reboot, or any other change the node's page shows as reboot-needed, only takes effect once the node restarts. **Reboot…** triggers that from the Fleet Manager instead of a hypervisor hard reset.
+A config change **Config** reports as needing a reboot, or any other change the node's page shows as reboot-needed, only takes effect once the node restarts. **Reboot…** triggers that from the FleetOS Manager instead of a hypervisor hard reset.
 
 :::warning[Every certificate operation stops until the node is back]
 Rebooting an Issuing CA interrupts everything that depends on it until it restarts, or, with **Power off instead of restarting**, until the hypervisor or a person powers it back on.
@@ -89,8 +89,8 @@ To confirm, type the node's CA common name exactly. A refusal, such as the node 
 
 ## The node's own audit log
 
-:::info[Not the Fleet Manager's audit log]
-This is the node's own record of calls to its API, distinct from the Fleet Manager's own actions (approving an enrolment, issuing, revoking and so on), which are on the [Audit](./web-operators-audit.md#audit) page instead.
+:::info[Not the FleetOS Manager's audit log]
+This is the node's own record of calls to its API, distinct from the FleetOS Manager's own actions (approving an enrolment, issuing, revoking and so on), which are on the [Audit](./web-operators-audit.md#audit) page instead.
 :::
 
 Every managed node keeps a signed, hash-chained audit log of every call to its API. The panel lists it oldest entry first, with the same sequence, time, actor and summary as [`cryptosctl audit list`](/docs/cryptos/using/audit-log#1-list-the-entries), plus the call itself under **Action** and whether it was allowed under **Outcome**. **Load more** fetches the next page.

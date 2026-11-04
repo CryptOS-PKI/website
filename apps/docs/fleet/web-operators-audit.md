@@ -4,9 +4,9 @@ title: "🔑 Operators, agent keys and audit"
 
 # 🔑 Operators, agent keys and audit
 
-The web UI is part of the alpha. A few screens still read demo data in places; see [Known gaps in the alpha](./web-ui.md#known-gaps-in-the-alpha).
+A few screens still read demo data in places; see [Known gaps](./web-ui.md#known-gaps).
 
-Who can reach the Fleet Manager, how an AI agent signs in, and the read-only record of what happened. Operator CAs are their own task: see [Managing operator CAs in the web UI](./web-operator-cas.md).
+Who can reach the FleetOS Manager, how an AI agent signs in, and the read-only record of what happened. Operator CAs are their own task: see [Managing operator CAs in the web UI](./web-operator-cas.md).
 
 ## Operators
 
@@ -15,7 +15,7 @@ The operator certificates the manager knows about: recorded ones and ones it has
 `admin` gets **Request credential…**, **Record certificate…**, **Complete…** and **Cancel** on a request, and **Deny…** on a credential. Each is a step in [Adding operators](./web-operator-credentials.md). **Deny…** puts a certificate on the manager's denylist: the manager refuses it from its next request. It needs `database_url`.
 
 :::warning[Denying here doesn't revoke at your CA]
-The denylist stops the certificate at the Fleet Manager only. Revoke it at your operator CA as well and publish a new CRL.
+The denylist stops the certificate at the FleetOS Manager only. Revoke it at your operator CA as well and publish a new CRL.
 :::
 
 The manager doesn't issue operator certificates: your operator CA signs them. To add an operator, see [Operator credentials after day zero](./operator-credentials.md). Certificates the manager recorded before operator CAs became external are listed as `legacy_node` and can't log in.

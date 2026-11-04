@@ -8,9 +8,9 @@
 
 .container {
   width: 100%;
-  max-width: 72rem;
+  max-width: var(--frame-max);
   margin-inline: auto;
-  padding-inline: clamp(1.25rem, 4vw, 2rem);
+  padding-inline: var(--frame-gutter);
 }
 
 .skip-link {
@@ -30,120 +30,108 @@
   top: 1rem;
 }
 
-/* Nav */
+/* Strip, above the header. The row and its text are drawn by
+   packages/frame/site-frame.css (.strip__*), the same rules the docs use for
+   their announcement bar; this is the band behind them. */
+.strip {
+  border-bottom: 1px solid var(--frame-border);
+  background: var(--frame-strip-bg);
+}
+
+/* Nav. Every measurement and colour comes from the packages/frame tokens,
+   which the docs header uses too, so the two headers sit on top of each other
+   pixel for pixel. */
+/* The blur sits on a layer behind the bar, as on the docs, so the bar's
+   text is drawn the same way on both sites. */
 .nav {
-  border-bottom: 1px solid hsl(var(--border));
+  border-bottom: 1px solid var(--frame-border);
   position: sticky;
   top: 0;
-  background: color-mix(in srgb, hsl(var(--background)) 92%, transparent);
-  backdrop-filter: blur(6px);
   z-index: 10;
+}
+
+.nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--frame-header-bg);
+  backdrop-filter: var(--frame-header-blur);
 }
 
 .nav__row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-block: 1rem;
+  padding-block: var(--frame-header-pad);
 }
 
 .nav__brand {
   display: inline-flex;
   align-items: center;
+  gap: var(--frame-brand-gap);
+  text-decoration: none;
+  color: var(--frame-ink);
 }
 
-.nav__brand svg {
-  height: 1.75rem;
-  width: auto;
+.nav__logo {
+  width: var(--frame-logo);
+  height: var(--frame-logo);
+}
+
+.nav__title {
+  font-family: var(--frame-font-mono);
+  font-size: var(--frame-wordmark-size);
+  line-height: var(--frame-wordmark-line);
+  font-weight: var(--frame-wordmark-weight);
+  letter-spacing: var(--frame-wordmark-spacing);
+  color: var(--frame-ink);
+}
+
+.nav__title-accent {
+  color: var(--frame-primary);
 }
 
 .nav__links {
   list-style: none;
   display: flex;
-  gap: 2rem;
+  align-items: center;
+  gap: var(--frame-nav-gap);
   margin: 0;
   padding: 0;
-  font-size: 0.875rem;
+  font-family: var(--frame-font-sans);
+  font-size: var(--frame-nav-size);
+  line-height: var(--frame-nav-line);
 }
 
 .nav__links a {
   text-decoration: none;
-  color: hsl(var(--muted-foreground));
+  color: var(--frame-muted);
 }
 
 .nav__links a:hover,
 .nav__links a:focus-visible {
-  color: hsl(var(--foreground));
+  color: var(--frame-ink);
+}
+
+/* The theme switch is taller than a link; it overhangs the link line
+   instead of growing the row, so the header keeps its height. */
+.nav__theme {
+  display: flex;
+  align-items: center;
+  height: var(--frame-nav-line);
 }
 
 @media (max-width: 640px) {
   .nav__row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.75rem;
+    gap: var(--frame-header-stack-gap);
   }
 
   .nav__links {
-    gap: 1rem;
     flex-wrap: wrap;
   }
-}
-
-/* Release banner */
-.release-banner {
-  border-bottom: 1px solid hsl(var(--border));
-  background: color-mix(in srgb, hsl(var(--warning)) 10%, hsl(var(--card)));
-}
-
-.release-banner__row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 1rem;
-  padding-block: 0.75rem;
-  border-inline-start: 4px solid hsl(var(--warning));
-}
-
-.release-banner__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: hsl(var(--foreground));
-  white-space: nowrap;
-}
-
-.release-banner__dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background: hsl(var(--warning));
-  flex-shrink: 0;
-}
-
-.release-banner__text {
-  margin: 0;
-  font-size: 0.875rem;
-  color: hsl(var(--muted-foreground));
-}
-
-.release-banner__text strong {
-  color: hsl(var(--foreground));
-}
-
-.release-banner__link {
-  color: hsl(var(--primary));
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.release-banner__link:hover,
-.release-banner__link:focus-visible {
-  color: hsl(var(--foreground));
 }
 
 /* Hero */
@@ -459,66 +447,92 @@
   }
 }
 
-/* Footer */
+/* Footer, on the packages/frame tokens the docs footer uses too. */
 .footer {
-  border-top: 1px solid hsl(var(--border));
-  padding-block: 2.5rem 2rem;
+  border-top: 1px solid var(--frame-border);
+  padding-block: var(--frame-footer-pad-top) var(--frame-footer-pad-bottom);
+  background: var(--frame-bg);
+  font-family: var(--frame-font-sans);
 }
 
 .footer__grid {
   display: grid;
-  grid-template-columns: 2fr repeat(3, 1fr);
-  gap: 2rem;
-  margin-bottom: 2rem;
+  grid-template-columns: var(--frame-footer-cols);
+  gap: var(--frame-footer-gap);
+  margin-bottom: var(--frame-footer-gap);
 }
 
+/* A block-level flex box, so no line box (whose strut differs between the
+   two sites) sets its height. */
 .footer__name {
-  display: inline-flex;
+  display: flex;
+  width: fit-content;
   align-items: center;
+  gap: var(--frame-brand-gap);
   text-decoration: none;
-  color: hsl(var(--foreground));
+  color: var(--frame-ink);
+}
+
+.footer__mark {
+  width: var(--frame-footer-mark);
+  height: var(--frame-footer-mark);
+}
+
+.footer__wordmark {
+  font-family: var(--frame-font-mono);
+  font-size: var(--frame-footer-wordmark-size);
+  line-height: var(--frame-wordmark-line);
+  font-weight: var(--frame-wordmark-weight);
+  letter-spacing: var(--frame-wordmark-spacing);
+}
+
+.footer__wordmark-accent {
+  color: var(--frame-primary);
 }
 
 .footer__tagline {
-  margin: 0.5rem 0 0;
-  font-size: 0.875rem;
-  color: hsl(var(--muted-foreground));
-  max-width: 20rem;
+  margin: var(--frame-footer-tagline-gap) 0 0;
+  font-size: var(--frame-footer-size);
+  line-height: var(--frame-footer-line);
+  color: var(--frame-muted);
+  max-width: var(--frame-footer-tagline-max);
 }
 
 .footer__heading {
-  margin: 0 0 0.75rem;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  margin: 0 0 var(--frame-footer-heading-gap);
+  font-family: var(--frame-font-mono);
+  font-size: var(--frame-footer-heading-size);
+  line-height: var(--frame-footer-heading-line);
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--frame-footer-heading-spacing);
   text-transform: uppercase;
-  color: hsl(var(--muted-foreground));
+  color: var(--frame-muted);
 }
 
 .footer__links {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--frame-footer-link-gap);
   margin: 0;
   padding: 0;
-  font-size: 0.875rem;
+  font-size: var(--frame-footer-size);
+  line-height: var(--frame-footer-line);
 }
 
 .footer__links a {
   text-decoration: none;
-  color: hsl(var(--foreground));
+  color: var(--frame-ink);
 }
 
 .footer__links a:hover,
 .footer__links a:focus-visible {
-  color: hsl(var(--primary));
+  color: var(--frame-primary);
 }
 
 @media (max-width: 720px) {
   .footer__grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: var(--frame-footer-cols-narrow);
   }
 
   .footer__brand {
@@ -527,19 +541,10 @@
 }
 
 .footer__legal {
-  border-top: 1px solid hsl(var(--border));
-  padding-top: 1.25rem;
-  font-size: 0.75rem;
-  color: hsl(var(--muted-foreground));
+  border-top: 1px solid var(--frame-border);
+  padding-top: var(--frame-legal-pad);
+  font-size: var(--frame-legal-size);
+  line-height: var(--frame-legal-line);
+  color: var(--frame-muted);
   margin: 0;
-}
-
-.nowrap {
-  white-space: nowrap;
-}
-
-.tm {
-  font-size: 0.7em;
-  vertical-align: super;
-  line-height: 0;
 }

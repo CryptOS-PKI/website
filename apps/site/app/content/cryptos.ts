@@ -17,12 +17,21 @@ limitations under the License.
 // src/content/cryptos.ts, so the two builds are an apples-to-apples
 // comparison. A new product gets its own file in this shape; the page and
 // every component stay unchanged.
-import { release } from "@cryptos-pki/frame/release";
+import { frameFooter, frameNav } from "@cryptos-pki/frame/content";
+import { frameLinks } from "@cryptos-pki/frame/strip";
 
 export interface LedeSegment {
   text: string;
   accent?: boolean;
 }
+
+// Where the two sites live. The site's own links stay on its base path; a
+// preview build sets VITE_DOCS_URL so it links to the docs preview instead
+// of the live docs.
+export const links = frameLinks({
+  siteUrl: import.meta.env.BASE_URL,
+  docsUrl: import.meta.env.VITE_DOCS_URL ?? "https://docs.cryptos-pki.com",
+});
 
 export const meta = {
   siteName: "CryptOS",
@@ -32,25 +41,8 @@ export const meta = {
     "CryptOS is an immutable, API-driven, high-assurance PKI operating system. No SSH, no shell: every operation goes through an mTLS-authenticated API.",
 };
 
-export const nav = {
-  links: [
-    { label: "What it is", href: "#what-it-is" },
-    { label: "Trust model", href: "#trust-model" },
-    { label: "FleetOS Manager", href: "#fleetos-manager" },
-    { label: "Standards", href: "#standards" },
-    { label: "GitHub", href: "https://github.com/CryptOS-PKI" },
-  ],
-};
-
-export const releaseStatus = {
-  badge: "Pre-release",
-  heading: `${release.version} is out.`,
-  body: "A release candidate for testing, not for production. The unsigned images and the release notes are on GitHub.",
-  cta: {
-    label: `Download ${release.version}`,
-    href: `https://github.com/CryptOS-PKI/cryptos-appliance/releases/tag/${release.version}`,
-  },
-};
+// The header links and the footer are shared with the docs (packages/frame).
+export const nav = { links: frameNav(links) };
 
 export const hero = {
   eyebrow: "CryptOS-PKI",
@@ -71,7 +63,7 @@ export const hero = {
   ] satisfies LedeSegment[],
   primaryCta: {
     label: "Read the docs",
-    href: "https://github.com/CryptOS-PKI/docs/tree/v0.1.0-rc.1/docs",
+    href: `${links.docs}/docs`,
   },
   secondaryCta: { label: "View on GitHub", href: "https://github.com/CryptOS-PKI" },
   terminal: {
@@ -135,45 +127,8 @@ export const standards = {
   body: "Your time-stamp policy is yours: its OID sits under your own IANA Private Enterprise Number.",
   link: {
     label: "Get a TSA policy OID",
-    href: "https://github.com/CryptOS-PKI/docs/blob/v0.1.0-rc.1/docs/using/tsa-policy-oid.md",
+    href: `${links.docs}/docs/using/tsa-policy-oid`,
   },
 };
 
-export const footer = {
-  marks: ["CryptOS-PKI", "FleetOS", "No shell to break into"],
-  tagline: "An immutable, API-driven PKI operating system.",
-  groups: [
-    {
-      title: "Product",
-      links: [
-        { label: "What it is", href: "/#what-it-is" },
-        { label: "Trust model", href: "/#trust-model" },
-        { label: "FleetOS Manager", href: "/#fleetos-manager" },
-        { label: "Standards", href: "/#standards" },
-        { label: releaseStatus.cta.label, href: releaseStatus.cta.href },
-      ],
-    },
-    {
-      title: "Resources",
-      links: [
-        { label: "Docs", href: "https://github.com/CryptOS-PKI/docs/tree/v0.1.0-rc.1/docs" },
-        { label: "GitHub", href: "https://github.com/CryptOS-PKI" },
-        { label: "Releases", href: "https://github.com/CryptOS-PKI/cryptos-appliance/releases" },
-      ],
-    },
-    {
-      title: "Trust",
-      links: [
-        { label: "Trust model", href: "/#trust-model" },
-        {
-          label: "Security policy",
-          href: "https://github.com/CryptOS-PKI/.github/blob/main/SECURITY.md",
-        },
-        {
-          label: "Report a vulnerability",
-          href: "https://github.com/CryptOS-PKI/.github/blob/main/SECURITY.md#reporting-a-vulnerability",
-        },
-      ],
-    },
-  ],
-};
+export const footer = frameFooter(links);

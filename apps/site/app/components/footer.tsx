@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { Wordmark } from "@cryptos-pki/ui";
+import { legalHtml } from "@cryptos-pki/frame/content";
 
 import "./marketing.css";
 
@@ -33,40 +33,35 @@ interface FooterProps {
   marks: string[];
 }
 
-// Renders a mark with its ™ bound to the last word in a no-break span,
-// so a line break can never land between the word and its mark.
-const MarkedTerm = ({ mark }: { mark: string }) => {
-  const lastSpace = mark.lastIndexOf(" ");
-  const rest = lastSpace === -1 ? "" : mark.slice(0, lastSpace + 1);
-  const lastWord = lastSpace === -1 ? mark : mark.slice(lastSpace + 1);
-  return (
-    <>
-      {rest}
-      <span className="nowrap">
-        {lastWord}
-        <sup className="tm">™</sup>
-      </span>
-    </>
-  );
-};
-
-const markSeparator = (index: number, count: number) => {
-  if (index === 0) return "";
-  return index === count - 1 ? " and " : ", ";
-};
+const base = import.meta.env.BASE_URL;
 
 // Base-layer component: the one footer every page uses -- the brand, the
-// link groups, then the legal line with the trademark notices.
+// link groups, then the legal line with the trademark notices. The docs
+// footer mirrors it from the same packages/frame tokens.
 export const Footer = ({ tagline, groups, marks }: FooterProps) => {
-  const year = new Date().getFullYear();
-
   return (
     <footer className="footer">
       <div className="container">
         <div className="footer__grid">
           <div className="footer__brand">
-            <a className="footer__name" href="/" aria-label="CryptOS">
-              <Wordmark product="CryptOS" markSize={24} />
+            <a className="footer__name" href={base} aria-label="CryptOS">
+              <img
+                className="footer__mark mark--light"
+                src={`${base}img/brand/cryptos-mark-light.svg`}
+                width={24}
+                height={24}
+                alt=""
+              />
+              <img
+                className="footer__mark mark--dark"
+                src={`${base}img/brand/cryptos-mark-dark.svg`}
+                width={24}
+                height={24}
+                alt=""
+              />
+              <span className="footer__wordmark">
+                Crypt<span className="footer__wordmark-accent">OS</span>
+              </span>
             </a>
             <p className="footer__tagline">{tagline}</p>
           </div>
@@ -83,16 +78,10 @@ export const Footer = ({ tagline, groups, marks }: FooterProps) => {
             </nav>
           ))}
         </div>
-        <p className="footer__legal">
-          {marks.map((mark, index) => (
-            <span key={mark}>
-              {markSeparator(index, marks.length)}
-              <MarkedTerm mark={mark} />
-            </span>
-          ))}{" "}
-          {marks.length > 1 ? "are trademarks" : "is a trademark"} of the CryptOS-PKI project.
-          &copy; {year} The CryptOS Authors. Licensed under Apache-2.0.
-        </p>
+        <p
+          className="footer__legal"
+          dangerouslySetInnerHTML={{ __html: legalHtml(marks, new Date().getFullYear()) }}
+        />
       </div>
     </footer>
   );

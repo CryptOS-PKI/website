@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { Wordmark } from "@cryptos-pki/ui";
+import { ThemeSwitch } from "./theme-switch";
 
 import "./marketing.css";
 
@@ -26,13 +26,32 @@ interface NavProps {
   links: NavLink[];
 }
 
-// Base-layer component: a slim top nav, reusable across products. Only the
-// Wordmark's `product` prop and the link list are product-specific.
+const base = import.meta.env.BASE_URL;
+
+// Base-layer component: the slim top nav. The docs header mirrors it from the
+// same packages/frame tokens: the mark and wordmark, the links, then the
+// theme switch at the right end.
 export const Nav = ({ links }: NavProps) => (
   <header className="nav">
     <div className="container nav__row">
-      <a className="nav__brand" href="/" aria-label="CryptOS">
-        <Wordmark product="CryptOS" markSize={28} />
+      <a className="nav__brand" href={base} aria-label="CryptOS">
+        <img
+          className="nav__logo mark--light"
+          src={`${base}img/brand/cryptos-mark-light.svg`}
+          width={28}
+          height={28}
+          alt=""
+        />
+        <img
+          className="nav__logo mark--dark"
+          src={`${base}img/brand/cryptos-mark-dark.svg`}
+          width={28}
+          height={28}
+          alt=""
+        />
+        <span className="nav__title">
+          Crypt<span className="nav__title-accent">OS</span>
+        </span>
       </a>
       <nav aria-label="Primary">
         <ul className="nav__links">
@@ -41,6 +60,9 @@ export const Nav = ({ links }: NavProps) => (
               <a href={link.href}>{link.label}</a>
             </li>
           ))}
+          <li className="nav__theme">
+            <ThemeSwitch />
+          </li>
         </ul>
       </nav>
     </div>

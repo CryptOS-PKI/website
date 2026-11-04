@@ -19,17 +19,17 @@ import type { MetaFunction } from "react-router";
 import { FeatureGrid } from "~/components/feature-grid";
 import { Footer } from "~/components/footer";
 import { Nav } from "~/components/nav";
-import { ReleaseBanner } from "~/components/release-banner";
 import { Section } from "~/components/section";
 import { SplitHero } from "~/components/split-hero";
+import { Strip } from "~/components/strip";
 import { TerminalCard } from "~/components/terminal-card";
 import {
   fleetosManager,
   footer,
   hero,
+  links,
   meta as pageMeta,
   nav,
-  releaseStatus,
   standards,
   trustModel,
   whatItIs,
@@ -52,13 +52,8 @@ export default function Home() {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
+      <Strip links={links} />
       <Nav links={nav.links} />
-      <ReleaseBanner
-        badge={releaseStatus.badge}
-        heading={releaseStatus.heading}
-        body={releaseStatus.body}
-        cta={releaseStatus.cta}
-      />
       <main id="main">
         <SplitHero
           eyebrow={hero.eyebrow}

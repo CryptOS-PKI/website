@@ -43,7 +43,7 @@ export const nav = { links: frameNav(links) };
 export const hero = {
   primaryCta: {
     label: "Read the docs",
-    href: `${links.docs}/docs`,
+    href: `${links.docs}/docs/cryptos`,
   },
   secondaryCta: { label: "View on GitHub", href: "https://github.com/CryptOS-PKI" },
 };
@@ -93,7 +93,7 @@ export const standards = {
   body: "Your time-stamp policy is yours: its OID sits under your own IANA Private Enterprise Number.",
   link: {
     label: "Get a TSA policy OID",
-    href: `${links.docs}/docs/using/tsa-policy-oid`,
+    href: `${links.docs}/docs/cryptos/using/tsa-policy-oid`,
   },
 };
 

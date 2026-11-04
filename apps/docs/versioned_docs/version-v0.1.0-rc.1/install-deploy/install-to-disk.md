@@ -2,15 +2,7 @@
 title: "💾 Install to disk"
 ---
 
-import Pre10Notice from '@site/docs/_partials/pre-1-0-notice.mdx';
-
 # 💾 Install to disk
-
-:::tip[✅ Works today]
-This describes CryptOS as it works right now.
-:::
-
-<Pre10Notice />
 
 When a maintenance node accepts your machine config, it installs itself onto the disk named in `install.disk` and reboots. You do not run anything else. This page explains what it writes, so you know what to expect and what the disk looks like afterwards.
 
@@ -38,25 +30,9 @@ The state partition is **not** formatted during the install. On the first boot f
 
 After the reboot the machine should start from the disk. Remove the ISO from the virtual CD drive, or put the disk first in the boot order, so the firmware boots the copy on disk.
 
-## Installing without maintenance mode
-
-For bare metal there is also `cryptos-install` (built by `task build`), a small tool you run as root from a Linux live USB on the target machine. It writes the same two-partition layout and the UKI, but no machine config:
-
-:::danger[cryptos-install erases the disk]
-Everything on the disk given to `--disk` is wiped. Check the device name on the target machine (for example with `lsblk`) before you run it.
+:::info[Not supported in v0.1.0-rc.1]
+`cryptos-node` also builds `cryptos-install`, which writes the same disk layout from a Linux live system on a physical server. Physical servers aren't supported in v0.1.0-rc.1, so install through maintenance mode, as above.
 :::
-
-```bash
-sudo cryptos-install --disk /dev/nvme0n1 --uki cryptos-amd64.uki --yes
-```
-
-Without `--yes` it refuses to run, because the disk is erased. `--esp-size-mib`, `--esp-label` and `--state-label` change the defaults (512, `EFI` and `cryptos-state`).
-
-:::caution[Keep the default labels]
-The node looks for its partitions by exactly the names `EFI` and `cryptos-state`. Leave `--esp-label` and `--state-label` unset.
-:::
-
-Because no config is staged, the first boot from that disk encrypts the state partition and then waits in maintenance mode on its DHCP address. Send the config the same way as before, with `--insecure`; `install.disk` is not needed this time. The node saves it to the encrypted partition and reboots into the ceremony, the same place a normal install ends up.
 
 ## Next step
 

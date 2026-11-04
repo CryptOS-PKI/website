@@ -1,17 +1,14 @@
 ---
-title: "🔐 What is CryptOS?"
+title: "What is CryptOS?"
 slug: "/"
 ---
 
-import Pre10Notice from '@site/docs/_partials/pre-1-0-notice.mdx';
+import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
-# 🔐 What is CryptOS?
+# <ThemedImage sources={{light: useBaseUrl('/img/brand/cryptos-mark-light.svg'), dark: useBaseUrl('/img/brand/cryptos-mark-dark.svg')}} alt="CryptOS" className="integration-logo" /> What is CryptOS?
 
-:::tip[✅ Works today]
-The core described here is built and tested. Booting it end-to-end on real hardware is still in progress — see [Project status and roadmap](./status-roadmap.md).
-:::
-
-<Pre10Notice />
+The core described here is built and tested, and runs end to end on VMware virtual machines. Physical servers aren't supported in v0.1.0-rc.1. See [Project status and roadmap](./status-roadmap.md).
 
 CryptOS is a computer with **one job**: to be a certificate authority (CA).
 
@@ -25,7 +22,7 @@ Think of CryptOS like a passport office that **only** makes passports. It sits i
 - 🔑 **The secret key never leaves the chip.** The key CryptOS signs certificates with is made *inside* a security chip called a TPM, and it is never written to disk where someone could copy it.
 - 🧱 **It cannot be changed while it runs.** The system is read-only. You describe how a node should behave in **one file** ahead of time, and that is exactly what it does.
 
-## What it can do today
+## What it can do
 
 You can build a CryptOS image, boot it in a virtual machine, and have it create its very first identity — a **Root CA** — right inside the TPM. It signs its own certificate, and you can check that the certificate is valid, all from one command-line tool called `cryptosctl`.
 

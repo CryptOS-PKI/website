@@ -11,11 +11,13 @@ release that ships them.
 
 When a release is published, the workflow checks out that release's tag and then:
 
-1. Checks the docs version (`npm run check:docs-version`). The release version in
-   `packages/frame/release.ts` must be cut in `apps/docs/versions.json` and be the newest
-   version there. If it isn't, the run stops before anything builds or deploys.
+1. Checks the docs versions (`npm run check:docs-version`). Each docs instance follows its own
+   product's release in `packages/frame/release.ts`: `release` (CryptOS) must be cut in
+   `apps/docs/versions.json` and `fleetRelease` (FleetOS Manager) in
+   `apps/docs/fleet_versions.json`, each as the newest version there. If either isn't, the run
+   stops before anything builds or deploys.
 2. Runs `npm ci --ignore-scripts`, then builds the site and the docs. The docs build sets
-   `DOCS_INCLUDE_NEXT=false`, so the published docs carry the released versions only, not Next
+   `DOCS_INCLUDE_NEXT=false`, so the published docs carry the released versions only, not vNext
    (unreleased `main`). Both builds finish before either deploy starts, so a failed build never
    leaves one site on the new release and the other on the old one.
 3. Uploads `apps/site/build/client/` to the Pages project `cryptos-pki-www` and `apps/docs/build/`
@@ -24,22 +26,27 @@ When a release is published, the workflow checks out that release's tag and then
 
 ## Cutting the docs version for a release
 
-The docs are versioned. The newest cut version is the default at `/docs/`; Next (`main`) is
-served at `/docs/next/` in dev and preview builds, under a banner that points at the current
-version.
+The docs site has two docs, each versioned on its own: CryptOS at `/docs/cryptos` and FleetOS
+Manager at `/docs/fleet`. In each, the newest cut version is the default; vNext (`main`) is served
+at `/docs/cryptos/vnext/` and `/docs/fleet/vnext/` in dev and preview builds, under a banner that
+points at the current version.
 
-A release that changes the product version gets its own PR first:
+A release that changes a product version gets its own PR first:
 
-1. Bump `version` and `publishedOn` in `packages/frame/release.ts`.
-2. Run `npm run docs:version`. It snapshots `apps/docs/docs` and the sidebar under that version.
-3. Commit `apps/docs/versions.json`, `apps/docs/versioned_docs/` and
-   `apps/docs/versioned_sidebars/` with the bump, and merge the PR.
+1. Bump `version` (and `publishedOn`) in `release` for CryptOS, and `version` in `fleetRelease`
+   for FleetOS Manager, in `packages/frame/release.ts`.
+2. Run `npm run docs:version`. It snapshots each instance whose version isn't cut yet:
+   `apps/docs/docs` with `sidebars.ts` for CryptOS, `apps/docs/fleet` with `sidebars-fleet.ts`
+   for FleetOS Manager.
+3. Commit what it wrote (`versions.json`, `versioned_docs/` and `versioned_sidebars/` for
+   CryptOS; `fleet_versions.json`, `fleet_versioned_docs/` and `fleet_versioned_sidebars/` for
+   FleetOS Manager, all under `apps/docs/`) with the bump, and merge the PR.
 
 Then publish the release. If the PR was missed, the deploy fails at the docs version check; merge
 the PR and publish the release again. The workflow never commits anything itself: `main` takes
 changes only through a PR, and a commit made after the tag wouldn't be in the tagged source.
 
-The docs version follows the product release in `release.ts`, not this repo's own tags. This
+The docs versions follow the product releases in `release.ts`, not this repo's own tags. This
 repo's releases are plain SemVer (`v0.2.0`), with no rc.
 
 ## Pre-release builds go to dev, not production

@@ -10,10 +10,10 @@ CryptOS is open source under the **Apache License, Version 2.0**. You can use it
 
 | Repo | License | Files |
 |---|---|---|
-| [cryptos-node](https://github.com/CryptOS-PKI/cryptos-node) | Apache License 2.0 | [`LICENSE`](https://github.com/CryptOS-PKI/cryptos-node/blob/main/LICENSE), [`NOTICE`](https://github.com/CryptOS-PKI/cryptos-node/blob/main/NOTICE) |
+| [cryptos-node](https://github.com/CryptOS-PKI/cryptos-node) | Apache License 2.0 | [`LICENSE`](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/LICENSE), [`NOTICE`](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/NOTICE) |
 | [api](https://github.com/CryptOS-PKI/api) (archived) | Apache License 2.0 | [`LICENSE`](https://github.com/CryptOS-PKI/api/blob/main/LICENSE), [`NOTICE`](https://github.com/CryptOS-PKI/api/blob/main/NOTICE) |
-| [cryptos-manager](https://github.com/CryptOS-PKI/cryptos-manager) | Apache License 2.0 | [`LICENSE`](https://github.com/CryptOS-PKI/cryptos-manager/blob/main/LICENSE), [`NOTICE`](https://github.com/CryptOS-PKI/cryptos-manager/blob/main/NOTICE) |
-| [cryptos-web](https://github.com/CryptOS-PKI/cryptos-web) | Apache License 2.0 | [`LICENSE`](https://github.com/CryptOS-PKI/cryptos-web/blob/main/LICENSE), [`NOTICE`](https://github.com/CryptOS-PKI/cryptos-web/blob/main/NOTICE) |
+| [cryptos-manager](https://github.com/CryptOS-PKI/cryptos-manager) | Apache License 2.0 | [`LICENSE`](https://github.com/CryptOS-PKI/cryptos-manager/blob/v0.1.0-rc.1/LICENSE), [`NOTICE`](https://github.com/CryptOS-PKI/cryptos-manager/blob/v0.1.0-rc.1/NOTICE) |
+| [cryptos-web](https://github.com/CryptOS-PKI/cryptos-web) | Apache License 2.0 | [`LICENSE`](https://github.com/CryptOS-PKI/cryptos-web/blob/v0.1.0-rc.1/LICENSE), [`NOTICE`](https://github.com/CryptOS-PKI/cryptos-web/blob/v0.1.0-rc.1/NOTICE) |
 | [docs](https://github.com/CryptOS-PKI/docs) | Apache License 2.0 | [`LICENSE`](https://github.com/CryptOS-PKI/docs/blob/main/LICENSE), [`NOTICE`](https://github.com/CryptOS-PKI/docs/blob/main/NOTICE) |
 | [cryptos-lab](https://github.com/CryptOS-PKI/cryptos-lab) | Apache License 2.0 | [`LICENSE`](https://github.com/CryptOS-PKI/cryptos-lab/blob/main/LICENSE), [`NOTICE`](https://github.com/CryptOS-PKI/cryptos-lab/blob/main/NOTICE) |
 | [.github](https://github.com/CryptOS-PKI/.github) | Apache License 2.0 | [`LICENSE`](https://github.com/CryptOS-PKI/.github/blob/main/LICENSE) |

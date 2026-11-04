@@ -4,10 +4,6 @@ title: "🎉 Run the first-boot ceremony"
 
 # 🎉 Run the first-boot ceremony
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Create the Root CA for the first time and watch each step.
 
 The **first-boot ceremony** is the moment a Root CA is born. The node creates its Root key inside the TPM, signs its own Root certificate with it, and writes a signed record of what it did. It runs once per node.
@@ -47,7 +43,7 @@ Subject and issuer are the same because the certificate is self-signed. If the c
 :::
 
 :::caution[The first pin is trust on first use]
-`trust fetch` saves whatever certificate answers on that port. Here the port is a forward to a VM on your own machine, so that is fine. On a real network, compare the SHA-256 with the **Mgmt SHA-256** on the node's console, or pass it as `--expect-sha256` so `cryptosctl` refuses any other certificate. The [management trust guide](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/management-trust.md) explains what the pin proves.
+`trust fetch` saves whatever certificate answers on that port. Here the port is a forward to a VM on your own machine, so that is fine. On a real network, compare the SHA-256 with the **Mgmt SHA-256** on the node's console, or pass it as `--expect-sha256` so `cryptosctl` refuses any other certificate. The [management trust guide](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/docs/management-trust.md) explains what the pin proves.
 :::
 
 ## 2. Check the node is ready

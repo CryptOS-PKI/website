@@ -62,7 +62,7 @@ Terms are in alphabetical order. Where a term names something CryptOS doesn't ha
 
 ## F
 
-**Fleet Manager:** the separate web application and API for running many CryptOS nodes from one place. It holds no CA keys. See the [Fleet Manager overview](../fleet-manager/overview.md).
+**FleetOS Manager:** the separate web application and API for running many CryptOS nodes from one place. It holds no CA keys. See the [FleetOS Manager overview](/docs/fleet/vnext).
 
 ## G
 
@@ -124,7 +124,7 @@ Terms are in alphabetical order. Where a term names something CryptOS doesn't ha
 
 **SAN (Subject Alternative Name):** the certificate extension listing the names a certificate is valid for, such as DNS names and IP addresses.
 
-**SCEP** (RFC 8894): a certificate enrolment protocol for network gear and devices. Not available in CryptOS.
+**SCEP** (RFC 8894): a certificate enrolment protocol for network gear and devices. An intermediate or issuing node serves it when `pki.scep` is set. See [Enrol devices with SCEP](../using/enrol-devices-scep.md).
 
 **Secure Boot:** firmware checking that the operating system image is signed by a key it trusts before running it. See [Secure Boot](../install-deploy/secure-boot.md).
 

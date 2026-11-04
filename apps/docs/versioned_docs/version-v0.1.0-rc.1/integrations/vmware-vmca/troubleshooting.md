@@ -55,4 +55,4 @@ Every certificate vCenter serves changed. Anything that stored the old machine S
 | `FailedPrecondition` mentioning the revocation preflight | The node cannot resolve or reach its own `revocation_base_url` | Set `network.nameservers`, reboot the node, confirm `Revocation: OK` |
 | VMCA certificate has no CDP or AIA | It was signed before `revocation_base_url` was set | Sign the same CSR again after setting it, rebuild the chain, import again |
 | The Intermediate in the chain has no CDP or AIA | The Intermediate enrolled before the Root had `revocation_base_url` | Re-certify the Intermediate (same key), rebuild `vmca-fullchain.pem` with the new Intermediate copy. The VMCA certificate still verifies, because the key and SKI are unchanged. |
-| VMCA certificate outlives the Intermediate | `validity_days` too large; CryptOS does not cap it | Lower `validity_days`, sign again |
+| The VMCA certificate ends with the Intermediate, earlier than planned, and `sign-subordinate` printed `WARNING: ... capped to issuer notAfter` | `validity_days` runs past the Intermediate's `notAfter`, so the node capped it | Lower `validity_days` (or accept the cap) and sign again |

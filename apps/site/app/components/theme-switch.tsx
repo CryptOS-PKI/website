@@ -13,10 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import { pressThemeSwitch, rememberedTheme } from "@cryptos-pki/frame/theme-pref";
 import { type FrameTheme, ThemeToggle } from "@cryptos-pki/frame/theme-toggle";
-import { useSyncExternalStore } from "react";
+import { useBrowserConsent } from "@cryptos-pki/frame/use-consent";
+import { useEffect, useSyncExternalStore } from "react";
 
-import { applyTheme, nextTheme, storedTheme, THEME_KEY } from "~/theme";
+import { applyTheme, pageTheme, SITE_CONSENT_PREFIX } from "~/theme";
 
 const listeners = new Set<() => void>();
 
@@ -27,21 +29,37 @@ const subscribe = (listener: () => void) => {
   };
 };
 
-const getTheme = (): FrameTheme => storedTheme(document.documentElement.getAttribute("data-theme"));
+const getTheme = (): FrameTheme => pageTheme(document.documentElement.getAttribute("data-theme"));
 const getServerTheme = (): FrameTheme => "dark";
 
-function choose(theme: FrameTheme) {
+function show(theme: FrameTheme) {
   applyTheme(document.documentElement, theme);
-  try {
-    window.localStorage.setItem(THEME_KEY, theme);
-  } catch {
-    // Storage blocked: the choice still holds for this page view.
-  }
   listeners.forEach((listener) => listener());
 }
 
 // The shared switch (packages/frame), wired to the site's theme on <html>.
+// Before the visitor answers the cookie choice a press only opens the cookie
+// bar; after that it flips the theme (stored only if they accepted). Until
+// the visitor picks a theme of their own, the page follows the system
+// setting, live.
 export const ThemeSwitch = () => {
   const theme = useSyncExternalStore(subscribe, getTheme, getServerTheme);
-  return <ThemeToggle theme={theme} onToggle={() => choose(nextTheme(theme))} />;
+  const { consent } = useBrowserConsent(SITE_CONSENT_PREFIX);
+
+  useEffect(() => {
+    if (!consent) return undefined;
+    const query = window.matchMedia("(prefers-color-scheme: light)");
+    const follow = () => {
+      if (rememberedTheme(consent) === null) show(query.matches ? "light" : "dark");
+    };
+    query.addEventListener("change", follow);
+    return () => query.removeEventListener("change", follow);
+  }, [consent]);
+
+  const press = () => {
+    if (!consent) return;
+    const next = pressThemeSwitch(consent, theme);
+    if (next) show(next);
+  };
+  return <ThemeToggle theme={theme} onToggle={press} />;
 };

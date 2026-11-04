@@ -6,9 +6,9 @@ title: "☸️ Kubernetes workloads"
 
 A Kubernetes cluster uses a lot of certificates, and they come and go fast: ingress certificates for every hostname, certificates for webhooks and controllers, and mTLS between services. Nobody carries CSRs by hand for that. In Kubernetes the job usually goes to **cert-manager**, which asks a CA for certificates and renews them before they expire.
 
-Kubernetes is a certificate **consumer** of CryptOS here, never a place CryptOS's CA runs: the CA runs only on its own appliance (hardware or VM), because a CA in a cluster can't be TPM-sealed and would be a single point of failure. FleetOS Manager, the optional multi-node console, is the part of CryptOS that does run on Kubernetes (or standalone); see the [Fleet Manager overview](../fleet-manager/overview.md).
+Kubernetes is a certificate **consumer** of CryptOS here, never a place CryptOS's CA runs: the CA runs only on its own appliance (a VMware VM in v0.1.0-rc.1), because a CA in a cluster can't be TPM-sealed and would be a single point of failure. FleetOS Manager, the optional multi-node console, is the part of CryptOS that does run on Kubernetes (or standalone); see the [FleetOS Manager overview](/docs/fleet).
 
-This page says how far the alpha gets.
+This page says how far this release gets.
 
 There are two separate jobs here, and it helps to keep them apart:
 
@@ -20,9 +20,7 @@ There are two separate jobs here, and it helps to keep them apart:
 - **No `dns-01` and no wildcard names**, which cert-manager usually relies on for internal names.
 :::
 
-:::tip[Works today]
-You can issue certificates for cluster workloads by CSR, the same way as for any server: make the key and CSR, issue with `cryptosctl ca issue-leaf` or the Fleet Manager, and load the result into a Kubernetes TLS Secret yourself. See [Internal TLS and mTLS](./internal-tls.md). Renewal is manual.
-:::
+You can issue certificates for cluster workloads by CSR, the same way as for any server: make the key and CSR, issue with `cryptosctl ca issue-leaf` or the FleetOS Manager, and load the result into a Kubernetes TLS Secret yourself. See [Internal TLS and mTLS](./internal-tls.md). Renewal is manual.
 
 ## How the ACME server behaves
 
@@ -35,7 +33,7 @@ Once ACME is switched on, it behaves like this:
 - **Every authorisation is checked afresh.** Nothing is reused across orders, so every renewal re-proves every name.
 - **ACME needs a TLS front end.** The node's ACME listener is plain HTTP on `http_port` (8555 by default), and `base_url` is the HTTPS address clients dial. A TLS terminator in front of the node carries the traffic to that port.
 
-The [ACME guide](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/acme.md) in the `cryptos-node` repo has the full config block and client examples.
+The [ACME guide](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/docs/acme.md) in the `cryptos-node` repo has the full config block and client examples.
 
 :::caution[cert-manager's default key is refused]
 A CryptOS node certifies only ECDSA P-384 keys and RSA keys of 3072 bits or more. cert-manager generates RSA 2048 keys unless a Certificate says otherwise, and the node refuses those. Set the Certificate's `privateKey` to ECDSA with size 384, or RSA with size 3072 or more.
@@ -44,7 +42,7 @@ A CryptOS node certifies only ECDSA P-384 keys and RSA keys of 3072 bits or more
 cert-manager also has to trust the CryptOS chain for the HTTPS connection to the ACME directory. Give it the CryptOS root (or the chain your TLS front end serves) as the ACME issuer's CA bundle.
 
 :::info[Tested in CI with kind and cert-manager]
-Every `cryptos` pull request that touches the ACME code runs cert-manager in a [kind](https://kind.sigs.k8s.io/) cluster against a CryptOS intermediate. cert-manager registers with External Account Binding and proves the name with `http-01` through the cluster's ingress. The test checks that an ECDSA P-384 Certificate goes Ready, that its chain verifies to the CryptOS root, that the node recorded the serial, and that a forced renewal returns a new serial. The node in that test runs from the `cryptos` code on the CI runner with software keys, not from the OS image with a TPM. See [`ci-kind-acme.yml`](https://github.com/CryptOS-PKI/cryptos-node/blob/main/.github/workflows/ci-kind-acme.yml) and `task e2e:kind` to run it yourself on Linux.
+Every `cryptos` pull request that touches the ACME code runs cert-manager in a [kind](https://kind.sigs.k8s.io/) cluster against a CryptOS intermediate. cert-manager registers with External Account Binding and proves the name with `http-01` through the cluster's ingress. The test checks that an ECDSA P-384 Certificate goes Ready, that its chain verifies to the CryptOS root, that the node recorded the serial, and that a forced renewal returns a new serial. The node in that test runs from the `cryptos` code on the CI runner with software keys, not from the OS image with a TPM. See [`ci-kind-acme.yml`](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/.github/workflows/ci-kind-acme.yml) and `task e2e:kind` to run it yourself on Linux.
 :::
 
 ## An intermediate for the cluster
@@ -55,7 +53,7 @@ cert-manager can also act as a small CA of its own, signing from a CA key pair s
 With this setup the cluster CA's private key sits in a Kubernetes Secret, not in a TPM. Anyone who can read that Secret can issue certificates that chain to your CryptOS root, for any name the CA certificate allows. Keep the certificate short-lived, give the CA its own profile so it can be revoked on its own, and keep RBAC on that Secret tight.
 :::
 
-This path has not been tested with cert-manager. The signing step itself is the one proven with VMCA; see [vCenter VMCA as a CryptOS subordinate](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/vmca-subordination.md) for a worked example of the profile and the command.
+This path has not been tested with cert-manager. The signing step itself is the one proven with VMCA; see [vCenter VMCA as a CryptOS subordinate](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/docs/vmca-subordination.md) for a worked example of the profile and the command.
 
 ## Related
 

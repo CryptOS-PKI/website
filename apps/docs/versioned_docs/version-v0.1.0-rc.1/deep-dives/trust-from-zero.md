@@ -6,9 +6,7 @@ title: "🌱 Trust from zero"
 
 Start with nothing: how the Root signs itself, and how your laptop earns the right to talk to the API.
 
-:::tip[Works today]
-Everything on this page up to "Where it falls short" is built and runs in the alpha. The gaps at the end are stated as they are in the code today.
-:::
+Everything on this page up to "Where it falls short" is built and runs in this release. The gaps at the end are stated as they are in the code today.
 
 A freshly built CryptOS image knows nobody. It carries no administrator account, no password, no pre-shared key and no CA key. Three trust relationships have to be built from that blank state, and this page follows each one to the code that enforces it:
 
@@ -76,7 +74,7 @@ Your client pins that certificate. To check the pin against the node itself, not
 cryptosctl --endpoint 192.0.2.10:443 trust fetch --expect-sha256 "<Mgmt SHA-256 from the console>"
 ```
 
-The full procedure, and why the pin goes stale after every reboot, is in [Trusting a node's management certificate](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/management-trust.md).
+The full procedure, and why the pin goes stale after every reboot, is in [Trusting a node's management certificate](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/docs/management-trust.md).
 
 :::caution[Fetch the pin again after every reboot until the ceremony]
 Before the node has its CA, the management certificate changes on every boot. A pin taken before a reboot fails afterwards with `x509: certificate signed by unknown authority`. Run `trust fetch --expect-sha256` again after each reboot, and don't drop `--expect-sha256`, because without it `trust fetch` saves whatever certificate it received.
@@ -110,19 +108,19 @@ The ceremony stream prints `CERT_SIGNED cert_sha256=<hex>`, the SHA-256 of the n
 
 ## Where it falls short
 
-These are the places where the alpha is short of the design. Each one is traceable to the code listed below. For what is planned and when, see [Project status and roadmap](../introduction/status-roadmap.md).
+These are the places where this release is short of the design. Each one is traceable to the code listed below. For what is planned and when, see [Project status and roadmap](../introduction/status-roadmap.md).
 
-| Design goal | What the alpha does |
+| Design goal | What this release does |
 |---|---|
 | The bootstrap certificate is single-use: during the ceremony the operator enrolls a long-term admin certificate and the bootstrap certificate is revoked. | Not built. The streaming RPC has no channel for the operator to send a CSR, so the ceremony promotes the bootstrap certificate to be the steady-state admin (`ADMIN_ROTATED` carries its own SHA-256). The listener keeps trusting the certificate from `bootstrap.admin_cert_pem`, and it stays the only admin. |
 | M-of-N administrator quorum for Root operations. | Not built. One certificate authorizes everything. |
-| The node proves to you that it runs on a genuine TPM (EK certificate, attestation quote over PCRs). | Not built. The ceremony returns the TPM creation data for the key, but no endorsement key certificate or quote, and `cryptosctl` doesn't check it. The `Attest` RPC used by the Fleet Manager is a signature by the CA key over a nonce, not a TPM quote. |
+| The node proves to you that it runs on a genuine TPM (EK certificate, attestation quote over PCRs). | Not built. The ceremony returns the TPM creation data for the key, but no endorsement key certificate or quote, and `cryptosctl` doesn't check it. The `Attest` RPC used by the FleetOS Manager is a signature by the CA key over a nonce, not a TPM quote. |
 | No unauthenticated path to change a node. | Maintenance mode, before install, has none of the protections above (Step 3). |
 | The management listener presents a certificate from the node's CA. | Only once the node has its CA. Before that, the listener presents a new self-signed certificate on every boot, pinned by fingerprint (Step 5). |
 
 ## Where this lives in the code
 
-All paths are in [CryptOS-PKI/cryptos-node](https://github.com/CryptOS-PKI/cryptos-node) on `main`.
+All paths are in [CryptOS-PKI/cryptos-node](https://github.com/CryptOS-PKI/cryptos-node/tree/v0.1.0-rc.1) at the `v0.1.0-rc.1` tag.
 
 | Step | Code |
 |---|---|

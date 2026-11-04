@@ -24,7 +24,7 @@ const links = frameLinks({ siteUrl: "https://site.example/", docsUrl: "https://d
 test("the frame links drop a trailing slash and keep the two sites apart", () => {
   assert.equal(links.site, "https://site.example");
   assert.equal(links.docs, "https://docs.example");
-  assert.equal(links.status, "https://docs.example/docs/introduction/status-roadmap");
+  assert.equal(links.status, "https://docs.example/docs/cryptos/introduction/status-roadmap");
 });
 
 test("the strip names the current release and links the site's Releases page and the project status", () => {
@@ -32,7 +32,10 @@ test("the strip names the current release and links the site's Releases page and
   assert.equal(strip.heading, `${release.version} is out.`);
   assert.deepEqual(
     strip.links.map((link) => link.href),
-    ["https://site.example/releases", "https://docs.example/docs/introduction/status-roadmap"],
+    [
+      "https://site.example/releases",
+      "https://docs.example/docs/cryptos/introduction/status-roadmap",
+    ],
   );
 });
 

@@ -4,7 +4,7 @@ title: "🔎 Check the source you built"
 
 # 🔎 Check the source you built
 
-CryptOS ships source only: a release is a tag, its notes and the source archive at that tag, with no prebuilt image, binary or chart. Since you build everything yourself, the thing worth checking is that the source you built from is really the source the release points at.
+A CryptOS release is a tag, its notes and the source archive at that tag. `cryptos-appliance` also attaches unsigned VMware and Proxmox VE amd64 ISOs and UKIs and `cryptosctl` binaries built from the tag, and `cryptos-manager` publishes its image and Helm chart to ghcr.io. Nothing the project publishes is signed with a Secure Boot key. Whether you build from source or check a download, the thing worth checking is that the source is really the source the release points at.
 
 ## 1. Check the tag's commit
 
@@ -41,7 +41,7 @@ CryptOS-PKI doesn't sign every release tag today. Where a tag isn't signed, the 
 A build pulls in more than the one repository you cloned:
 
 - **`cryptos-appliance`** pins `cryptos-node` in `go.mod`; `go.sum` pins every dependency's content hash. `go mod verify` checks your local module cache against `go.sum`.
-- **`cryptos-manager`** pins `cryptos-node` the same way, and pins the `cryptos-web` build it embeds via the `WEB_RELEASE_REF` repository variable (a tag or commit, never a floating branch) when it builds a release image.
+- **`cryptos-manager`** pins `cryptos-node` the same way, and builds its release image from the `cryptos-web` release with the same tag (the two are versioned in lockstep). The workflow fails if that `cryptos-web` release isn't published.
 - **`cryptos-web`**'s `package-lock.json` pins every npm dependency by resolved version and integrity hash; `npm ci` refuses to install anything that doesn't match.
 
 ```bash
@@ -51,4 +51,4 @@ npm ci   # fails closed on an integrity mismatch
 
 ## 4. Know what "tested" means
 
-CI and a lab gate build the exact tagged source with throwaway keys, and prove install, boot, upgrade and rollback before a release goes out. That gate runs on the project's infrastructure, not yours -- it tells you the source was provably buildable and bootable at that commit, not that the binary in front of you matches it. Building from the same commit yourself, with the checks above, is what closes that gap.
+CI builds the exact tagged source on GitHub-hosted runners, checks that the unsigned image builds reproducibly, and boots it in QEMU with a software TPM before the assets are attached. That run includes an in-place upgrade from an earlier build, a rollback and a second upgrade. It runs on GitHub's infrastructure, not yours -- it tells you the source was provably buildable and bootable at that commit, not that the binary in front of you matches it. Building from the same commit yourself, with the checks above, is what closes that gap.

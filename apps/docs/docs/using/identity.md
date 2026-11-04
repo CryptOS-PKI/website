@@ -4,10 +4,6 @@ title: "📇 Show and validate identity"
 
 # 📇 Show and validate identity
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Print the CA certificate and confirm the chain is valid.
 
 A node's **identity** is its CA certificate and the chain above it. A Root's chain is one certificate, signed by itself. An intermediate or issuing CA's chain runs from its own certificate up to the Root. `cryptosctl identity show` prints it, and `cryptosctl identity validate` checks it. Both only read.

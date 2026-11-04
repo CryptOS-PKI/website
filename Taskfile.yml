@@ -26,7 +26,7 @@ tasks:
     cmds:
       - npm run lint
   docs:version:
-    desc: Cut the docs version for the release in packages/frame/release.ts.
+    desc: Cut the CryptOS and FleetOS Manager docs versions for the releases in packages/frame/release.ts.
     cmds:
       - npm run docs:version
   ci:
@@ -37,6 +37,9 @@ tasks:
       - npm run typecheck
       - npm run build
       - npm run check:links
+      - npm run check:storage:site
+      - npm run check:storage:docs
+      - npm run check:images:docs
   license:
     desc: Verify every source file carries the Apache 2.0 license header and LICENSE is the verbatim Apache 2.0 text (CI; never writes).
     cmds:

@@ -2,21 +2,13 @@
 title: "💿 Build a bootable image"
 ---
 
-import Pre10Notice from '@site/docs/_partials/pre-1-0-notice.mdx';
-
 # 💿 Build a bootable image
-
-:::tip[✅ Works today]
-This describes CryptOS as it works right now.
-:::
-
-<Pre10Notice />
 
 A CryptOS node boots from one file: a **Unified Kernel Image** (UKI). The UKI holds the kernel, a tiny start-up program, and the read-only system image, all in one signed file. To install a node you usually wrap that UKI in an **ISO** and boot the machine or virtual machine from it.
 
 This page shows how to build the ISO from the `cryptos-appliance` source code, which pins the `cryptos-node` engine at a version and builds `init`, `cryptosctl` and the console from it by import path.
 
-The CA runs only on the image you build here — its own hardware or VM — never on Kubernetes: a CA there can't be TPM-sealed and would be a single point of failure. FleetOS Manager, the optional multi-node console, runs separately, on Kubernetes or standalone (a VM); see the [Fleet Manager overview](../fleet-manager/overview.md).
+The CA runs only on the image you build here, in a VMware virtual machine (physical servers aren't supported in v0.1.0-rc.1), never on Kubernetes: a CA there can't be TPM-sealed and would be a single point of failure. FleetOS Manager, the optional multi-node console, runs separately, on Kubernetes or standalone (a VM); see the [FleetOS Manager overview](/docs/fleet).
 
 ## Two choices to make first
 
@@ -74,7 +66,7 @@ The files land in `build/out/`:
 |---|---|
 | `cryptos-amd64.uki` | the signed UKI |
 | `cryptos-amd64.uki.sig` | the detached signature a node checks before it accepts an upgrade |
-| `cryptos-amd64-vmware.iso` | the bootable installer ISO (`cryptos-amd64-vmware-nodeid.iso` for `STATEKEY=nodeid`) |
+| `cryptos-amd64-vmware-<build>.iso` | the bootable installer ISO (`cryptos-amd64-vmware-nodeid-<build>.iso` for `STATEKEY=nodeid`) |
 
 `task image` runs the same chain but stops at the signed UKI, without making an ISO.
 
@@ -91,7 +83,7 @@ task iso:unsigned PLATFORM=vmware
 task iso:unsigned PLATFORM=vmware STATEKEY=nodeid
 ```
 
-This writes `build/out/cryptos-amd64-vmware-unsigned.iso` (or `...-vmware-nodeid-unsigned.iso`).
+This writes `build/out/cryptos-amd64-vmware-unsigned-<build>.iso` (or `cryptos-amd64-vmware-nodeid-unsigned-<build>.iso`).
 
 ## Download the unsigned image
 
@@ -134,7 +126,7 @@ From there you have two paths:
   later image you sign with the same key upgrades a node installed from this one. It
   needs no root, no `xorriso` and no rebuild, and the same command signs a standalone
   unsigned UKI, with `.unsigned` dropped from the output name instead.
-  See [Signing an image with your own key](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/image-sign.md)
+  See [Signing an image with your own key](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/docs/image-sign.md)
   in the `cryptos-node` repository for the full command reference.
 - **Build from source** instead (above), with `SB_KEY` and `SB_CERT` set, for the same
   result without downloading a release asset. See [Secure Boot](./secure-boot.md).

@@ -6,9 +6,7 @@ title: "🛡️ How the clock protects signing"
 
 Following a node's clock from boot through every poll, and what stops a wrong or hostile time server from putting a bad date on a certificate.
 
-:::tip[Works today]
-This describes CryptOS as it works right now. See [Keep the clock in sync](../using/time-sync.md) for setting `network.ntp_servers` and reading the `Clock:` status line.
-:::
+See [Keep the clock in sync](../using/time-sync.md) for setting `network.ntp_servers` and reading the `Clock:` status line.
 
 A CA's clock sets the `notBefore` and `notAfter` of every certificate it signs. A clock that jumps backwards, or that a hostile server pushes forward or back, can misdate a certificate for its whole life. CryptOS protects against that with a clock floor the time can never go behind, and a gate that refuses to sign while the clock hasn't synced.
 

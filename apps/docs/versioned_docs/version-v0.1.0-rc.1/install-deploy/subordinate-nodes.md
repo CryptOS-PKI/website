@@ -4,10 +4,6 @@ title: "🪢 Subordinate nodes"
 
 # 🪢 Subordinate nodes
 
-:::tip[✅ Works today]
-This describes CryptOS as it works right now.
-:::
-
 A Root is one node. An `intermediate` or `issuing` node chains under it, and gets there a different way: it never runs the first-boot ceremony ([Run the first-boot ceremony](./run-the-ceremony.md) covers that for a Root only). Instead it makes a certificate signing request (CSR) for its parent to sign.
 
 ## Chain a subordinate to its parent

@@ -4,16 +4,12 @@ title: "🔌 gRPC API"
 
 # 🔌 gRPC API
 
-:::tip[✅ Works today]
-This describes CryptOS as it works right now.
-:::
-
-CryptOS exposes two gRPC services. The protobuf definitions are the source of truth: the node API in [`proto/cryptos/node/v1`](https://github.com/CryptOS-PKI/cryptos-node/tree/main/proto/cryptos/node/v1) in the cryptos-node repo, and the Fleet Manager API in [`proto/cryptos/fleet/v1`](https://github.com/CryptOS-PKI/cryptos-manager/tree/main/proto/cryptos/fleet/v1) in the cryptos-manager repo; this page explains the parts that need more than the field comments.
+CryptOS exposes two gRPC services. The protobuf definitions are the source of truth: the node API in [`proto/cryptos/node/v1`](https://github.com/CryptOS-PKI/cryptos-node/tree/v0.1.0-rc.1/proto/cryptos/node/v1) in the cryptos-node repo, and the FleetOS Manager API in [`proto/cryptos/fleet/v1`](https://github.com/CryptOS-PKI/cryptos-manager/tree/v0.1.0-rc.1/proto/cryptos/fleet/v1) in the cryptos-manager repo; this page explains the parts that need more than the field comments.
 
 | Service | Package | Served by | What it covers |
 |---|---|---|---|
 | `NodeService` | `cryptos.node.v1` | each CryptOS node, over mTLS on port 443 and the local UNIX socket | one node: config, status, ceremony, issuance, revocation, key backup and rotation, image upgrades, the audit log |
-| `FleetService` | `cryptos.fleet.v1` | the Fleet Manager, as a Connect endpoint | many nodes: inventory, the profile catalog, enrollment, the audit log, operator credentials, MCP agent keys, step-up approvals |
+| `FleetService` | `cryptos.fleet.v1` | the FleetOS Manager, as a Connect endpoint | many nodes: inventory, the profile catalog, enrollment, the audit log, operator credentials, MCP agent keys, step-up approvals |
 
 > The rest of the RPCs are not written up here yet. Until they are, read the comments in `proto/cryptos/node/v1/node.proto` (cryptos-node) and `proto/cryptos/fleet/v1/fleet.proto` (cryptos-manager). 🚧
 
@@ -31,7 +27,7 @@ The `ApplyConfig` warnings are advisory. A CA's remaining lifetime shrinks every
 
 The warnings are plain text for a person to read. Don't parse them.
 
-The Fleet Manager's own `FleetService.IssueLeaf` response carries only `cert_der` today; it doesn't pass the node's warnings through.
+The FleetOS Manager's own `FleetService.IssueLeaf` response carries only `cert_der` today; it doesn't pass the node's warnings through.
 
 ## Validity policy
 
@@ -44,13 +40,13 @@ The Fleet Manager's own `FleetService.IssueLeaf` response carries only `cert_der
 
 Any other value fails config validation. The policy applies to both `IssueLeaf` and `SignSubordinateCSR`.
 
-Profiles live in `pki.profiles[]` in the node's machine config; see [Machine config schema](./machine-config.md). The Fleet Manager's catalog (`ListProfiles`, `CreateProfile`, `UpdateProfile`, `ApplyProfileToNode`) uses the same `cryptos.v1.CertificateProfile` message, so `validity_policy` travels with a profile when the manager pushes it to a node.
+Profiles live in `pki.profiles[]` in the node's machine config; see [Machine config schema](./machine-config.md). The FleetOS Manager's catalog (`ListProfiles`, `CreateProfile`, `UpdateProfile`, `ApplyProfileToNode`) uses the same `cryptos.v1.CertificateProfile` message, so `validity_policy` travels with a profile when the manager pushes it to a node.
 
 A catalog profile also carries a manager-only `requestable` flag, off by default, set with `SetProfileRequestable`. It isn't part of `cryptos.v1.CertificateProfile` and never reaches a node; it only decides whether [certificate requests](#certificate-requests) can name the profile. `ListRequestableProfiles` lists the profiles currently marked requestable.
 
 ## MCP agent keys
 
-The Fleet Manager serves an MCP endpoint so AI agents can work with the fleet. An agent authenticates with an **MCP key**: a bearer key bound to one operator's client certificate. MCP clients that can run the OAuth login get a key from that flow; `CreateMcpKey` mints one for clients that can't. Both produce the same kind of key.
+The FleetOS Manager serves an MCP endpoint so AI agents can work with the fleet. An agent authenticates with an **MCP key**: a bearer key bound to one operator's client certificate. MCP clients that can run the OAuth login get a key from that flow; `CreateMcpKey` mints one for clients that can't. Both produce the same kind of key.
 
 A key is identity only. On every request its effective level is the lower of the bound certificate's live level and the key's `level_ceiling`, and the key stops working as soon as that certificate is revoked or expires.
 
@@ -187,7 +183,7 @@ Timestamps are RFC 3339 strings; an unset one is empty.
 ## Certificate requests
 
 :::info[No web page yet]
-`CreateCertificateRequest`, `ListCertificateRequests`, `GetCertificateRequestByID` and `CancelCertificateRequest` are reachable over the API today. The Fleet Manager web UI doesn't have a **Request a certificate** or **My requests** page yet; that ships in a later wave, on the same screens as [Make a credential request](../fleet-manager/make-a-credential-request.md).
+`CreateCertificateRequest`, `ListCertificateRequests`, `GetCertificateRequestByID` and `CancelCertificateRequest` are reachable over the API today. The FleetOS Manager web UI doesn't have a **Request a certificate** or **My requests** page yet; that ships in a later wave, on the same screens as [Make a credential request](/docs/fleet/make-a-credential-request).
 :::
 
 Any signed-in user, not only an operator or admin, can ask for a certificate under a profile an admin has marked `requestable`. The flow reuses the step-up approvals queue: filing a request opens an `Approval` of kind `certificate_request`, and an operator or admin other than the requester has to decide it before anything is signed.
@@ -319,7 +315,7 @@ Takes no fields and walks the whole stored log. A broken chain is a result, not 
 | `first_broken_sequence` (3) | `uint64` | the `seq` the first failing entry holds, or the one expected at its place when the line can't be read; `0` when intact |
 | `reason` (4) | `string` | the file, line and failure (a signature mismatch, a sequence gap, a `prev_entry_sha256` mismatch, or a line that is malformed or does not parse); empty when intact |
 
-## Fleet Manager audit events
+## FleetOS Manager audit events
 
 `FleetService.ListAudit` returns `cryptos.fleet.v1.AuditEvent` entries. This is the manager's log, separate from the hash-chained `cryptos.node.v1.AuditEvent` log each node keeps (see [Audit log format](./audit-log.md)).
 

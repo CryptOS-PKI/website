@@ -13,17 +13,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-// Fails unless the docs have a version cut for the current release (the
-// version in packages/frame/release.ts), as the newest one. The deploy
+// Fails unless both docs instances have a version cut for their product's
+// current release (packages/frame/release.ts), as the newest one. The deploy
 // workflow runs it before building either site, so a release can't go out
 // with docs that are missing its version.
 import { docsVersionProblem, readState } from "./docs-version.mjs";
 
-const { version, versions } = readState();
-console.log(`release ${version}; docs versions: ${versions.join(", ") || "none"}`);
-const problem = docsVersionProblem(version, versions);
-if (problem) {
-  console.error(`docs version check failed: ${problem}`);
-  process.exit(1);
+let failed = false;
+for (const { name, version, versions } of readState()) {
+  console.log(`${name}: release ${version}; docs versions: ${versions.join(", ") || "none"}`);
+  const problem = docsVersionProblem(version, versions, name);
+  if (problem) {
+    console.error(`docs version check failed: ${problem}`);
+    failed = true;
+  } else {
+    console.log(`docs version check passed: ${version} is the default ${name} docs version`);
+  }
 }
-console.log(`docs version check passed: ${version} is the default docs version`);
+if (failed) process.exit(1);

@@ -6,18 +6,16 @@ title: "🎯 What you can do with CryptOS"
 
 CryptOS is a certificate authority, so every use case comes down to the same thing: a machine, a person or a build job needs a certificate, and something has to hand it over. What changes from one use case to the next is **how** the request reaches the CA. Some requests are carried by hand, and some arrive over a standard enrolment protocol that a client already speaks.
 
-These pages are honest about where the alpha stands. Each one says what works today and what doesn't.
+Each page says what this release does and what it doesn't.
 
-## How a certificate gets out of CryptOS today
+## How a certificate gets out of CryptOS
 
-:::tip[Works today]
 A node in the **intermediate** or **issuing** role issues end-entity certificates. You pick a named **certificate profile** from the machine config, hand the node a CSR, and get the certificate back. There are two ways to do that:
 
 - `cryptosctl ca issue-leaf --csr <file> --profile <name>` from your workstation, over mTLS.
-- The **Fleet Manager** web UI, which issues a leaf from a CSR on a node it manages.
+- The **FleetOS Manager** web UI, which issues a leaf from a CSR on a node it manages.
 
 Every certificate a node issues is recorded. `cryptosctl ca list-issued` lists them, `ca revoke` revokes one, and when `pki.revocation_base_url` is set the node serves its CRL at `/crl`, OCSP at `/ocsp` and its own CA certificate at `/ca.cer`.
-:::
 
 The profile decides everything about the certificate except the subject and the public key, which come from the CSR. SANs and EKUs asked for in the CSR are ignored. That is deliberate: a request can never widen what the CA hands out. See [certificate profiles](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/certificate-profiles.md) for every field.
 
@@ -25,14 +23,16 @@ A **Root** node refuses to issue leaf certificates unless its config sets `root_
 
 ## Enrolment protocols
 
-Carrying CSRs by hand works, but it does not scale to hundreds of servers or a rack of switches. The enrolment protocols let clients ask for, and renew, certificates on their own. Here is what works in the alpha.
+Carrying CSRs by hand works, but it does not scale to hundreds of servers or a rack of switches. The enrolment protocols let clients ask for, and renew, certificates on their own. Here is what works in this release.
 
-| Protocol | What speaks it | State in the alpha |
+| Protocol | What speaks it | State in this release |
 |---|---|---|
-| gRPC `IssueLeaf` | `cryptosctl`, the Fleet Manager | Works today |
-| CRL and OCSP | Every TLS client that checks revocation | Works today |
+| gRPC `IssueLeaf` | `cryptosctl`, the FleetOS Manager | Available |
+| CRL and OCSP | Every TLS client that checks revocation | Available |
 | ACME (RFC 8555, `http-01`) | certbot, lego, acme.sh, win-acme, cert-manager | Off until you switch it on in the machine config |
 | EST (RFC 7030) | Network gear and devices with an EST client | Off until you switch it on in the machine config |
+| SCEP (RFC 8894) | Cisco IOS/IOS-XE trustpoints and other network gear | Off until you switch it on in the machine config (`pki.scep`) |
+| RFC 3161 time-stamping | `signtool`, `openssl ts` and other signing tools | Off until you switch it on in the machine config (`pki.tsa`) |
 
 ACME and EST run on an intermediate or issuing node. You switch each one on by adding its `pki.acme` or `pki.est` block to the node's machine config and running `cryptosctl config apply`, and off by removing the block and applying again. See the [machine config reference](../reference/machine-config.md) and the [ACME](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/acme.md) and [EST](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/est.md) guides.
 
@@ -44,19 +44,19 @@ The listeners start only at boot. `config apply` stores the switch, on or off, a
 A config that sets `pki.acme` or `pki.est` on a Root is refused, and nothing is stored. Serve them from an issuing node under the Root.
 :::
 
-The Fleet Manager lists each enrolment protocol adapter with an **Enabled** switch. As the page itself says, enabling records intent: it does not start the protocol on a node.
+The FleetOS Manager lists each enrolment protocol adapter with an **Enabled** switch. As the page itself says, enabling records intent: it does not start the protocol on a node.
 
 The node does not serve ACME `dns-01`. SCEP and RFC 3161 timestamps arrive with their own pages: [Enrol devices with SCEP](../using/enrol-devices-scep.md) and [Serve RFC 3161 timestamps](../using/serve-timestamps-tsa.md).
 
 ## One rule for every key
 
-A node certifies only two kinds of subject key: **ECDSA P-384**, and **RSA of 3072 bits or more**. It refuses a CSR for anything else with `subject ECDSA key must be on P-384` or `subject RSA key must be at least 3072 bits`. Many tools default to RSA 2048 or ECDSA P-256, so check the key before you send the request. Each use case page says where this bites.
+A node certifies only two kinds of subject key: **ECDSA P-384**, and **RSA of 3072 bits or more**. It refuses a CSR for anything else with `subject ECDSA key must be on P-384` or `subject RSA key must be at least 3072 bits`. The one exception is SCEP, where a profile can accept RSA 2048 with `min_rsa_key_bits: 2048`; see [Enrol devices with SCEP](../using/enrol-devices-scep.md). Many tools default to RSA 2048 or ECDSA P-256, so check the key before you send the request. Each use case page says where this bites.
 
 ## The use cases
 
 | Page | The job | Where it stands |
 |---|---|---|
-| [Internal TLS and mTLS](./internal-tls.md) | Certificates for your own servers and services | Works today, by CSR |
+| [Internal TLS and mTLS](./internal-tls.md) | Certificates for your own servers and services | Available, by CSR |
 | [Kubernetes workloads](./kubernetes.md) | Certificates for pods, ingress and controllers | By CSR today |
 | [Devices and IoT](./devices-iot.md) | Routers, switches and small devices | By CSR today |
 | [Code signing](./code-signing.md) | Certificates your build tools sign with | By CSR today |

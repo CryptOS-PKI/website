@@ -6,9 +6,7 @@ title: "🔬 The ceremony, step by step"
 
 A close reading of each event the first-boot ceremony emits.
 
-:::tip[Works today]
-The first-boot Root ceremony runs end to end in the alpha: it creates the Root key, self-signs the Root certificate, writes a signed ceremony manifest and commits everything in one transaction. It is a 1-of-1 ceremony; the gaps are listed at the end.
-:::
+The first-boot Root ceremony runs end to end in this release: it creates the Root key, self-signs the Root certificate, writes a signed ceremony manifest and commits everything in one transaction. It is a 1-of-1 ceremony; the gaps are listed at the end.
 
 This page reads the ceremony as a reviewer would: what the node checks, what it does between events, what each event carries, and what is stored at the end. The code is `Engine.Start` in `internal/ceremony/ceremony.go`. To run the ceremony as an operator, see [Run the first-boot ceremony](../using/ceremony-start.md).
 
@@ -91,7 +89,7 @@ There is no event for these two steps, but they are what makes the ceremony dura
 
 **The manifest.** The node builds a `CeremonyManifest` (defined in the node API's `ceremony.proto`, in the `cryptos-node` repo):
 
-| Field | Value in the alpha |
+| Field | Value in this release |
 |---|---|
 | `manifest_version` | `1` |
 | `ceremony_id` | A random version 4 UUID from `crypto/rand` |
@@ -121,7 +119,7 @@ Sent after the transaction commits. It carries `manifest_id`, the ceremony UUID,
 
 ## Event 4: `ADMIN_ROTATED`
 
-It carries `admin_cert_sha256`. Despite the name, nothing rotates in the alpha: the value is the SHA-256 of the bootstrap admin certificate you presented (or the configured one, for a local-socket call), which the commit recorded as the steady-state admin. The mTLS listener keeps trusting the same certificate.
+It carries `admin_cert_sha256`. Despite the name, nothing rotates in this release: the value is the SHA-256 of the bootstrap admin certificate you presented (or the configured one, for a local-socket call), which the commit recorded as the steady-state admin. The mTLS listener keeps trusting the same certificate.
 
 ## Event 5: `COMPLETE`
 
@@ -138,7 +136,7 @@ Every `StartCeremony` call is recorded in the audit log as one entry when the st
 
 ## Where it falls short
 
-| Design goal | What the alpha does |
+| Design goal | What this release does |
 |---|---|
 | M-of-N: the ceremony waits for M administrators to authorize it. | 1-of-1. The manifest's `operator_signatures` list is shaped for more entries, but only one is ever written. |
 | The operator signs the manifest with their own key. | The node signs with its HKDF-derived ceremony key, and the admin identity is bound into the signed bytes. |
@@ -150,7 +148,7 @@ Every `StartCeremony` call is recorded in the audit log as one entry when the st
 
 ## Where this lives in the code
 
-All paths are in [CryptOS-PKI/cryptos-node](https://github.com/CryptOS-PKI/cryptos-node) on `main`, the proto included.
+All paths are in [CryptOS-PKI/cryptos-node](https://github.com/CryptOS-PKI/cryptos-node/tree/v0.1.0-rc.1) at the `v0.1.0-rc.1` tag, the proto included.
 
 | Piece | Code |
 |---|---|

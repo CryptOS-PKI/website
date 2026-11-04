@@ -4,10 +4,6 @@ title: "📤 Bootstrap and apply config"
 
 # 📤 Bootstrap and apply config
 
-:::tip[✅ Works today]
-This describes CryptOS as it works right now.
-:::
-
 A maintenance node is waiting for one thing: its **machine config**. That single YAML file says what the node is (its role, name and network address), which administrator it trusts, and which disk to install to. You make an administrator identity on your workstation, put it in the config, and send the config to the node.
 
 ## 1. Get `cryptosctl`

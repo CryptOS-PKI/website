@@ -4,10 +4,6 @@ title: "🧾 What you need"
 
 # 🧾 What you need
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 The tools to run CryptOS on your own machine: Linux, QEMU, swtpm, OVMF, and Go.
 
 This section walks you from an empty machine to a running CryptOS Root CA inside a virtual machine. You build the image from source, boot it in QEMU with a software TPM, and run the first-boot ceremony with `cryptosctl`. Nothing here touches real hardware or your network, and you can throw the whole thing away when you are done.
@@ -71,18 +67,18 @@ These are the sizes CryptOS is tested with: the `cryptos-appliance` QEMU integra
 ### The build host
 
 - **Linux on x86-64**, with KVM if you can (see below).
-- **Tested size:** the `cryptos` CI builds the image on GitHub's standard hosted Linux runner, which has 4 vCPUs and 16 GB of RAM. A machine that size builds it; smaller ones have not been measured.
+- **Tested size:** the `cryptos-appliance` CI builds the image on GitHub's standard hosted Linux runner, which has 4 vCPUs and 16 GB of RAM. A machine that size builds it; smaller ones have not been measured.
 - **Room for the node on top**, if you run QEMU on the same machine: its 1 vCPU and 2 GiB of RAM, plus the 2 GiB disk image.
 - **Free disk space** for the kernel source, the Docker images that build the static disk tools, and the build output. No exact figure has been measured.
 
-The Fleet Manager isn't part of this walkthrough. No sizing has been measured for it, and its chart sets no resource requests or limits.
+The FleetOS Manager isn't part of this walkthrough. No sizing has been measured for it, and its chart sets no resource requests or limits.
 
 ## Build tools
 
-These turn the `cryptos-node` source into a bootable image.
+These turn the `cryptos-appliance` source into a bootable image.
 
 - **Git**, to clone the source. Clone the whole history: the build stamps its version from `git describe`.
-- **Go**, at the version in the `cryptos` `go.mod` (Go 1.26 today).
+- **Go**, at the version in the `cryptos-appliance` `go.mod` (Go 1.26.8).
 - **go-task**, the `task` command. Every build step is a `task` target.
 - **Docker**, usable by your user without `sudo`. The static disk tools baked into the image (`cryptsetup`, `mkfs.ext4`, `sgdisk`, `mkfs.vfat`) are compiled from source inside containers.
 - **The kernel and image tools**, from your package manager.
@@ -137,7 +133,7 @@ docker run --rm hello-world
 ```
 
 :::tip[Expected output]
-The loop prints nothing when every tool is on your `PATH`. Any `missing:` line names a tool to install before you go on. `go version` should report 1.25 or newer, and the Docker test container should print its greeting without `sudo`.
+The loop prints nothing when every tool is on your `PATH`. Any `missing:` line names a tool to install before you go on. `go version` should report 1.26.8 or newer (an older Go downloads that toolchain on first use), and the Docker test container should print its greeting without `sudo`.
 :::
 
 ## Next step

@@ -4,10 +4,6 @@ title: "📄 Machine config: pki"
 
 # 📄 Machine config: pki
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 The `pki` section of the [machine config](./machine-config.md): the CA's key, name and lifetime, the parent it trusts, where it publishes revocation data, and the certificate profiles it issues from. ACME and EST have [their own page](./machine-config-enrollment.md).
 
 ## 🔑 The CA key, subject and lifetime
@@ -21,7 +17,7 @@ The `pki` section of the [machine config](./machine-config.md): the CA's key, na
 | `pki.root_subject.province` | string | empty | ST (state or province). |
 | `pki.root_subject.locality` | string | empty | L (city or locality). |
 | `pki.root_validity_years` | integer | none | How long a Root's self-signed certificate lasts, 1 to 30 years. Required on a Root, unused on an intermediate or issuing node. |
-| `pki.path_len_constraint` | integer | `0` | Accepted and checked (0 to 5), but not applied to any certificate in this alpha. A Root carries no path length limit; depth below it is set by the signing profile's `basic_constraints.path_len`. |
+| `pki.path_len_constraint` | integer | `0` | Accepted and checked (0 to 5), but not applied to any certificate in this release. A Root carries no path length limit; depth below it is set by the signing profile's `basic_constraints.path_len`. |
 
 Empty subject fields are left out of the certificate. On a Root, `root_subject` becomes both the subject and the issuer of the self-signed certificate; see [Root certificate profile](./root-cert-profile.md). On an intermediate or issuing node, it's the subject of the CSR the node sends its parent.
 
@@ -174,5 +170,5 @@ A few formats worth knowing:
 A certificate can't outlive the CA that signed it, so the node caps every certificate at its own notAfter. With `cap`, `cryptosctl` prints a warning such as `WARNING: requested validity ends 2046-09-22; capped to issuer notAfter 2041-09-21` and issues the shorter certificate. With `reject`, the call fails with `FailedPrecondition` before the CA key is loaded. ACME and EST issue the capped certificate without a warning, because those protocols have no channel for one.
 
 :::caution[Profile subjects lose ST and L over the API]
-`cryptosctl config apply` and the Fleet Manager carry a profile's `subject.common_name`, `organization` and `country` only. A `province` or `locality` in a profile subject is dropped on apply. The CA's own `root_subject` isn't affected.
+`cryptosctl config apply` and the FleetOS Manager carry a profile's `subject.common_name`, `organization` and `country` only. A `province` or `locality` in a profile subject is dropped on apply. The CA's own `root_subject` isn't affected.
 :::

@@ -2,13 +2,7 @@
 title: "🏭 Platform profiles and the image factory"
 ---
 
-import Pre10Notice from '@site/docs/_partials/pre-1-0-notice.mdx';
-
 # 🏭 Platform profiles and the image factory
-
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
 
 How a bootable image is built for a target such as VMware. The step-by-step build is in [Build a bootable image](../install-deploy/build-bootable-image.md).
 
@@ -59,8 +53,8 @@ The second choice at build time is `STATEKEY`, which decides how the node protec
 [The TPM and sealed keys](./tpm-sealed-keys.md) explains both. The variant shows in the file name:
 
 ```text
-build/out/cryptos-amd64-vmware.iso           TPM variant
-build/out/cryptos-amd64-vmware-nodeid.iso    nodeid variant
+build/out/cryptos-amd64-vmware-<build>.iso           TPM variant
+build/out/cryptos-amd64-vmware-nodeid-<build>.iso    nodeid variant
 ```
 
 ## Signing: bring your own key
@@ -85,23 +79,23 @@ A node accepts upgrades only from the key its image was built with. If you lose 
 
 ## Unsigned images
 
-`task iso:unsigned` builds the same ISO with no signature and no upgrade anchor, named with `-unsigned`, for example `cryptos-amd64-vmware-unsigned.iso`. This is how the public release assets are built: the project never signs an image, so every one it publishes is this unsigned form, built from the exact tagged source:
+`task iso:unsigned` builds the same ISO with no signature and no upgrade anchor, named with `-unsigned`, for example `cryptos-amd64-vmware-unsigned-<build>.iso`. This is how the public release assets are built: the project never signs an image, so every one it publishes is this unsigned form, built from the exact tagged source:
 
 | Asset | What it is |
 |---|---|
-| `cryptos-amd64-vmware.uki.unsigned`, `cryptos-amd64-vmware-nodeid.uki.unsigned` | the UKI, TPM and nodeid variants |
-| `cryptos-amd64-vmware-unsigned.iso`, `cryptos-amd64-vmware-nodeid-unsigned.iso` | the same UKIs on bootable ISOs |
-| `cryptosctl-{linux,darwin}-{amd64,arm64}` | the CLI |
+| `cryptos-amd64-vmware-<build>.uki.unsigned`, `cryptos-amd64-vmware-nodeid-<build>.uki.unsigned` | the UKI, TPM and nodeid variants |
+| `cryptos-amd64-vmware-unsigned-<build>.iso`, `cryptos-amd64-vmware-nodeid-unsigned-<build>.iso` | the same UKIs on bootable ISOs |
+| `cryptosctl-{linux,darwin}-{amd64,arm64}-<build>` | the CLI |
 | `build-manifest.json` | the build record: commit, dirty state, version and build tag |
 | `SHA256SUMS` | SHA-256 of every asset |
+
+`<build>` is the build tag; for this release, `v0.1.0-rc.1-0-gbb516a2`.
 
 :::caution[Unsigned images need your signature before Secure Boot]
 An unsigned image boots only with Secure Boot off, and carries no upgrade anchor, so a node installed from one can never be upgraded in place. Every image you run is signed by you: sign the downloaded image with your own Secure Boot key to boot with Secure Boot on (there is no in-place upgrade path from it), or build and sign from source for a CA you intend to keep and upgrade. See [Download the unsigned image](../install-deploy/build-bootable-image.md#download-the-unsigned-image).
 :::
 
 ## Upgrading in place
-
-<Pre10Notice />
 
 Because the image and the state partition are separate, a node can change images without losing its CA:
 
@@ -111,8 +105,8 @@ Because the image and the state partition are separate, a node can change images
 
 `cryptosctl image status` shows the running and staged images. The state partition (CA key, issued history, identity) is never opened by an upgrade. In the reference deployment an upgrade cost about 8 to 11 seconds of downtime per node. `cryptosctl` runs on Linux and macOS.
 
-## What is not available today
+## What it doesn't do yet
 
-- There is no hosted image factory or download. You build the image yourself.
+- There is no hosted image factory. Releases publish unsigned VMware amd64 images only. To boot with Secure Boot on or upgrade in place, sign the download with `cryptosctl image sign` or build and sign from source.
 - `vmware` is the only platform profile.
 - Only amd64 images have been booted. The pipeline takes an architecture, but there is no arm64 image.

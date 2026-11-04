@@ -2,15 +2,9 @@
 title: "⌨️ cryptosctl command reference"
 ---
 
-import Pre10Notice from '@site/docs/_partials/pre-1-0-notice.mdx';
-
 # ⌨️ cryptosctl command reference
 
-:::tip[✅ Works today]
-This describes CryptOS as it works right now.
-:::
-
-Every command and flag, in one place. `cryptosctl` is the only management tool for a standalone node, and it speaks the same API the Fleet Manager uses. `cryptosctl <command> --help` prints the same information on your machine.
+Every command and flag, in one place. `cryptosctl` is the only management tool for a standalone node, and it speaks the same API the FleetOS Manager uses. `cryptosctl <command> --help` prints the same information on your machine.
 
 `cryptosctl` runs on Linux and macOS.
 
@@ -125,6 +119,7 @@ The `ca` commands marked **child** run on the subordinate being set up, and **pa
 | `ca submit-rotation` | `--chain` (PEM, leaf first, required) | **child:** install the parent-signed chain for the rotated key; the node re-mints its OCSP responder certificate under the new key within 30 seconds |
 | `ca issue-leaf` | `--csr` (PEM or DER, required), `--profile` (required), `--dns` (repeatable) | issue an end-entity certificate from a CSR |
 | `ca list-issued` | | list the certificates this node has issued |
+| `ca get-issued` | `--serial` (hex, required) | print a certificate this node issued, with its chain |
 | `ca revoke` | `--serial` (hex, required; case, leading zeros, a `0x` prefix and colons are ignored, so `openssl x509 -serial` output works as it is), `--reason` (RFC 5280 reason code, default `0`) | revoke a certificate this node issued |
 | `ca revocations` | | list this node's revoked certificates |
 | `ca crl` | | print this node's revocation list as a table |
@@ -144,7 +139,24 @@ Notes:
 - `ca issue-leaf --dns` replaces the profile's DNS names, and only works when the profile sets `allow_request_sans`.
 - `ca export-key` asks for a new passphrase twice and for a confirmation: the Root's common name on a Root, `yes` on a subordinate. `--role root` or `--role subordinate` overrides the role read from the node, and `--yes` skips the confirmation. A TPM-backed node refuses the export, because its CA key cannot leave the TPM.
 - `ca import-key` asks for the backup's passphrase, and refuses a node that already has an identity.
-- Step-by-step guides in the `cryptos-node` repository: [subordinating vCenter's VMCA](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/vmca-subordination.md) and [re-certifying a subordinate](https://github.com/CryptOS-PKI/cryptos-node/blob/main/docs/subordinate-recertify.md).
+- Step-by-step guides in the `cryptos-node` repository: [subordinating vCenter's VMCA](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/docs/vmca-subordination.md) and [re-certifying a subordinate](https://github.com/CryptOS-PKI/cryptos-node/blob/v0.1.0-rc.1/docs/subordinate-recertify.md).
+
+## Trust
+
+| Command | Flags | What it does |
+|---|---|---|
+| `trust fetch` | `--expect-sha256` | fetch the node's management certificate and save it as the `--trust` pin; with `--expect-sha256` it saves only on a match |
+
+## SCEP
+
+| Command | Flags | What it does |
+|---|---|---|
+| `scep challenge mint` | `--profile`, `--ttl` (default 1h, at most 168h), `--name` (repeatable) | mint a single-use challenge |
+| `scep challenge list` | | list usable challenges |
+| `scep challenge revoke` | `--id` (required) | withdraw an unused challenge |
+| `scep enrollments list` | `--profile` | list enrolments waiting for approval |
+| `scep enrollments approve` | `--id` (required) | issue the waiting enrolment |
+| `scep enrollments reject` | `--id` (required), `--reason` | refuse it |
 
 ## Time-stamp authority
 
@@ -178,8 +190,6 @@ Checks every entry's signature, that the sequence numbers run from 1 with no gap
 
 ## Image upgrades
 
-<Pre10Notice />
-
 These replace the node's CryptOS image without reinstalling it. The encrypted state (CA key, issued history, identity) is never touched. The node must have been built with an upgrade anchor; see [Secure Boot enrollment](../install-deploy/secure-boot.md).
 
 | Command | Flags | What it does |
@@ -188,8 +198,9 @@ These replace the node's CryptOS image without reinstalling it. The encrypted st
 | `image stage` | `--image` (the signed UKI), `--signature` (default `<image>.sig`) | upload a signed image; the node checks the signature before writing anything, keeps the current image for rollback, and does not reboot |
 | `image activate` | `--confirm` (the CA common name) | reboot into the staged image |
 | `image rollback` | | put the retained previous image back on the boot path; run `image activate` to boot it |
+| `image sign` | `--image` (unsigned UKI or ISO, required), `--key` (RSA PEM, required), `--cert` (required), `--out` | sign an unsigned image with your key and stamp your certificate as its upgrade anchor; runs locally |
 
-The full procedure is the [in-place upgrade guide](https://github.com/CryptOS-PKI/cryptos-appliance/blob/main/docs/image-upgrade.md). The Fleet Manager's web console covers the same ground for a managed node: see [OS image lifecycle](../fleet-manager/web-node-detail.md#os-image-lifecycle).
+The full procedure is the [in-place upgrade guide](https://github.com/CryptOS-PKI/cryptos-appliance/blob/v0.1.0-rc.1/docs/image-upgrade.md). The FleetOS Manager's web console covers the same ground for a managed node: see [OS image lifecycle](/docs/fleet/web-node-detail#os-image-lifecycle).
 
 ## Power and reset
 

@@ -4,10 +4,6 @@ title: "📋 RFC 5280 Root certificate profile"
 
 # 📋 RFC 5280 Root certificate profile
 
-:::tip[Works today]
-This describes CryptOS as it works right now.
-:::
-
 Exactly what fields the Root certificate carries, and why.
 
 A Root node makes its certificate once, in the [first-boot ceremony](../deep-dives/ceremony-walkthrough.md): it creates the key, then signs a certificate for that key with the key itself. Every field below is set by the node's code, and only a few come from the [machine config](./machine-config-pki.md). The goal is a certificate that follows RFC 5280 to the letter and carries nothing a Root doesn't need.

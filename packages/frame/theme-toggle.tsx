@@ -16,10 +16,12 @@ limitations under the License.
 // The light and dark switch both sites put at the right end of the header:
 // the kit's ThemeToggle (vendor/cryptos-ui), drawn with plain classes from
 // site-frame.css so the docs, which have no Tailwind, render the same button.
-// Each site owns the state: the site keeps it in localStorage and on <html>,
-// the docs hand it Docusaurus's colour mode.
+// Each site owns the state on its page (the site's <html>, the docs'
+// Docusaurus colour mode); remembering it waits for consent (theme-pref.ts).
 
-export type FrameTheme = "dark" | "light";
+import type { FrameTheme } from "./theme-pref.ts";
+
+export type { FrameTheme };
 
 const themeToggleLabel = (theme: FrameTheme) =>
   theme === "dark" ? "Switch to light theme" : "Switch to dark theme";

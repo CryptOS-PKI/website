@@ -39,9 +39,10 @@ test("the page description and link preview are the hero's lede", () => {
   assert.equal(content.meta.description, heroLedeText);
 });
 
-test("the header links the Releases page, after Standards and before Docs", () => {
+test("the header links the Trust Center after Standards, then the Releases page, then Docs", () => {
   const labels = content.nav.links.map((link) => link.label);
-  assert.equal(labels.indexOf("Releases"), labels.indexOf("Standards") + 1);
+  assert.equal(labels.indexOf("Trust Center"), labels.indexOf("Standards") + 1);
+  assert.equal(labels.indexOf("Releases"), labels.indexOf("Trust Center") + 1);
   assert.equal(labels.indexOf("Docs"), labels.indexOf("Releases") + 1);
   assert.equal(content.nav.links.find((link) => link.label === "Releases")?.href, "/releases");
 });

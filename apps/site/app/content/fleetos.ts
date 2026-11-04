@@ -37,7 +37,19 @@ export interface StorageMode {
   next?: boolean;
 }
 
-const managerRepo = "https://github.com/CryptOS-PKI/cryptos-manager";
+export interface DocLink {
+  label: string;
+  href: string;
+}
+
+// The FleetOS Manager docs this page sends readers to, on the docs base the
+// site was built with (the live docs, or a preview's), so both work. These
+// pages are in the released docs version, not only in Next.
+export const fleetDocs = (docs: string): DocLink[] => [
+  { label: "Deploy with Helm", href: `${docs}/docs/fleet/helm` },
+  { label: "First run", href: `${docs}/docs/fleet/first-run` },
+  { label: "All FleetOS Manager docs", href: `${docs}/docs/fleet` },
+];
 
 export const fleetos = {
   meta: {
@@ -233,7 +245,7 @@ export const fleetos = {
         next: true,
       },
     ] satisfies FleetItem[],
-    cta: { label: "Read the deployment guide", href: `${managerRepo}#-ways-to-run` },
+    docsLead: "The deployment guide is in the FleetOS Manager docs:",
   },
   nextLabel: "Next release",
   nextNote: "Marked Next release: on main and in the next release candidate, not in v0.1.0-rc.1.",

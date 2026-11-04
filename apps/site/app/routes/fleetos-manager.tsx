@@ -21,7 +21,7 @@ import { Nav } from "~/components/nav";
 import { Section } from "~/components/section";
 import { Strip } from "~/components/strip";
 import { footer, links, meta as siteMeta, nav } from "~/content/cryptos";
-import { fleetos, type FleetItem } from "~/content/fleetos";
+import { fleetDocs, fleetos, type FleetItem } from "~/content/fleetos";
 
 import "~/components/trust.css";
 
@@ -191,7 +191,13 @@ export default function FleetosManager() {
         >
           <Cards items={run.items} />
           <p className="prose trust-doc-link fleet-cta">
-            <a href={run.cta.href}>{run.cta.label}</a>
+            {run.docsLead}{" "}
+            {fleetDocs(links.docs).map((link, index) => (
+              <span key={link.href}>
+                {index > 0 ? " · " : null}
+                <a href={link.href}>{link.label}</a>
+              </span>
+            ))}
           </p>
         </Section>
       </main>

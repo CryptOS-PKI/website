@@ -13,24 +13,20 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-// Content layer: same shape and same copy as the Astro proof's
-// src/content/cryptos.ts, so the two builds are an apples-to-apples
-// comparison. A new product gets its own file in this shape; the page and
-// every component stay unchanged.
+// Content layer: the page's copy in one place; the components it feeds take
+// it as props. The hero's copy is shared with the docs home
+// (packages/frame/hero-content.ts). No emoji on the product site.
 import { frameFooter, frameNav, TAGLINE } from "@cryptos-pki/frame/content";
+import { heroLedeText } from "@cryptos-pki/frame/hero-content";
 import { frameLinks } from "@cryptos-pki/frame/strip";
-
-export interface LedeSegment {
-  text: string;
-  accent?: boolean;
-}
 
 // Where the two sites live. The site's own links stay on its base path; a
 // preview build sets VITE_DOCS_URL so it links to the docs preview instead
-// of the live docs.
+// of the live docs. import.meta.env is Vite's; the content tests run in plain
+// Node, where it's absent and the live addresses apply.
 export const links = frameLinks({
-  siteUrl: import.meta.env.BASE_URL,
-  docsUrl: import.meta.env.VITE_DOCS_URL ?? "https://docs.cryptos-pki.com",
+  siteUrl: import.meta.env?.BASE_URL ?? "/",
+  docsUrl: import.meta.env?.VITE_DOCS_URL ?? "https://docs.cryptos-pki.com",
 });
 
 export const meta = {
@@ -38,51 +34,25 @@ export const meta = {
   url: "https://www.cryptos-pki.com/",
   // The tagline is a trademark, so it carries ™ here too.
   title: `CryptOS -- ${TAGLINE.charAt(0).toLowerCase()}${TAGLINE.slice(1)}\u2122`,
-  description: `CryptOS: ${TAGLINE}\u2122. High-assurance, with no SSH and no shell: every operation goes through an mTLS-authenticated API.`,
+  // The hero's lede, the same words the docs home opens with.
+  description: heroLedeText,
 };
 
 // The header links and the footer are shared with the docs (packages/frame).
 export const nav = { links: frameNav(links) };
 
+// The hero's copy is shared (packages/frame); the site picks its calls to
+// action.
 export const hero = {
-  // The trademarked tagline, with its ™.
-  eyebrow: TAGLINE,
-  eyebrowTrademark: true,
-  // Decorative only (rendered aria-hidden next to the headline); written as a
-  // Unicode escape rather than the literal character, consistent with the
-  // no-emoji-in-source-files rule everywhere else in this repo.
-  headlineIcon: "\u{1F512}", // lock
-  headlineLine1: "A PKI operating system",
-  headlineLine2: "with no shell to break into.",
-  lede: [
-    { text: "Every CryptOS image is built from " },
-    { text: "tested source", accent: true },
-    { text: ", shipped " },
-    { text: "unsigned", accent: true },
-    { text: ", and signed only when you boot it, so you " },
-    { text: "hold the keys", accent: true },
-    { text: ", not us." },
-  ] satisfies LedeSegment[],
   primaryCta: {
     label: "Read the docs",
     href: `${links.docs}/docs`,
   },
   secondaryCta: { label: "View on GitHub", href: "https://github.com/CryptOS-PKI" },
-  terminal: {
-    title: "cryptosctl identity show",
-    lines: [
-      "$ cryptosctl identity show",
-      "role       issuing-ca",
-      "status     active -- TPM-sealed",
-      "chain      valid -- 2 intermediates",
-      "api        mTLS gRPC -- no shell, no SSH",
-    ],
-  },
 };
 
 export const whatItIs = {
   eyebrow: "What it is",
-  icon: "\u{2693}", // anchor -- matches "trust anchor" in the heading
   heading: "An operating system built around one job: being a trust anchor.",
   lede: "No login prompt, no package manager, no general-purpose shell -- just the PKI API.",
   features: [
@@ -107,7 +77,6 @@ export const whatItIs = {
 
 export const trustModel = {
   eyebrow: "Trust model",
-  icon: "\u{1F511}", // key -- matches "your keys" in the heading
   heading: "Tested source, unsigned images, your keys.",
   lede: "We publish and test the source. You decide who signs what runs.",
   body: "CryptOS ships unsigned images built from source you can read and test yourself. Secure Boot enrollment, image signing and the keys behind them stay with you: nothing in the chain of trust for your fleet is signed by us.",
@@ -115,7 +84,6 @@ export const trustModel = {
 
 export const fleetosManager = {
   eyebrow: "FleetOS Manager",
-  icon: "\u{1F6F0}\u{FE0F}", // satellite -- fleet of linked nodes
   heading: "One view across every linked node.",
   lede: "An optional web console for day-to-day operations -- the nodes keep working without it.",
   body: "Link a node to the FleetOS Manager for topology, certificate inventory and ceremony history across your fleet. The manager never holds issuance authority -- its own certificate can't sign.",
@@ -123,7 +91,6 @@ export const fleetosManager = {
 
 export const standards = {
   eyebrow: "Standards",
-  icon: "\u{1F4DC}", // scroll -- the RFCs the heading names
   heading: "Built to the PKI RFCs.",
   lede: "X.509, OCSP, time-stamps, ACME, EST and SCEP.",
   body: "Your time-stamp policy is yours: its OID sits under your own IANA Private Enterprise Number.",

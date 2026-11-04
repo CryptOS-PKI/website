@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import { Hero } from "@cryptos-pki/frame/hero";
 import { FleetosMark } from "@cryptos-pki/ui";
 import type { MetaFunction } from "react-router";
 
@@ -20,9 +21,7 @@ import { FeatureGrid } from "~/components/feature-grid";
 import { Footer } from "~/components/footer";
 import { Nav } from "~/components/nav";
 import { Section } from "~/components/section";
-import { SplitHero } from "~/components/split-hero";
 import { Strip } from "~/components/strip";
-import { TerminalCard } from "~/components/terminal-card";
 import {
   fleetosManager,
   footer,
@@ -55,23 +54,11 @@ export default function Home() {
       <Strip links={links} />
       <Nav links={nav.links} />
       <main id="main">
-        <SplitHero
-          eyebrow={hero.eyebrow}
-          eyebrowTrademark={hero.eyebrowTrademark}
-          headlineIcon={hero.headlineIcon}
-          headlineLine1={hero.headlineLine1}
-          headlineLine2={hero.headlineLine2}
-          lede={hero.lede}
-          primaryCta={hero.primaryCta}
-          secondaryCta={hero.secondaryCta}
-        >
-          <TerminalCard title={hero.terminal.title} lines={hero.terminal.lines} />
-        </SplitHero>
+        <Hero primaryCta={hero.primaryCta} secondaryCta={hero.secondaryCta} />
 
         <Section
           id="what-it-is"
           eyebrow={whatItIs.eyebrow}
-          icon={whatItIs.icon}
           heading={whatItIs.heading}
           lede={whatItIs.lede}
         >
@@ -81,7 +68,6 @@ export default function Home() {
         <Section
           id="trust-model"
           eyebrow={trustModel.eyebrow}
-          icon={trustModel.icon}
           heading={trustModel.heading}
           lede={trustModel.lede}
           tone="card"
@@ -93,7 +79,6 @@ export default function Home() {
         <Section
           id="fleetos-manager"
           eyebrow={fleetosManager.eyebrow}
-          icon={fleetosManager.icon}
           heading={fleetosManager.heading}
           lede={fleetosManager.lede}
           layout="split"
@@ -107,7 +92,6 @@ export default function Home() {
         <Section
           id="standards"
           eyebrow={standards.eyebrow}
-          icon={standards.icon}
           heading={standards.heading}
           lede={standards.lede}
           tone="card"

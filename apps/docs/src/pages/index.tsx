@@ -16,8 +16,10 @@ limitations under the License.
 import type {ReactNode} from 'react';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import Layout from '@theme/Layout';
-import {SplitHero} from '@site/src/components/SplitHero';
+import {Hero} from '@cryptos-pki/frame/hero';
+import {docsHeroNote} from '@cryptos-pki/frame/hero-content';
 
 import styles from './index.module.css';
 
@@ -76,29 +78,12 @@ export default function Home(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
 
   return (
-    <Layout description={siteConfig.tagline}>
-      <SplitHero
-        eyebrow="CryptOS documentation"
-        headline="A certificate authority"
-        headlineAccent="you can run yourself."
-        lede={
-          <>
-            CryptOS turns a bare machine into an <mark>immutable</mark>, <mark>API-driven</mark>{' '}
-            certificate authority: no shell, no login, no door in except the API. These docs cover
-            building it, running it, and managing a fleet of nodes with FleetOS Manager.
-          </>
-        }
-        primaryCta={{label: 'Get started', to: '/docs/try-it-locally/requirements'}}
-        secondaryCta={{label: 'What is CryptOS?', to: '/docs'}}
-        terminalTitle="cryptosctl"
-        terminalLines={[
-          {prompt: 'cryptosctl ca status'},
-          {text: 'role       Root CA'},
-          {text: 'state      sealed (TPM)'},
-          {text: 'issued     128 certificates'},
-          {prompt: 'cryptosctl ca issue --csr device.csr'},
-          {text: 'issued     device.pem (expires in 90d)'},
-        ]}
+    // The page description says who the docs are for, as the hero does.
+    <Layout description={docsHeroNote}>
+      <Hero
+        note={docsHeroNote}
+        primaryCta={{label: 'Get started', href: useBaseUrl('/docs/try-it-locally/requirements')}}
+        secondaryCta={{label: 'What is CryptOS?', href: useBaseUrl('/docs')}}
       />
 
       <main>

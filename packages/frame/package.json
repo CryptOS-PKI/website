@@ -2,19 +2,22 @@
   "name": "@cryptos-pki/frame",
   "private": true,
   "type": "module",
-  "description": "What both CryptOS sites share: site-frame.css, the self-hosted fonts and the current release.",
+  "description": "What both CryptOS sites share: site-frame.css, the hero, the self-hosted fonts and the current release.",
   "license": "Apache-2.0",
   "exports": {
     "./site-frame.css": "./site-frame.css",
     "./release": "./release.ts",
     "./content": "./content.ts",
     "./strip": "./strip.ts",
+    "./hero": "./hero.tsx",
+    "./hero-content": "./hero-content.ts",
+    "./hero.css": "./hero.css",
     "./theme-toggle": "./theme-toggle.tsx",
     "./public": "./public/",
     "./package.json": "./package.json"
   },
   "scripts": {
-    "test": "node --experimental-strip-types --test frame.test.ts strip.test.ts content.test.ts"
+    "test": "node --experimental-strip-types --test frame.test.ts strip.test.ts content.test.ts hero.test.ts"
   },
   "peerDependencies": {
     "react": "^19.0.0"

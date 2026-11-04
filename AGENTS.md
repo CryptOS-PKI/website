@@ -8,12 +8,20 @@ hook-enforced rules). Keep this file current when the build, layout, or public A
 Two static sites in one repo, as npm workspaces:
 
 - `apps/site` (`@cryptos-pki/site`): the CryptOS product site (www.cryptos-pki.com), a marketing
-  site, not an app: the home page and `/releases`, the current release's downloads. React Router
+  site, not an app: the home page, `/releases` (the current release's downloads),
+  `/fleetos-manager` and the Trust Center (`/trust` and `/trust/security-review`). React Router
   v7 in framework mode prerenders it to static HTML at build time (`ssr: false` plus a
   `prerender()` list in `react-router.config.ts`); there is no Node server at request time, and
   nothing talks to a backend. The page copy lives in `app/content/cryptos.ts` and the downloads
   in `app/content/release.ts`; the components they feed (`app/components/`) take their content
   as props. No emoji on the site.
+- The Trust Center's controls (`app/content/trust/controls.ts`) and the FleetOS Manager page
+  (`app/content/fleetos.ts`) state only what the code on each repo's main does. Every evidence
+  path and test name was checked against main; recheck them when you change a status. A planned
+  control links an open issue or the public roadmap, a not-planned one says why, and anything
+  on main but not on a published tag is labelled as the next release. The security review's
+  four figures (`app/components/diagrams.tsx`) are traced to cryptos-node, cryptos-appliance and
+  cryptos-manager main; nothing goes in a figure the code doesn't do.
 - `apps/docs` (`@cryptos-pki/docs`): the CryptOS docs (docs.cryptos-pki.com), Docusaurus 3,
   versioned. `docs/` is Next (unreleased `main`); `versioned_docs/` holds one snapshot per
   release.

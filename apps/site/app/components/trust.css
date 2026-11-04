@@ -1,0 +1,435 @@
+/*
+Copyright The CryptOS Authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+/* The Trust Center and the security review: posture tiles, the status chips,
+   control cards and the review's tables. Colours are kit tokens, so both
+   themes work. */
+.area-nav {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 0 0 2rem;
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+.area-nav a {
+  color: hsl(var(--primary));
+  text-decoration: none;
+}
+
+.area-nav a:hover,
+.area-nav a:focus-visible {
+  text-decoration: underline;
+}
+
+.trust-note {
+  margin-top: 1rem;
+}
+
+.posture-tiles {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 1rem;
+  margin: 0 0 1.5rem;
+  padding: 0;
+}
+
+.posture-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1.25rem;
+  border: 1px solid hsl(var(--border));
+  border-top: 3px solid var(--status-color);
+  border-radius: var(--radius-lg, 0.75rem);
+  background: hsl(var(--background));
+}
+
+.posture-tile__value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.posture-tile__label {
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+}
+
+/* One colour per status, shared by tiles, chips and badges. */
+.posture-tile--implemented,
+.chip--implemented,
+.status--implemented {
+  --status-color: hsl(var(--success));
+}
+
+.posture-tile--partial,
+.chip--partial,
+.status--partial {
+  --status-color: hsl(var(--warning));
+}
+
+.posture-tile--planned,
+.chip--planned,
+.status--planned {
+  --status-color: hsl(var(--primary));
+}
+
+.posture-tile--not-planned,
+.chip--not-planned,
+.status--not-planned {
+  --status-color: hsl(var(--muted-foreground));
+}
+
+.explorer__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.explorer__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 999px;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.chip::before {
+  content: "";
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--status-color, transparent);
+}
+
+.chip--clear::before {
+  display: none;
+}
+
+.chip[aria-pressed="true"] {
+  border-color: var(--status-color);
+  background: color-mix(in srgb, var(--status-color) 16%, hsl(var(--background)));
+}
+
+.chip:focus-visible,
+.explorer__sort select:focus-visible {
+  outline: 2px solid hsl(var(--ring, var(--primary)));
+  outline-offset: 2px;
+}
+
+.chip__count {
+  color: hsl(var(--muted-foreground));
+  font-variant-numeric: tabular-nums;
+}
+
+.explorer__sort {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.explorer__sort select {
+  margin-left: 0.35rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius, 0.5rem);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.explorer__note {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 0.8125rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.area {
+  margin-top: 2.5rem;
+}
+
+.area__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.area__count {
+  color: hsl(var(--muted-foreground));
+  font-weight: 400;
+  font-size: 0.9rem;
+}
+
+.area__summary {
+  margin: 0.25rem 0 1rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.control-list {
+  list-style: none;
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+}
+
+.control-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.25rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-lg, 0.75rem);
+  background: hsl(var(--background));
+}
+
+.control-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.control-card__title {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.control-card__id {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.control-card__body,
+.control-card__reason,
+.control-card__gaps {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.control-card__reason {
+  font-style: italic;
+}
+
+.control-card a,
+.trust-doc-link a,
+.sr a {
+  color: hsl(var(--primary));
+}
+
+.control-card__evidence summary {
+  cursor: pointer;
+  font-size: 0.8125rem;
+  color: hsl(var(--foreground));
+}
+
+.control-card__evidence ul {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+
+.evidence-kind {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+}
+
+.status {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--status-color);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  color: hsl(var(--foreground));
+  background: color-mix(in srgb, var(--status-color) 14%, transparent);
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+/* The security review */
+.sr-meta {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.35rem 1.5rem;
+  margin: 0 0 1.5rem;
+  font-size: 0.875rem;
+}
+
+.sr-meta dt {
+  color: hsl(var(--muted-foreground));
+}
+
+.sr-toc ol {
+  margin: 0;
+  padding-left: 1.25rem;
+  list-style: decimal;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.sr-section h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.sr-section h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 2rem 0 0.75rem;
+}
+
+.sr-section > p,
+.sr-section .sr-flow,
+.sr-section .sr-note {
+  max-width: 48rem;
+  margin-bottom: 1rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.sr-section ul.sr-list {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.sr-section .downloads-table {
+  margin-bottom: 1.5rem;
+}
+
+.sr-flow figcaption {
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  margin-bottom: 0.5rem;
+}
+
+.sr-flow ol {
+  list-style: decimal;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.sr-note {
+  padding: 0.85rem 1rem;
+  border-left: 3px solid hsl(var(--primary));
+  background: hsl(var(--card));
+  border-radius: 0 var(--radius, 0.5rem) var(--radius, 0.5rem) 0;
+}
+
+.sr-note--warn {
+  border-left-color: hsl(var(--warning));
+}
+
+.sr-evidence span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+/* The FleetOS Manager page */
+.fleet-note {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+}
+
+.fleet-card__title .status {
+  margin-left: 0.35rem;
+  vertical-align: middle;
+}
+
+.fleet-flows {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  margin-bottom: 1.5rem;
+}
+
+.fleet-flow {
+  padding: 1.25rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-lg, 0.75rem);
+  background: hsl(var(--card));
+  color: hsl(var(--muted-foreground));
+  font-size: 0.9rem;
+}
+
+.fleet-split {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+}
+
+.fleet-pages {
+  list-style: disc;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.3rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.fleet-cli {
+  margin: 1rem 0 0;
+  padding: 1rem 1.25rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-lg, 0.75rem);
+  background: hsl(var(--background));
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+.fleet-cta {
+  margin-top: 1.5rem;
+}
+
+.trust-steps {
+  list-style: decimal;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}

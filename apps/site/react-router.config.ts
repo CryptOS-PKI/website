@@ -28,6 +28,6 @@ export default {
   ssr: false,
   basename,
   async prerender() {
-    return ["/", "/releases"];
+    return ["/", "/releases", "/fleetos-manager", "/trust", "/trust/security-review"];
   },
 } satisfies Config;

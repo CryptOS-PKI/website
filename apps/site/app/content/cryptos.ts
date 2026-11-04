@@ -16,7 +16,7 @@ limitations under the License.
 // Content layer: the page's copy in one place; the components it feeds take
 // it as props. The hero's copy is shared with the docs home
 // (packages/frame/hero-content.ts). No emoji on the product site.
-import { frameFooter, frameNav, TAGLINE } from "@cryptos-pki/frame/content";
+import { frameFooter, frameNav } from "@cryptos-pki/frame/content";
 import { heroLedeText } from "@cryptos-pki/frame/hero-content";
 import { frameLinks } from "@cryptos-pki/frame/strip";
 
@@ -29,12 +29,9 @@ export const links = frameLinks({
   docsUrl: import.meta.env?.VITE_DOCS_URL ?? "https://docs.cryptos-pki.com",
 });
 
-export const meta = {
-  siteName: "CryptOS",
-  url: "https://www.cryptos-pki.com/",
-  // The tagline is a trademark, so it carries ™ here too.
-  title: `CryptOS -- ${TAGLINE.charAt(0).toLowerCase()}${TAGLINE.slice(1)}\u2122`,
-  // The hero's lede, the same words the docs home opens with.
+// The home page's description: the hero's lede, the same words the docs home
+// opens with. Titles and preview tags come from meta.ts.
+export const homeMeta = {
   description: heroLedeText,
 };
 

@@ -1,0 +1,113 @@
+<!doctype html>
+<!--
+  The source of public/img/brand/og-card.png, the link-preview card both
+  sites point og:image at: the CryptOS mark and wordmark and the trademarked
+  tagline on the brand's dark background, with the frame's fonts. To change
+  the card, edit this page, render it headless at a 1200x630 viewport with a
+  device scale of 1, screenshot the full viewport to that path, and check
+  the file carries no C2PA or caBX metadata.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>CryptOS link-preview card</title>
+    <style>
+      @font-face {
+        font-family: "Inter Variable";
+        font-weight: 100 900;
+        src: url("../frame/public/fonts/inter-latin.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        font-weight: 700;
+        src: url("../frame/public/fonts/jetbrains-mono-700-latin.woff2") format("woff2");
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background: #0c0f16;
+      }
+      .card {
+        position: relative;
+        box-sizing: border-box;
+        width: 1200px;
+        height: 630px;
+        padding: 96px 104px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 40px;
+        background:
+          radial-gradient(circle at 92% 0%, rgb(83 145 216 / 0.32), transparent 45%),
+          linear-gradient(#232b3d 1px, transparent 1px) 0 0 / 48px 48px,
+          linear-gradient(90deg, #232b3d 1px, transparent 1px) 0 0 / 48px 48px,
+          #0c0f16;
+      }
+      .card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, rgb(12 15 22 / 0.55), #0c0f16 92%);
+      }
+      .brand,
+      .tagline,
+      .site {
+        position: relative;
+        z-index: 1;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+      }
+      .brand img {
+        width: 128px;
+        height: 128px;
+      }
+      .wordmark {
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 700;
+        font-size: 104px;
+        letter-spacing: -0.025em;
+        color: #e7eaf1;
+      }
+      .wordmark span {
+        color: #5391d8;
+      }
+      .tagline {
+        margin: 0;
+        max-width: 900px;
+        font-family: "Inter Variable", sans-serif;
+        font-weight: 600;
+        font-size: 48px;
+        line-height: 1.25;
+        color: #e7eaf1;
+      }
+      .tagline sup {
+        font-size: 0.55em;
+        vertical-align: super;
+        line-height: 0;
+      }
+      .site {
+        margin: 0;
+        font-family: "JetBrains Mono", monospace;
+        font-weight: 700;
+        font-size: 26px;
+        color: #8b94a6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="brand">
+        <img src="public/img/brand/cryptos-mark-dark.svg" alt="" />
+        <div class="wordmark">Crypt<span>OS</span></div>
+      </div>
+      <p class="tagline">An immutable, API-driven PKI operating system<sup>™</sup></p>
+      <p class="site">cryptos-pki.com</p>
+    </div>
+  </body>
+</html>

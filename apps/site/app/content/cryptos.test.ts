@@ -36,7 +36,7 @@ test("the product site carries no emoji", () => {
 });
 
 test("the page description and link preview are the hero's lede", () => {
-  assert.equal(content.meta.description, heroLedeText);
+  assert.equal(content.homeMeta.description, heroLedeText);
 });
 
 test("the header links the Trust Center after Standards, then the Releases page, then Docs", () => {

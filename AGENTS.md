@@ -15,13 +15,6 @@ Two static sites in one repo, as npm workspaces:
   nothing talks to a backend. The page copy lives in `app/content/cryptos.ts` and the downloads
   in `app/content/release.ts`; the components they feed (`app/components/`) take their content
   as props. No emoji on the site.
-- The Trust Center's controls (`app/content/trust/controls.ts`) and the FleetOS Manager page
-  (`app/content/fleetos.ts`) state only what the code on each repo's main does. Every evidence
-  path and test name was checked against main; recheck them when you change a status. A planned
-  control links an open issue or the public roadmap, a not-planned one says why, and anything
-  on main but not on a published tag is labelled as the next release. The security review's
-  four figures (`app/components/diagrams.tsx`) are traced to cryptos-node, cryptos-appliance and
-  cryptos-manager main; nothing goes in a figure the code doesn't do.
 - `apps/docs` (`@cryptos-pki/docs`): the CryptOS docs (docs.cryptos-pki.com), Docusaurus 3,
   versioned. `docs/` is Next (unreleased `main`); `versioned_docs/` holds one snapshot per
   release.
@@ -112,3 +105,10 @@ Follow the logging rules in `CLAUDE.md`. In short:
   CryptOS as shipped on `main`; MDX 3, so no explicit `{#id}` heading anchors.
 - `golic` does not descend into `vendor/`; its headers are verified by inspection against the
   cryptos-web commit they were copied from, not by CI.
+- The Trust Center's controls (`app/content/trust/controls.ts`) and the FleetOS Manager page
+  (`app/content/fleetos.ts`) state only what the code on each repo's main does. Every evidence
+  path and test name was checked against main; recheck them when you change a status. A planned
+  control links an open issue or the public roadmap, a not-planned one says why, and anything
+  on main but not on a published tag is labelled as the next release. The security review's
+  four figures (`app/components/diagrams.tsx`) are traced to cryptos-node, cryptos-appliance and
+  cryptos-manager main; nothing goes in a figure the code doesn't do.

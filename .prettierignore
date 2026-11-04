@@ -1,5 +1,6 @@
 build
 .react-router
+.docusaurus
 coverage
 node_modules
 .github
@@ -8,3 +9,6 @@ package-lock.json
 # Vendored copy of cryptos-web's packages/ui (see vendor/cryptos-ui/NOTICE);
 # formatted and linted in its own repo, not here.
 vendor
+
+# The docs app keeps the Docusaurus house style it came in with.
+apps/docs

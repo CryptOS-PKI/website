@@ -1,0 +1,16 @@
+{
+  "name": "@cryptos-pki/frame",
+  "private": true,
+  "type": "module",
+  "description": "What both CryptOS sites share: site-frame.css, the self-hosted fonts and the current release.",
+  "license": "Apache-2.0",
+  "exports": {
+    "./site-frame.css": "./site-frame.css",
+    "./release": "./release.ts",
+    "./public": "./public/",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test frame.test.ts"
+  }
+}

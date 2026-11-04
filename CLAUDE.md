@@ -27,57 +27,72 @@ the governance below is shared across all repos created that way.
 <!-- layout:begin vite/app -->
 ## Project layout
 
-This repo diverges from the `vite/app` baseline (project-template has no framework-mode layout yet;
-`ecosystems/vite/layouts/app.md` describes a single-page app, not a prerendered one). The tree below
-is this repo's actual layout; a future governance sync that adds a matching layout should replace
-this section, not revert it to the SPA tree.
+This repo diverges from the `vite/app` baseline: it is an npm workspaces monorepo holding two
+static sites and the packages they share (project-template has no monorepo layout yet). The tree
+below is this repo's actual layout; a future governance sync that adds a matching layout should
+replace this section, not revert it to the single-app tree.
 
-A prerendered static site: React Router v7 in framework mode (`ssr: false`, `prerender()`), not a
-single-page app -- there is no client-side routing or server at request time.
+Both sites are static: the product site is React Router v7 in framework mode, prerendered at
+build time (`ssr: false`, `prerender()`), and the docs are Docusaurus 3. Neither has a server at
+request time.
 
 ### Tree
 
 ```text
 .
-├── app/
-│   ├── root.tsx           the document shell (<html>, fonts, meta)
-│   ├── routes.ts           the route table (one route today: "/")
-│   ├── routes/
-│   │   └── home.tsx        the home route: composes components from content
-│   ├── components/         presentational pieces, product-agnostic (props carry the copy)
-│   ├── content/
-│   │   └── cryptos.ts      this product's copy and structure
-│   └── app.css             Tailwind entry + the design kit's tokens
-├── vendor/cryptos-ui/       vendored copy of cryptos-web's packages/ui (see its NOTICE)
-├── public/                  static files served as-is (favicon, apple-touch-icon)
-├── build/                   build output (gitignored): client/ is the deployable site
-├── scripts/
-│   └── check-links.mjs      CI: checks internal links in the prerendered output
-├── package.json
-├── tsconfig.json
-├── react-router.config.ts   prerender config
-├── vite.config.ts
-├── tailwind.config.js
-├── eslint.config.mjs
+├── apps/
+│   ├── site/                    @cryptos-pki/site: www.cryptos-pki.com
+│   │   ├── app/
+│   │   │   ├── root.tsx         the document shell (<html>, meta)
+│   │   │   ├── routes.ts        the route table (one route today: "/")
+│   │   │   ├── routes/home.tsx  the home route: composes components from content
+│   │   │   ├── components/      presentational pieces, product-agnostic (props carry the copy)
+│   │   │   ├── content/cryptos.ts   this product's copy and structure
+│   │   │   └── app.css          the frame's fonts, Tailwind, the kit's tokens
+│   │   ├── scripts/check-links.mjs  CI: internal links in the prerendered output
+│   │   ├── shared-public.ts     Vite plugin serving packages/*/public at the site root
+│   │   ├── react-router.config.ts, vite.config.ts, tailwind.config.js, postcss.config.js
+│   │   └── build/               build output (gitignored): client/ is the deployable site
+│   └── docs/                    @cryptos-pki/docs: docs.cryptos-pki.com
+│       ├── docs/                Next: the pages for unreleased main
+│       ├── versioned_docs/      one snapshot per release (never edited by hand)
+│       ├── versioned_sidebars/, versions.json
+│       ├── sidebars.ts, docusaurus.config.ts
+│       ├── src/                 the docs home, components and theme CSS
+│       ├── static/              the docs' own images
+│       └── build/               build output (gitignored)
+├── packages/
+│   ├── frame/                   @cryptos-pki/frame: site-frame.css, public/fonts/, release.ts
+│   └── brand/                   @cryptos-pki/brand: public/ (favicon, touch icon, img/brand/)
+├── vendor/cryptos-ui/           vendored copy of cryptos-web's packages/ui (see its NOTICE)
+├── scripts/                     CI path filter and the docs version scripts, with tests
+├── docs/deploy.md               how a release deploys both sites
+├── package.json                 the workspace root (one package-lock.json)
+├── eslint.config.mjs            one lint config for the whole repo
+├── .nvmrc                       the Node version CI uses
 └── Taskfile.yml
 ```
 
 ### What goes where
 
-- `app/content/<product>.ts`: all product-specific copy (nav, hero, sections, footer). A second
-  product site gets its own file in this shape; the components and page stay unchanged.
-- `app/components/`: presentational pieces, each one taking its content as props. No data fetching,
-  no product-specific copy.
-- `app/routes/`: one file per route, composes components from a content file.
+- `apps/site/app/content/<product>.ts`: all product-specific copy (nav, hero, sections, footer).
+  The components and the page stay product-agnostic.
+- `apps/site/app/components/`: presentational pieces, each one taking its content as props. No
+  data fetching, no product-specific copy.
+- `apps/docs/docs/`: docs pages for Next. A released version's pages change only by cutting a new
+  version (`npm run docs:version`).
+- `packages/frame`: anything both sites must render the same (fonts now; the header and footer
+  measurements later) and the current release version.
+- `packages/brand`: the marks and icons both sites serve.
 - `vendor/cryptos-ui/`: read-only; re-copy from cryptos-web to update, never edit in place.
-- Configuration comes from `import.meta.env.VITE_*`; never put secrets there, it ships to the
-  browser.
+- Configuration comes from `import.meta.env.VITE_*` (site) or the Docusaurus config (docs);
+  never put secrets there, it ships to the browser.
 
 ### Naming
 
-- Components and their files are `kebab-case` (`split-hero.tsx`), one component per file, matching
-  the vendored `@cryptos-pki/ui` kit's own convention.
-- Named exports throughout.
+- Site components and their files are `kebab-case` (`split-hero.tsx`), one component per file,
+  matching the vendored `@cryptos-pki/ui` kit's own convention. Named exports throughout.
+- Workspace packages are scoped `@cryptos-pki/<name>`.
 <!-- layout:end -->
 
 ## CI and Actions minutes

@@ -1,6 +1,42 @@
 version: "3"
 
 tasks:
+  install:
+    desc: Install every workspace's dependencies from the lock (no install scripts).
+    cmds:
+      - npm ci --ignore-scripts
+  dev:site:
+    desc: Run the product site locally with hot reload.
+    cmds:
+      - npm run dev:site
+  dev:docs:
+    desc: Run the docs site locally with hot reload (includes Next).
+    cmds:
+      - npm run dev:docs
+  build:
+    desc: Build both sites (apps/site/build/client and apps/docs/build).
+    cmds:
+      - npm run build
+  test:
+    desc: Run the shared packages' and the release scripts' tests.
+    cmds:
+      - npm test
+  lint:
+    desc: Lint the whole repo.
+    cmds:
+      - npm run lint
+  docs:version:
+    desc: Cut the docs version for the release in packages/frame/release.ts.
+    cmds:
+      - npm run docs:version
+  ci:
+    desc: Local gate, the same steps as the Checks workflow.
+    cmds:
+      - npm run lint
+      - npm test
+      - npm run typecheck
+      - npm run build
+      - npm run check:links
   license:
     desc: Verify every source file carries the Apache 2.0 license header and LICENSE is the verbatim Apache 2.0 text (CI; never writes).
     cmds:

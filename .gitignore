@@ -1,7 +1,13 @@
+# Dependencies
 node_modules/
+
+# Builds and caches (apps/site and apps/docs)
 build/
 .react-router/
+.docusaurus/
+.cache/
 coverage/
+*.tsbuildinfo
 *.log
 
 # local design notes - never committed
@@ -10,3 +16,4 @@ plan/
 .DS_Store
 .idea/
 .vscode/
+*.swp

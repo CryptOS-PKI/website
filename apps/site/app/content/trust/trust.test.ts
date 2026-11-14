@@ -42,18 +42,17 @@ test("control ids are unique and every control sits in a known area", () => {
     );
 });
 
-test("the register holds 61 controls: 38 implemented, 8 partial, 11 planned, 4 not planned", () => {
+test("the register holds 61 controls: 38 implemented, 8 partial, 10 planned, 5 not planned", () => {
   assert.deepEqual(countByStatus(controls), {
     implemented: 38,
     partial: 8,
-    planned: 11,
-    "not-planned": 4,
+    planned: 10,
+    "not-planned": 5,
   });
 });
 
 test("each design-intent control is planned and linked to the issue that tracks it", () => {
   const tracked: Record<string, string> = {
-    "KEY-6": "website#42",
     "AUD-5": "cryptos-node#408",
     "REC-5": "cryptos-node#407",
     "SUP-9": "cryptos-node#406",

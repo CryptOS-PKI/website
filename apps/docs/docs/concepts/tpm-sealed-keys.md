@@ -96,6 +96,18 @@ The `kms` mode is in the code, but no reference deployment has run it, and the i
 The node reads `state_key.mode` from the staged config on its first boot, when it formats the state partition. After that it reads the mode from the partition's LUKS2 header on every boot, so the mode chosen at install stays, whatever `STATEKEY` a later image was built with. A `config apply` that names a different `state_key.mode` is refused with `FailedPrecondition` and nothing is stored. To change the mode, reinstall the node.
 :::
 
+## A network HSM is out of scope
+
+CA keys live only in the node's own TPM (or, in the software modes above, on its encrypted state partition). CryptOS does not support keeping a CA key in a network HSM or behind a PKCS#11 device, and it is not planned.
+
+The reason is the property this page is about: the CA key is made inside the node's TPM and signs there, so no other machine, network path or vendor library ever holds or touches it. An external HSM would add a second custodian for the key and a third-party PKCS#11 module on the signing path, which CryptOS keeps off it.
+
+`kms` mode is not HSM support. It only has an external key management service encrypt the **state key**, the key that unlocks the state partition. The CA key is still generated in software and stored on that partition, and the KMS never holds it or signs with it. If you need the CA key itself held by an HSM, CryptOS is not the right fit for that CA today.
+
+:::caution[Do not read `kms` as a way to put the CA key in an HSM]
+Pointing `state_key.kms.endpoint` at an HSM-backed KMS protects the disk's unlock key only. The CA key stays in software on the encrypted partition, and `cryptosctl ca export-key` still exports it.
+:::
+
 ## What it doesn't do yet
 
 - **Sharing a TPM key between nodes.** The key is created so it can't be duplicated to another TPM, so there is no second node that can sign with the same key.

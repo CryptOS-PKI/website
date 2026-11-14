@@ -272,14 +272,16 @@ export const controls: Control[] = [
     area: "keys",
     title: "No network HSM for CA keys",
     statement:
-      "CA keys live only in the node's own TPM; a network HSM or PKCS#11 device for CA keys is out of scope. The kms mode wraps only the state disk's key with an external KMS. Saying so plainly in the docs is planned.",
-    status: "planned",
-    evidence: [],
-    gaps: [
+      "CA keys live only in the node's own TPM; a network HSM or PKCS#11 device for CA keys is out of scope. The kms mode wraps only the state disk's key with an external KMS, and keeps the CA key in software.",
+    status: "not-planned",
+    reason:
+      "The CA key is made inside the node's TPM and never leaves it. A network HSM would add a second key custodian and a third-party PKCS#11 module on the signing path, which the node keeps off it.",
+    evidence: [
       {
         repo: "website",
-        number: 42,
-        title: "Say that CA keys stay in the TPM and a network HSM is out of scope",
+        path: "apps/docs/docs/concepts/tpm-sealed-keys.md",
+        kind: "doc",
+        detail: "A network HSM is out of scope",
       },
     ],
   },

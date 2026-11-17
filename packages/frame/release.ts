@@ -19,10 +19,10 @@ limitations under the License.
 // can go out. `upcoming` is the release being built, named on every vNext
 // docs page.
 export const release = {
-  version: "v0.1.0-rc.1",
-  upcoming: "v0.1.0-rc.2",
+  version: "v0.1.0-rc.2",
+  upcoming: "v0.1.0-rc.3",
   kind: "prerelease" as const,
-  publishedOn: "2026-10-24",
+  publishedOn: "2026-11-17",
 };
 
 // The current FleetOS Manager release, the version the FleetOS Manager docs
@@ -30,6 +30,6 @@ export const release = {
 // a release can go out. It ships alongside CryptOS today, so the two match,
 // but each docs instance follows its own product.
 export const fleetRelease = {
-  version: "v0.1.0-rc.1",
-  upcoming: "v0.1.0-rc.2",
+  version: "v0.1.0-rc.2",
+  upcoming: "v0.1.0-rc.3",
 };

@@ -45,10 +45,10 @@ test("every download has a positive size and a unique name", () => {
   }
 });
 
-test("the images are the unsigned ones, both state-key variants, with SHA256SUMS", () => {
+test("the images are the unsigned ones, for VMware and Proxmox, both state-key variants, with SHA256SUMS", () => {
   const names = downloads.map((asset) => asset.name);
   const isos = names.filter((name) => name.endsWith(".iso"));
-  assert.equal(isos.length, 2);
+  assert.equal(isos.length, 3);
   assert.ok(
     isos.every((name) => name.includes("unsigned")),
     "every ISO is the unsigned build",
@@ -57,14 +57,25 @@ test("the images are the unsigned ones, both state-key variants, with SHA256SUMS
     isos.some((name) => name.includes("nodeid")),
     "the nodeid ISO is listed",
   );
+  assert.ok(
+    isos.some((name) => name.includes("proxmox")),
+    "the Proxmox ISO is listed",
+  );
   assert.ok(names.includes("SHA256SUMS"));
 });
 
-test("cryptosctl is listed for Linux and macOS on amd64 and arm64", () => {
+test("cryptosctl is listed for Linux, macOS and Windows on amd64 and arm64", () => {
   const cli = downloads
     .filter((asset) => asset.name.startsWith("cryptosctl-"))
     .map((asset) => asset.name);
-  for (const platform of ["linux-amd64", "linux-arm64", "darwin-amd64", "darwin-arm64"]) {
+  for (const platform of [
+    "linux-amd64",
+    "linux-arm64",
+    "darwin-amd64",
+    "darwin-arm64",
+    "windows-amd64",
+    "windows-arm64",
+  ]) {
     assert.ok(
       cli.some((name) => name.startsWith(`cryptosctl-${platform}-`)),
       platform,

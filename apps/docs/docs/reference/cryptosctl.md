@@ -194,7 +194,7 @@ These replace the node's CryptOS image without reinstalling it. The encrypted st
 
 | Command | Flags | What it does |
 |---|---|---|
-| `image status` | | show the running and staged images |
+| `image status` | | show the running and staged images, and the upgrade anchor the node checks incoming images against (its subject and SHA-256) |
 | `image stage` | `--image` (the signed UKI), `--signature` (default `<image>.sig`) | upload a signed image; the node checks the signature before writing anything, keeps the current image for rollback, and does not reboot |
 | `image activate` | `--confirm` (the CA common name) | reboot into the staged image |
 | `image rollback` | | put the retained previous image back on the boot path; run `image activate` to boot it |

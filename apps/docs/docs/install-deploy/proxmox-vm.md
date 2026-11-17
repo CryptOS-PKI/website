@@ -132,7 +132,7 @@ The node is waiting for its machine config. Follow [Bootstrap and apply config](
 - Put the whole admin certificate in `bootstrap.admin_cert_pem`.
 
 :::danger[Don't name the admin by fingerprint]
-A config with only `bootstrap.admin_cert_sha256` is accepted and installs, and then the node boot-loops on its first boot and never opens port 443. Use `bootstrap.admin_cert_pem`.
+Name the admin with the whole certificate in `bootstrap.admin_cert_pem`. A node needs it to serve its management API. From `v0.1.0-rc.3` a maintenance node refuses a config with only `bootstrap.admin_cert_sha256` before it touches the disk, and stays in maintenance mode. On `v0.1.0-rc.2` that config is accepted and installs, and then the node boot-loops on its first boot and never opens port 443.
 :::
 
 Set `network.ntp_servers` too. Without it the node takes time servers from its DHCP lease, or runs on the VM's clock, and `cryptosctl config apply` warns about it.

@@ -157,8 +157,8 @@ The administrator certificate the node trusts on first boot. The first-boot cere
 
 | Field | Type | Default | Meaning |
 |---|---|---|---|
-| `bootstrap.admin_cert_pem` | string | empty | The full certificate, as one PEM `CERTIFICATE` block. |
-| `bootstrap.admin_cert_sha256` | string | empty | The certificate's SHA-256 fingerprint, as 64 hex characters. |
+| `bootstrap.admin_cert_pem` | string | empty | The full certificate, as one PEM `CERTIFICATE` block. Use this on every node you install. |
+| `bootstrap.admin_cert_sha256` | string | empty | The certificate's SHA-256 fingerprint, as 64 hex characters. The schema accepts it, but an installed node can't start its management API with it: see the warning below. |
 
 Set exactly one of the two.
 
@@ -172,8 +172,8 @@ Set exactly one of the two.
 | More than one block | `config: bootstrap.admin_cert_pem: must contain exactly one PEM block` |
 | Not a parseable certificate | `config: bootstrap.admin_cert_pem: parse: <reason>` |
 
-:::warning[Use admin_cert_pem on a node you manage over the network]
-A fingerprint-only config validates, but the node's mTLS listener needs the full certificate to verify clients against. With only `admin_cert_sha256` set, the node stops at boot with `init: ServerTLSConfig: the mTLS listener needs the full bootstrap admin certificate (PEM), not just a fingerprint`, and PID 1 reboots. Put the whole certificate in `admin_cert_pem`.
+:::danger[Use admin_cert_pem on every node you install]
+A fingerprint-only config validates and installs, but the node's mTLS listener needs the full certificate to verify clients against. With only `admin_cert_sha256` set, the node stops at boot with `init: ServerTLSConfig: the mTLS listener needs the full bootstrap admin certificate (PEM), not just a fingerprint`, and PID 1 reboots, over and over: the node never opens port 443, and the install disk has already been erased. Put the whole certificate in `admin_cert_pem`.
 :::
 
 ## 💽 install

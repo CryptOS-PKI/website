@@ -69,7 +69,7 @@ cryptosctl bootstrap --common-name "Example Org bootstrap admin"
 ```
 
 :::tip[Expected output]
-The key and certificate are written, and the SHA-256 is the value for the machine config.
+The key and certificate are written. The certificate, `identity.crt`, is what goes in the machine config; the SHA-256 is for checking it.
 
 ```text
 wrote /home/you/.cryptos/identity.crt
@@ -110,7 +110,10 @@ network:
   nameservers:
     - 192.0.2.53
 bootstrap:
-  admin_cert_sha256: 8748ee3c8a8a55e3c89fee5f71b70ddd99fcb6e8865d17271469d4221b7cecd0
+  admin_cert_pem: |
+    -----BEGIN CERTIFICATE-----
+    MIIB...
+    -----END CERTIFICATE-----
 pki:
   root_key_alg: ECDSA-P384
   root_subject:
@@ -132,19 +135,23 @@ What each part does:
 | `network.interface` | The network card the node configures after the install, by its kernel name (usually `eth0`). |
 | `network.address`, `network.gateway` | The node's **static** address in CIDR form and its gateway. After the install the node listens here, on port 443. |
 | `network.nameservers` | Optional DNS servers, as IPv4 addresses. Without them the node uses the ones DHCP handed out during boot. |
-| `bootstrap.admin_cert_sha256` | The SHA-256 that `cryptosctl bootstrap` printed. Or use `bootstrap.admin_cert_pem` with the whole certificate. Set exactly one of the two. |
+| `bootstrap.admin_cert_pem` | The whole certificate that `cryptosctl bootstrap` wrote to `identity.crt`, as one PEM block, with every line indented the same amount. A node you install needs the full certificate. |
 | `pki.root_key_alg` | The CA key type: `ECDSA-P384`, `RSA-3072` or `RSA-4096`. |
 | `pki.root_subject` | The CA certificate's name. `common_name` is required; `organization`, `country`, `province` and `locality` are optional. |
 | `pki.root_validity_years` | How long the Root certificate lasts, from 1 to 30 years. Needed for a Root only. |
 | `install.disk` | The whole disk to install to, such as `/dev/sda` or `/dev/nvme0n1`. **It is erased.** Needed for an install from maintenance mode. |
 
-`cryptosctl` checks the file before it sends anything, so a typo such as a short fingerprint fails on your workstation:
+:::danger[Use the full certificate, not the fingerprint]
+The config schema also accepts `bootstrap.admin_cert_sha256`, and `cryptosctl config apply` and the maintenance installer take it, but an installed node needs the whole certificate to bring up its management API. A node installed with only the fingerprint has its install disk erased, reboots, and then boots in a loop: the console reaches `[!!]  management API` and restarts about every 15 seconds, and it never answers on port 443. The only way out is to install again from the ISO with `admin_cert_pem`.
+:::
+
+`cryptosctl` checks the file before it sends anything, so a typo such as a block that isn't a PEM certificate fails on your workstation:
 
 :::tip[Expected output]
-For a fingerprint only three characters long, nothing is sent and the error names the field:
+For a `bootstrap.admin_cert_pem` that holds no PEM block, nothing is sent and the error names the field:
 
 ```text
-cryptosctl: config: bootstrap.admin_cert_sha256: must be 64 hex characters, got 3
+cryptosctl: config: bootstrap.admin_cert_pem: no PEM block found
 ```
 :::
 

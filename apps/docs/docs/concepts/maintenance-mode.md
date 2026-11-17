@@ -30,7 +30,7 @@ A CryptOS node trusts exactly one administrator on its first boot, named in the 
 cryptosctl bootstrap
 ```
 
-It writes an ECDSA P-256 key and a self-signed client certificate (`identity.crt`, `identity.key`) and prints the certificate's SHA-256. Put the certificate, or that SHA-256, into `bootstrap.admin_cert_pem` or `bootstrap.admin_cert_sha256`. `cryptosctl` runs on Linux and macOS, and on Windows from `v0.1.0-rc.2`.
+It writes an ECDSA P-256 key and a self-signed client certificate (`identity.crt`, `identity.key`) and prints the certificate's SHA-256, which you can use to check the file. Put the certificate itself into `bootstrap.admin_cert_pem`: a node installed with only a fingerprint can't bring up its management API. `cryptosctl` runs on Linux and macOS, and on Windows from `v0.1.0-rc.2`.
 
 :::danger[Keep the bootstrap key safe]
 Whoever holds `identity.key` is the node's administrator: they can run the ceremony, sign subordinate CAs, reboot and reset the node. Keep it off shared machines, store it in a privileged access management (PAM) solution, and back it up. The node has no password reset.

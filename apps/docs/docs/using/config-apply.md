@@ -75,7 +75,7 @@ applied: generation=4 requires_reboot=true digest=<sha256 of the saved config>
 A check that fails on your workstation names the field, and nothing is sent. For example:
 
 ```text
-cryptosctl: config: bootstrap.admin_cert_sha256: must be 64 hex characters, got 3
+cryptosctl: config: bootstrap.admin_cert_pem: no PEM block found
 ```
 
 The node checks the file again. If it refuses it, the error reads `rpc error: code = InvalidArgument desc = node: Apply: ...` and nothing is saved: the node keeps its old config and generation.

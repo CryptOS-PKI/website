@@ -46,6 +46,8 @@ The secrets are write-only, in a switched-off block too: `hmac_key_base64` for A
 
 ## 🤖 ACME
 
+To get a certificate from a node with an ACME client, see [Get certificates with ACME](../using/enrol-devices-acme.md).
+
 ```yaml
 pki:
   revocation_base_url: http://pki.example.org

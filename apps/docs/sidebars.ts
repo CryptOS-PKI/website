@@ -98,6 +98,7 @@ const sidebars: SidebarsConfig = {
         'using/config-apply',
         'using/time-sync',
         'using/audit-log',
+        'using/enrol-devices-acme',
         'using/enrol-devices-scep',
         'using/tsa-policy-oid',
         'using/serve-timestamps-tsa',

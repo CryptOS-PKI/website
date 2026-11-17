@@ -142,7 +142,13 @@ What each part does:
 | `install.disk` | The whole disk to install to, such as `/dev/sda` or `/dev/nvme0n1`. **It is erased.** Needed for an install from maintenance mode. |
 
 :::danger[Use the full certificate, not the fingerprint]
-The config schema also accepts `bootstrap.admin_cert_sha256`, and `cryptosctl config apply` and the maintenance installer take it, but an installed node needs the whole certificate to bring up its management API. A node installed with only the fingerprint has its install disk erased, reboots, and then boots in a loop: the console reaches `[!!]  management API` and restarts about every 15 seconds, and it never answers on port 443. The only way out is to install again from the ISO with `admin_cert_pem`.
+The config schema still parses `bootstrap.admin_cert_sha256`, but a config that names the admin only by fingerprint is refused. `cryptosctl config apply`, the maintenance installer and a running node all stop before anything is written, so the install disk is not touched and the node stays in maintenance mode:
+
+```text
+config: bootstrap.admin_cert_sha256: an installed node needs the full admin certificate to serve its management API; set bootstrap.admin_cert_pem
+```
+
+A node can't serve its management API with only a fingerprint, so put the whole certificate in `bootstrap.admin_cert_pem`.
 :::
 
 `cryptosctl` checks the file before it sends anything, so a typo such as a block that isn't a PEM certificate fails on your workstation:

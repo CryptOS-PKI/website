@@ -35,7 +35,7 @@ You put the certificate into the node's machine config under `bootstrap.admin_ce
 `LoadTrust` in `internal/bootstrap` parses the value. It accepts exactly one `CERTIFICATE` PEM block and rejects a second one, so a config can't smuggle in an extra credential.
 
 :::caution[Use the full certificate, not only the fingerprint]
-The mTLS listener needs the whole certificate to build its client trust pool. With only `admin_cert_sha256` set, the node refuses to start the listener and the boot fails with `init: ServerTLSConfig: the mTLS listener needs the full bootstrap admin certificate (PEM), not just a fingerprint`. Set `bootstrap.admin_cert_pem`.
+The mTLS listener needs the whole certificate to build its client trust pool, and a node can't start the listener from a fingerprint alone (`init: ServerTLSConfig: the mTLS listener needs the full bootstrap admin certificate (PEM), not just a fingerprint`). So a config that sets only `admin_cert_sha256` is refused when it is applied, before anything is written. Set `bootstrap.admin_cert_pem`.
 :::
 
 ## Step 3: the config reaches the node

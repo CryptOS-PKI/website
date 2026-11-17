@@ -75,7 +75,7 @@ bootstrap:
 Indent every line of the PEM block the same amount under `admin_cert_pem: |`. The config must hold exactly one certificate there.
 
 :::warning[Use admin_cert_pem on a node you will install]
-The config schema also takes `admin_cert_sha256` (the fingerprint) instead of the certificate. `cryptosctl` and the maintenance installer accept it, but an installed node needs the whole certificate to bring up its management API. With only the fingerprint, the first boot from disk stops with `the mTLS listener needs the full bootstrap admin certificate (PEM), not just a fingerprint`, and the node restarts. Use `admin_cert_pem`.
+The config schema still parses `admin_cert_sha256` (the fingerprint), but a config that sets it is refused: an installed node needs the whole certificate to bring up its management API. `cryptosctl config apply` and the maintenance installer stop before anything is written. Use `admin_cert_pem`.
 :::
 
 The rest of the config (role, network, CA name and install disk) is covered in [Bootstrap and apply config](../install-deploy/bootstrap-apply.md) and the [machine config reference](../reference/machine-config.md).

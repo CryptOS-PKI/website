@@ -75,6 +75,7 @@ const sidebars: SidebarsConfig = {
       label: 'Install & Deploy',
       items: [
         'install-deploy/build-bootable-image',
+        'install-deploy/proxmox-vm',
         'install-deploy/boot-maintenance',
         'install-deploy/bootstrap-apply',
         'install-deploy/install-to-disk',

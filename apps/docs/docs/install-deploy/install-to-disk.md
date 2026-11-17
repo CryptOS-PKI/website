@@ -7,7 +7,7 @@ title: "💾 Install to disk"
 When a maintenance node accepts your machine config, it installs itself onto the disk named in `install.disk` and reboots. You do not run anything else. This page explains what it writes, so you know what to expect and what the disk looks like afterwards.
 
 :::info[v0.1.0 installs on virtual machines only]
-v0.1.0 supports installing on a VMware or Proxmox VE virtual machine, from the amd64 installer ISO. The Proxmox ISO is new in `v0.1.0-rc.2`; `v0.1.0-rc.1` has the VMware installer ISO only. Physical servers and booting from a USB stick aren't supported in v0.1.0; they're planned for a later release.
+v0.1.0 supports installing on a VMware or Proxmox VE virtual machine, from the amd64 installer ISO. The Proxmox ISO is new in `v0.1.0-rc.2`, with its own guide, [Create a Proxmox VE VM](./proxmox-vm.md); `v0.1.0-rc.1` has the VMware installer ISO only. Physical servers and booting from a USB stick aren't supported in v0.1.0; they're planned for a later release.
 :::
 
 ## What the node does

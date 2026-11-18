@@ -19,7 +19,7 @@ The console shows each stage as it finishes, and marks the stage that failed if 
 4. **embedded etcd.** It starts the node's internal database.
 5. **management API.** It opens the mutual-TLS API on `network.address`, port 443.
 
-A boot step that fails stops the boot and the node restarts. There is no shell to fall back to.
+A boot step that fails stops the boot and the node restarts. There is no shell to fall back to, so the console marks the failed stage `[!!]`, shows the reason under it, and holds that screen for 30 seconds before the node restarts, so you can read it. A node that keeps failing the same stage restarts and shows the reason again each time.
 
 ## Trust the node's management certificate
 

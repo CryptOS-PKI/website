@@ -28,7 +28,7 @@ The rest is split into sections:
 | `metadata` | `name`, the node's hostname. For people, not for trust. |
 | `role` | `kind`: `root`, `intermediate` or `issuing`. See [CA roles](./ca-roles.md). |
 | `network` | `interface`, `address` (CIDR), `gateway`, and optional `nameservers` and `search` domains. |
-| `bootstrap` | The first administrator's client certificate, as `admin_cert_pem`. A node you install needs the full certificate; the schema also takes a bare `admin_cert_sha256`, but a node configured that way can't bring up its management API. |
+| `bootstrap` | The first administrator's client certificate, as `admin_cert_pem`. A node needs the full certificate; a config that names only an `admin_cert_sha256` fingerprint is refused. |
 | `pki` | The CA itself: key algorithm, subject, validity, the parent pin on a subordinate, certificate profiles, revocation endpoints, and the ACME and EST endpoints. |
 | `install` | `disk`, the block device to install to. Used only by the [maintenance-mode](./maintenance-mode.md) install. |
 | `state_key` | How the encrypted state partition is unlocked. Empty means the image's build-time default. See [The TPM and sealed keys](./tpm-sealed-keys.md). |

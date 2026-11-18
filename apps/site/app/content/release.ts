@@ -26,7 +26,7 @@ const RELEASES = "https://github.com/CryptOS-PKI/cryptos-appliance/releases";
 
 // The appliance's file names carry the build tag (the release plus the
 // commit it was built from).
-const BUILD = "v0.1.0-rc.2-0-gc5b194d";
+const BUILD = "v0.1.0-rc.3-0-g31deeab";
 
 export const release = {
   ...current,
@@ -109,37 +109,37 @@ export const downloads: DownloadAsset[] = [
   {
     label: "Installer ISO for Proxmox VE, unsigned (TPM-sealed keys)",
     name: `cryptos-amd64-proxmox-unsigned-${BUILD}.iso`,
-    sizeBytes: 49711104,
+    sizeBytes: 49713152,
     sizeLabel: "47.4 MiB",
   },
   {
     label: "Installer ISO for VMware, unsigned (TPM-sealed keys)",
     name: `cryptos-amd64-vmware-unsigned-${BUILD}.iso`,
-    sizeBytes: 49702912,
+    sizeBytes: 49704960,
     sizeLabel: "47.4 MiB",
   },
   {
     label: "Installer ISO for VMware, unsigned, nodeid variant (no TPM)",
     name: `cryptos-amd64-vmware-nodeid-unsigned-${BUILD}.iso`,
-    sizeBytes: 49702912,
+    sizeBytes: 49704960,
     sizeLabel: "47.4 MiB",
   },
   {
     label: "The UKI inside the Proxmox ISO, unsigned",
     name: `cryptos-amd64-proxmox-${BUILD}.uki.unsigned`,
-    sizeBytes: 23618048,
+    sizeBytes: 23619072,
     sizeLabel: "22.5 MiB",
   },
   {
     label: "The UKI inside the VMware ISO, unsigned",
     name: `cryptos-amd64-vmware-${BUILD}.uki.unsigned`,
-    sizeBytes: 23613952,
+    sizeBytes: 23614976,
     sizeLabel: "22.5 MiB",
   },
   {
     label: "The UKI inside the nodeid ISO, unsigned",
     name: `cryptos-amd64-vmware-nodeid-${BUILD}.uki.unsigned`,
-    sizeBytes: 23613952,
+    sizeBytes: 23614976,
     sizeLabel: "22.5 MiB",
   },
   {
@@ -175,7 +175,7 @@ export const downloads: DownloadAsset[] = [
   {
     label: "cryptosctl for Windows, arm64",
     name: `cryptosctl-windows-arm64-${BUILD}.exe`,
-    sizeBytes: 13159424,
+    sizeBytes: 13158400,
     sizeLabel: "12.5 MiB",
   },
   {

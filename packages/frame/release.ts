@@ -22,7 +22,7 @@ export const release = {
   version: "v0.1.0-rc.3",
   upcoming: "v0.1.0-rc.4",
   kind: "prerelease" as const,
-  publishedOn: "2026-11-17",
+  publishedOn: "2026-11-18",
 };
 
 // The current FleetOS Manager release, the version the FleetOS Manager docs

@@ -26,7 +26,7 @@ const RELEASES = "https://github.com/CryptOS-PKI/cryptos-appliance/releases";
 
 // The appliance's file names carry the build tag (the release plus the
 // commit it was built from).
-const BUILD = "v0.1.0-rc.1-0-gbb516a2";
+const BUILD = "v0.1.0-rc.2-0-gc5b194d";
 
 export const release = {
   ...current,
@@ -72,7 +72,7 @@ export const installTargets: InstallTarget[] = [
   },
   {
     id: "cli",
-    label: "cryptosctl, for Linux and macOS",
+    label: "cryptosctl, for Linux, macOS and Windows",
     status: "Available",
     arch: "amd64 and arm64",
     guideLabel: "cryptosctl reference",
@@ -82,11 +82,18 @@ export const installTargets: InstallTarget[] = [
     id: "manager",
     label: "FleetOS Manager, Helm chart for your own Kubernetes",
     status: "Available",
-    arch: "amd64 only",
+    arch: "amd64 and arm64",
     guideLabel: "Helm install guide",
     guideHref: kubernetes.guideHref,
   },
-  { id: "proxmox", label: "Proxmox VE", status: "Not yet available", arch: "None published" },
+  {
+    id: "proxmox",
+    label: "Installer ISO, for a Proxmox VE VM with a vTPM",
+    status: "Available",
+    arch: "amd64 only",
+    guideLabel: "Create a Proxmox VE VM",
+    guideHref: `${links.docs}/docs/cryptos/install-deploy/proxmox-vm`,
+  },
   { id: "bare-metal", label: "Bare metal", status: "Not yet available", arch: "None published" },
 ];
 
@@ -100,64 +107,88 @@ export interface DownloadAsset {
 
 export const downloads: DownloadAsset[] = [
   {
-    label: "Installer ISO, unsigned (TPM-sealed keys)",
+    label: "Installer ISO for Proxmox VE, unsigned (TPM-sealed keys)",
+    name: `cryptos-amd64-proxmox-unsigned-${BUILD}.iso`,
+    sizeBytes: 49711104,
+    sizeLabel: "47.4 MiB",
+  },
+  {
+    label: "Installer ISO for VMware, unsigned (TPM-sealed keys)",
     name: `cryptos-amd64-vmware-unsigned-${BUILD}.iso`,
-    sizeBytes: 49635328,
-    sizeLabel: "47.3 MiB",
+    sizeBytes: 49702912,
+    sizeLabel: "47.4 MiB",
   },
   {
-    label: "Installer ISO, unsigned, nodeid variant (no TPM)",
+    label: "Installer ISO for VMware, unsigned, nodeid variant (no TPM)",
     name: `cryptos-amd64-vmware-nodeid-unsigned-${BUILD}.iso`,
-    sizeBytes: 49633280,
-    sizeLabel: "47.3 MiB",
+    sizeBytes: 49702912,
+    sizeLabel: "47.4 MiB",
   },
   {
-    label: "The UKI inside the ISO, unsigned",
+    label: "The UKI inside the Proxmox ISO, unsigned",
+    name: `cryptos-amd64-proxmox-${BUILD}.uki.unsigned`,
+    sizeBytes: 23618048,
+    sizeLabel: "22.5 MiB",
+  },
+  {
+    label: "The UKI inside the VMware ISO, unsigned",
     name: `cryptos-amd64-vmware-${BUILD}.uki.unsigned`,
-    sizeBytes: 23579648,
+    sizeBytes: 23613952,
     sizeLabel: "22.5 MiB",
   },
   {
     label: "The UKI inside the nodeid ISO, unsigned",
     name: `cryptos-amd64-vmware-nodeid-${BUILD}.uki.unsigned`,
-    sizeBytes: 23579136,
+    sizeBytes: 23613952,
     sizeLabel: "22.5 MiB",
   },
   {
     label: "cryptosctl for Linux, amd64",
     name: `cryptosctl-linux-amd64-${BUILD}`,
-    sizeBytes: 13906082,
-    sizeLabel: "13.3 MiB",
+    sizeBytes: 13832354,
+    sizeLabel: "13.2 MiB",
   },
   {
     label: "cryptosctl for Linux, arm64",
     name: `cryptosctl-linux-arm64-${BUILD}`,
-    sizeBytes: 12976290,
-    sizeLabel: "12.4 MiB",
+    sizeBytes: 12910754,
+    sizeLabel: "12.3 MiB",
   },
   {
     label: "cryptosctl for macOS, Intel",
     name: `cryptosctl-darwin-amd64-${BUILD}`,
-    sizeBytes: 14320720,
-    sizeLabel: "13.7 MiB",
+    sizeBytes: 14248224,
+    sizeLabel: "13.6 MiB",
   },
   {
     label: "cryptosctl for macOS, Apple silicon",
     name: `cryptosctl-darwin-arm64-${BUILD}`,
-    sizeBytes: 13445650,
+    sizeBytes: 13376706,
     sizeLabel: "12.8 MiB",
+  },
+  {
+    label: "cryptosctl for Windows, amd64",
+    name: `cryptosctl-windows-amd64-${BUILD}.exe`,
+    sizeBytes: 14313472,
+    sizeLabel: "13.7 MiB",
+  },
+  {
+    label: "cryptosctl for Windows, arm64",
+    name: `cryptosctl-windows-arm64-${BUILD}.exe`,
+    sizeBytes: 13159424,
+    sizeLabel: "12.5 MiB",
   },
   {
     label: "Build record",
     name: "build-manifest.json",
-    sizeBytes: 720,
-    sizeLabel: "720 B",
+    sizeBytes: 968,
+    sizeLabel: "968 B",
   },
   {
     label: "Checksums for every file above",
     name: "SHA256SUMS",
-    sizeBytes: 1042,
-    sizeLabel: "1.0 KiB",
+    sizeBytes: 1526,
+    sizeLabel: "1.5 KiB",
   },
 ].map((asset) => ({ ...asset, href: `${RELEASES}/download/${release.version}/${asset.name}` }));
 

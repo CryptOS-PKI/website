@@ -14,6 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import assert from "node:assert/strict";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { test } from "node:test";
 
 import {
@@ -22,6 +25,8 @@ import {
   docsVersions,
   readState,
   releaseVersion,
+  releasedLinks,
+  rewriteSnapshotLinks,
 } from "./docs-version.mjs";
 
 const releaseSource = [
@@ -85,4 +90,64 @@ test("the repo's own release has its version cut in both docs", () => {
   for (const { name, version, versions } of state) {
     assert.equal(docsVersionProblem(version, versions, name), null);
   }
+});
+
+test("a snapshot links the other docs' released pages, not their vNext", () => {
+  const cases = [
+    ["[a](/docs/fleet/vnext)", "[a](/docs/fleet)"],
+    ["[a](/docs/fleet/vnext/helm)", "[a](/docs/fleet/helm)"],
+    [
+      "[a](/docs/cryptos/vnext/using/audit-log#1-list)",
+      "[a](/docs/cryptos/using/audit-log#1-list)",
+    ],
+    ['<a href="/docs/fleet/vnext">x</a>', '<a href="/docs/fleet">x</a>'],
+    ["see /docs/cryptos/vnext, then /docs/fleet/vnext.", "see /docs/cryptos, then /docs/fleet."],
+    ["[a](/docs/fleet/vnext?x=1)", "[a](/docs/fleet?x=1)"],
+  ];
+  for (const [before, after] of cases) assert.equal(releasedLinks(before), after, before);
+});
+
+test("links that only look like vNext links are left alone", () => {
+  for (const text of [
+    "[a](/docs/fleet/vnextra)",
+    "[a](/docs/fleet/vnext-notes)",
+    "[a](/docs/other/vnext/x)",
+    "[a](https://example.org/docs/fleet/vnext/x)",
+    "the vnext docs",
+    "[a](/docs/fleet/helm)",
+  ]) {
+    assert.equal(releasedLinks(text), text);
+  }
+});
+
+test("rewriting a snapshot changes only its markdown pages and reports them", () => {
+  const dir = mkdtempSync(join(tmpdir(), "snapshot-"));
+  try {
+    mkdirSync(join(dir, "about"), { recursive: true });
+    writeFileSync(join(dir, "about", "cncf.md"), "[x](/docs/fleet/vnext/helm)\n");
+    writeFileSync(join(dir, "intro.mdx"), "<a href='/docs/cryptos/vnext'>y</a>\n");
+    writeFileSync(join(dir, "clean.md"), "[z](/docs/fleet/helm)\n");
+    writeFileSync(join(dir, "data.json"), '{"to": "/docs/fleet/vnext"}\n');
+
+    const changed = rewriteSnapshotLinks(dir);
+
+    assert.deepEqual(changed.sort(), ["about/cncf.md", "intro.mdx"]);
+    assert.equal(readFileSync(join(dir, "about", "cncf.md"), "utf8"), "[x](/docs/fleet/helm)\n");
+    assert.equal(readFileSync(join(dir, "intro.mdx"), "utf8"), "<a href='/docs/cryptos'>y</a>\n");
+    assert.equal(readFileSync(join(dir, "clean.md"), "utf8"), "[z](/docs/fleet/helm)\n");
+    assert.equal(readFileSync(join(dir, "data.json"), "utf8"), '{"to": "/docs/fleet/vnext"}\n');
+    assert.deepEqual(rewriteSnapshotLinks(dir), [], "a second pass has nothing left to change");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("each docs instance names where its snapshots are written", () => {
+  assert.deepEqual(
+    docsInstances.map((i) => [i.id, i.snapshotsDir]),
+    [
+      ["default", "versioned_docs"],
+      ["fleet", "fleet_versioned_docs"],
+    ],
+  );
 });

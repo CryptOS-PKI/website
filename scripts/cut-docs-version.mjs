@@ -17,11 +17,14 @@ limitations under the License.
 // instance's Next (apps/docs/docs for CryptOS, apps/docs/fleet for FleetOS
 // Manager) under its product's version in packages/frame/release.ts. Run it
 // in the release's own PR, after the version bump, and commit what it writes.
+// Each snapshot's links to the other docs' vNext are pointed at the released
+// pages, since a build of released versions has no vNext.
 import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 
-import { readState } from "./docs-version.mjs";
+import { paths, readState, rewriteSnapshotLinks } from "./docs-version.mjs";
 
-for (const { name, version, versions, cutCommand, versionsFile } of readState()) {
+for (const { name, version, versions, cutCommand, versionsFile, snapshotsDir } of readState()) {
   if (versions.includes(version)) {
     console.log(`${name} docs version ${version} is already cut; nothing to do`);
     continue;
@@ -33,6 +36,11 @@ for (const { name, version, versions, cutCommand, versionsFile } of readState())
     cwd: new URL("../apps/docs/", import.meta.url),
     stdio: "inherit",
   });
+  // The sources link the other docs' vNext; a released snapshot links the
+  // released pages (see releasedLinks).
+  const snapshot = fileURLToPath(new URL(`${snapshotsDir}/version-${version}`, paths.docs));
+  const rewritten = rewriteSnapshotLinks(snapshot);
+  console.log(`pointed the cross-links in ${rewritten.length} ${name} pages at the released docs`);
   console.log(
     `cut ${name} docs version ${version}: commit apps/docs/${versionsFile} and its snapshot`,
   );

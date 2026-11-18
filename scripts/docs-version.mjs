@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 
 // The docs site has two docs instances, each versioned on its own and each
 // following its own product's release: CryptOS at /docs/cryptos (the
@@ -27,6 +28,7 @@ export const docsInstances = [
     name: "CryptOS",
     releaseExport: "release",
     versionsFile: "versions.json",
+    snapshotsDir: "versioned_docs",
     cutCommand: "docs:version",
   },
   {
@@ -34,6 +36,7 @@ export const docsInstances = [
     name: "FleetOS Manager",
     releaseExport: "fleetRelease",
     versionsFile: "fleet_versions.json",
+    snapshotsDir: "fleet_versioned_docs",
     cutCommand: "docs:version:fleet",
   },
 ];
@@ -86,4 +89,34 @@ export function readState() {
       versions: docsVersions(existsSync(file) ? readFileSync(file, "utf8") : undefined),
     };
   });
+}
+
+// The docs link each other's unreleased pages (/docs/fleet/vnext/...,
+// /docs/cryptos/vnext/...). A released snapshot has to link the released
+// pages instead, because a build of released versions has no vNext and fails
+// on the broken links.
+const vnextLink = /(?<![A-Za-z0-9_./:-])\/docs\/(cryptos|fleet)\/vnext(?![A-Za-z0-9_-])/g;
+
+export function releasedLinks(text) {
+  return text.replace(vnextLink, "/docs/$1");
+}
+
+// Rewrites the links in every markdown page under dir and returns the pages
+// it changed, relative to dir.
+export function rewriteSnapshotLinks(dir, base = dir) {
+  const changed = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      changed.push(...rewriteSnapshotLinks(path, base));
+    } else if (/\.mdx?$/.test(entry.name)) {
+      const before = readFileSync(path, "utf8");
+      const after = releasedLinks(before);
+      if (after !== before) {
+        writeFileSync(path, after);
+        changed.push(path.slice(base.length + 1));
+      }
+    }
+  }
+  return changed;
 }

@@ -74,5 +74,5 @@ There are three levels. Each includes the one before it.
 - [A node's lifecycle in the fleet](./node-lifecycle.md): how a node joins, switches protocols and leaves.
 - [The web UI](./web-ui.md): logging in, finding your way around, and where each page lives.
 - [Deploy with Helm](./helm.md): the supported chart, and what to use today.
-- [Machine config](/docs/cryptos/vnext/reference/machine-config): the node config the adopt wizard fills in.
-- [cryptosctl](/docs/cryptos/vnext/reference/cryptosctl): managing a node without the FleetOS Manager.
+- [Machine config](/docs/cryptos/reference/machine-config): the node config the adopt wizard fills in.
+- [cryptosctl](/docs/cryptos/reference/cryptosctl): managing a node without the FleetOS Manager.

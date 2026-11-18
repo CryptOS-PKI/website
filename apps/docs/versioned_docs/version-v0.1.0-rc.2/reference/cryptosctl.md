@@ -200,7 +200,7 @@ These replace the node's CryptOS image without reinstalling it. The encrypted st
 | `image rollback` | | put the retained previous image back on the boot path; run `image activate` to boot it |
 | `image sign` | `--image` (unsigned UKI or ISO, required), `--key` (RSA PEM, required), `--cert` (required), `--out` | sign an unsigned image with your key and stamp your certificate as its upgrade anchor; runs locally |
 
-The full procedure is the [in-place upgrade guide](https://github.com/CryptOS-PKI/cryptos-appliance/blob/main/docs/image-upgrade.md). The FleetOS Manager's web console covers the same ground for a managed node: see [OS image lifecycle](/docs/fleet/vnext/web-node-detail#os-image-lifecycle).
+The full procedure is the [in-place upgrade guide](https://github.com/CryptOS-PKI/cryptos-appliance/blob/main/docs/image-upgrade.md). The FleetOS Manager's web console covers the same ground for a managed node: see [OS image lifecycle](/docs/fleet/web-node-detail#os-image-lifecycle).
 
 ## Power and reset
 

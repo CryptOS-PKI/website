@@ -20,7 +20,7 @@ The core of a certificate authority is built, tested, and running on VMware virt
 - Building the OS image and turning it into a bootable **ISO** for VMware and Proxmox VE (amd64).
 - Enrolment over **ACME** (RFC 8555, `http-01`) and **EST** (RFC 7030) on intermediate and issuing nodes, and **RFC 3161 timestamps**. See [Machine config: ACME and EST](../reference/machine-config-enrollment.md) and [Serve RFC 3161 timestamps](../using/serve-timestamps-tsa.md).
 - Installing a node from start to finish: **maintenance mode** on the very first boot, **install to disk**, then the reboot into the ceremony. See [Install & Deploy](../install-deploy/build-bootable-image.md).
-- The **FleetOS Manager** web app, for watching and managing several nodes from one place. See [FleetOS Manager overview](/docs/fleet/vnext).
+- The **FleetOS Manager** web app, for watching and managing several nodes from one place. See [FleetOS Manager overview](/docs/fleet).
 
 ## 📦 What each release ships
 

@@ -83,6 +83,7 @@ const sidebars: SidebarsConfig = {
         'install-deploy/run-the-ceremony',
         'install-deploy/subordinate-nodes',
         'install-deploy/secure-boot',
+        'install-deploy/qemu-guest-agent',
         'install-deploy/upgrade-in-place',
       ],
     },
